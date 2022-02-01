@@ -15,11 +15,11 @@ import os
 mode = os.environ.get('password_vault_mode')
 
 if mode == "prod":
-    import password_vault_backend.config.prod.credentials as creds
+    import config.prod.credentials as creds
 elif mode == "staging":
-    import password_vault_backend.config.staging.credentials as creds
+    import config.staging.credentials as creds
 else:
-    import password_vault_backend.config.dev.credentials as creds
+    import config.dev.credentials as creds
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

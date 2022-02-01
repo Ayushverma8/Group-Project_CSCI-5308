@@ -1,4 +1,4 @@
-import local_creds
+from .local_creds import *
 
-MYSQL_USER = local_creds.MYSQL_USER
-MYSQL_PASSWORD = local_creds.MYSQL_PASSWORD
+MYSQL_USER = MYSQL_USER
+MYSQL_PASSWORD = MYSQL_PASSWORD
