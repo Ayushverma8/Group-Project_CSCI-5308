@@ -1,0 +1,4 @@
+from .local_creds import *
+
+MYSQL_USER = MYSQL_USER
+MYSQL_PASSWORD = MYSQL_PASSWORD
