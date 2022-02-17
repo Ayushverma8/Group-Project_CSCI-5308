@@ -17,9 +17,11 @@ from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path, include
 
+import users.urls
 import vault.urls
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    path('', include(vault.urls.url_patterns))
+    path('', include(users.urls.url_patterns)),
+    path('vault', include(vault.urls.url_patterns)),
 ]

@@ -1,0 +1,1 @@
+This directory including credentials file for all three environments
