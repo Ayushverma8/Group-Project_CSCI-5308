@@ -79,7 +79,6 @@ class SignUpSerializer(serializers.Serializer):
         user.email = validated_data['email']
         user.set_password(validated_data['password'])
         user.save()
-        import ipdb;ipdb.set_trace()
         token = Token.objects.create(user=user)
 
         return token

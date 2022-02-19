@@ -114,3 +114,4 @@ GitHub.sublime-settings
 .history
 
 /password_vault_backend/config/dev/local_creds.py
+/password_vault_frontend/node_modules

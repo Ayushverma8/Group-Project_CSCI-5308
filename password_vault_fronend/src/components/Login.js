@@ -24,10 +24,12 @@ function Login() {
                         <label> Password </label>
                         <input type="password" name="password" placeholder="Your Password" required="" />
                     </div>
+
                     <div className="make wow shake">
                         <input type="submit" value="Login" />
 
                     </div>
+                    
                     <div>
                         <p className="forgot-password text-right">
                             <a href="#">Forgot password?</a>

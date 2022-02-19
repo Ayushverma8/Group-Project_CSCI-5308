@@ -3,3 +3,5 @@ function PageNotFound() {
         404
     </div>
 }
+
+export default PageNotFound;
