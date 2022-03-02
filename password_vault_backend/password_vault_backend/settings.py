@@ -11,18 +11,17 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+import environ
+from pathlib import Path
 
-mode = os.environ.get('password_vault_mode') or 'dev'
 
-if mode == "prod":
-    import config.prod.credentials as creds
-elif mode == "staging":
-    import config.staging.credentials as creds
-else:
-    import config.dev.credentials as creds
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+root = environ.Path()  # get root of the project
+env = environ.Env()
+environ.Env.read_env()
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
@@ -60,21 +59,15 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-if mode == 'dev':
-    MIDDLEWARE += [
-        'corsheaders.middleware.CorsMiddleware',
+
+MIDDLEWARE += ['corsheaders.middleware.CorsMiddleware',
         'django.middleware.common.CommonMiddleware',
     ]
-
-    # CORS_ALLOW_ALL_ORIGINS = True If this is used then `CORS_ALLOWED_ORIGINS`
-    # will not have any effect
-    CORS_ALLOW_CREDENTIALS = True
-    CORS_ALLOWED_ORIGINS = [
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOWED_ORIGINS = [
         'http://localhost:3000',
     ]  # If this is used, then not need to use `CORS_ALLOW_ALL_ORIGINS = True`
-    CORS_ALLOWED_ORIGIN_REGEXES = [
-        'http://localhost:3000',
-    ]
+CORS_ALLOWED_ORIGIN_REGEXES = ['http://localhost:3000',]
 
 ROOT_URLCONF = 'password_vault_backend.urls'
 
@@ -102,11 +95,11 @@ WSGI_APPLICATION = 'password_vault_backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'password_vault',
-        'USER': "root",
-        'PASSWORD': "",
-        'HOST': 'localhost',
-        'PORT': '3306',
+         'NAME': env('DB_NAME'),
+        'USER': env('DB_USER'),
+        'PASSWORD': env('DB_PASSWORD'),
+        'HOST': env('DB_HOST'),
+        'PORT': env('DB_PORT'),
     }
 }
 
@@ -159,12 +152,15 @@ if DEBUG:
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
-        'rest_framework_simplejwt.authentication.JWTAuthentication'
-
     ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 100
 }
 
-MAIL_CHIMP_API_KEY = "f72e2330efc974bb4b941c5fb8df7c30-us14"
-MAIL_CHIMP_SERVER_PREFIX = "us2"
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = env("EMAIL_HOST")
+EMAIL_PORT = env("EMAIL_PORT")
+EMAIL_USE_TLS = env("EMAIL_USE_TLS")
+EMAIL_HOST_USER = env("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")

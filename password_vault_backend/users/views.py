@@ -1,13 +1,19 @@
 from django.contrib.auth import logout
+from django.contrib.auth.models import User
+
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.status import *
+from django.core.mail import send_mail
 from django.conf import settings
-import mailchimp_marketing as MailchimpMarketing
-
+from rest_framework.authtoken.models import Token
 
 import core.views
 import users.serializers as serializers
+
+from .models import Verification
 
 
 class SignUpView(core.views.AbstractBaseAPIView):
@@ -30,6 +36,10 @@ class SignUpView(core.views.AbstractBaseAPIView):
         super(SignUpView, self).post(request, **kwargs)
         token = self.serializer.save()
         res = {'message': 'success', 'token': token.key}
+        # html_message = render_to_string('welcome.html')
+        # plain_message = strip_tags(html_message)
+        # send_mail('Welcome To Password Vault', plain_message, settings.EMAIL_HOST_USER,
+        #           ["poojaa358@gmail.com"], html_message=html_message)
 
         return Response(res, HTTP_201_CREATED)
 
@@ -52,8 +62,9 @@ class LoginView(core.views.AbstractBaseAPIView):
         """
 
         super(LoginView, self).post(request, **kwargs)
-        token = self.serializer.validated_data
-        res = {'message': 'success', 'token': token}
+        user = User.objects.get(email=request.data.get('email'))
+        token = Token.objects.get_or_create(user=user)[0]
+        res = {'message': 'success', 'token': token.key}
         return Response(res, HTTP_200_OK)
 
 
@@ -75,7 +86,16 @@ class ForgotPasswordView(core.views.AbstractBaseAPIView):
         """
 
         super(ForgotPasswordView, self).post(request, **kwargs)
-        mailchimp = MailchimpMarketing.Client.set_config(settings.MAIL_CHIMP_API_KEY, settings.MAIL_CHIMP_SERVER_PREFIX)
+        otp = Verification.objects.get(email=request.data.get("email"))
+        html_message = render_to_string('reset_password.html', context={
+            "site_name": "password_vault",
+            "otp": otp.verification_code
+        })
+        plain_message = strip_tags(html_message)
+        send_mail('Reset Password Request', plain_message, settings.EMAIL_HOST_USER,
+                  [otp.email], html_message=html_message)
+        res = {"message": "success"}
+        return Response(res, HTTP_200_OK)
 
 
 class ResetPasswordView(core.views.AbstractBaseAPIView):
@@ -87,7 +107,7 @@ class ResetPasswordView(core.views.AbstractBaseAPIView):
        """
     http_method_names = ["post"]
     permission_classes = [AllowAny]
-    serializer_class = serializers.ForgotPasswordSerializer
+    serializer_class = serializers.ResetPasswordSerializer
 
     def post(self, request, **kwargs):
         """
@@ -101,7 +121,6 @@ class ResetPasswordView(core.views.AbstractBaseAPIView):
 
 
 class LogOutView(core.views.AuthRequiredView, core.views.AbstractBaseAPIView):
-
     """
      Code to be run upon `post` request on this resource.It logs the user out.
 
@@ -115,6 +134,3 @@ class LogOutView(core.views.AuthRequiredView, core.views.AbstractBaseAPIView):
     def post(self, request, **kwargs):
         logout(request)
         return Response("User Logged out successfully")
-
-
-
