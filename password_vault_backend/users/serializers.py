@@ -1,9 +1,13 @@
 import re
+import random
 
+from django.contrib.auth import authenticate
 from django.db import transaction
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 from rest_framework import serializers
+
+from users.models import VerificationCode
 
 
 class SignUpSerializer(serializers.Serializer):
@@ -85,8 +89,77 @@ class SignUpSerializer(serializers.Serializer):
 
 
 class LoginSerializer(serializers.Serializer):
-    pass
+    """
+       Serializer for signin body
+
+       @author: Pooja Anandani <pooja.anandani@dal.ca>
+       """
+    email = serializers.EmailField()
+    password = serializers.CharField(min_length=6)
+
+    class Meta:
+        model = User,
+        fields = ('email', 'password')
+        read_only_fields = ['token']
+
+    def validate(self, data):
+        email = data.get("email")
+        password = data.get("password")
+        user = authenticate(username=email, password=password)
+        if user:
+            user_instance = Token.objects.get_or_create(user=user.id)[0]
+            token = user_instance.key
+            return token
+        else:
+            raise serializers.ValidationError("Please check your username/password.")
 
 
-class LogOutSerializer(serializers.Serializer):
-    pass
+class ForgotPasswordSerializer(serializers.Serializer):
+    """
+          Serializer for Forgot Password
+
+          @author: Pooja Anandani <pooja.anandani@dal.ca>
+    """
+    email = serializers.EmailField()
+
+    def validate_email(self, email):
+        """
+        validates if there is any existing account with the passed email or not.
+        """
+
+        user_exists = User.objects.filter(email=email).exists()
+        one_time_verification = random.randint(0, 999999)
+        data = VerificationCode(email=user_exists, verification_code=one_time_verification)
+        data.save()
+        if not user_exists:
+            raise serializers.ValidationError("Account with this email "
+                                              "does not exists")
+
+        return email
+
+
+class ResetPasswordSerializer(serializers.Serializer):
+    """
+              Serializer for Resetting the password
+
+              @author: Pooja Anandani <pooja.anandani@dal.ca>
+        """
+    email = serializers.EmailField()
+    otp = serializers.IntegerField()
+    password = serializers.CharField(min_length=6)
+
+    def validated_data(self, data):
+        """
+        validates if there is any existing account with the passed email or not.
+        """
+
+        user_otp = VerificationCode.objects.filter(email=data.get('email'))
+
+        if user_otp.verification_code == data.get('otp'):
+            user = User.objects.get(email=data.get('email'))
+            user.set_password(data.get('password'))
+            user.save()
+        else:
+            raise serializers.ValidationError("No record found")
+
+        return data
