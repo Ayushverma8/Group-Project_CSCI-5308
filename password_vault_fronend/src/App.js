@@ -34,20 +34,6 @@ function App() {
 					{/* <Route path='*' element={<PageNotFound />} /> */}
 				</Routes>
 			</BrowserRouter>
-<<<<<<< HEAD
-=======
-			<div style={{ maxWidth: "30rem", margin: "4rem auto" }}>
-				<GlobalProvider>
-					<BrowserRouter>
-						<Routes>
-							<Route path='/notes' element={<Notes />} />
-							<Route path="/add" element={<AddNotes />}></Route>
-						</Routes>
-					</BrowserRouter>
-				</GlobalProvider>
-			</div>
-
->>>>>>> solve coflict
 		</div>
 	);
 }
