@@ -32,11 +32,11 @@ function AddNotes  ()  {
   return (
     <><div class="sidebar" data-color="white" data-active-color="danger">
     <div class="logo">
-        <div class="logo-image-small">
-          <img src="../assets/img/user (1).png" class="user-icon"/>
-        </div>
+      <div class="logo-image-small">
+        <img src="../assets/img/user (1).png" class="user-icon" />
+      </div>
       <a href="#" class="simple-text logo-normal">
-      <label id="lbluserid" style={{fontWeight:"bolder"}}>Manasvi Sharma</label>
+        <label id="lbluserid" style={{ fontWeight: "bolder" }}>Manasvi Sharma</label>
       </a>
     </div>
     <div class="sidebar-wrapper ">
@@ -49,14 +49,14 @@ function AddNotes  ()  {
         </li>
         <li  >
           <a href="/notes">
-            <i class="nc-icon nc-bullet-list-67 logo-color"></i>
-            <p>Notes</p>
+            <i class="nc-icon nc-box-2 logo-color"></i>
+            <p>Vault</p>
           </a>
         </li>
         <li  >
           <a href="/notes">
-            <i class="nc-icon nc-box-2 logo-color"></i>
-            <p>Vault</p>
+            <i class="nc-icon nc-bullet-list-67 logo-color"></i>
+            <p>Notes</p>
           </a>
         </li>
         <li >
@@ -77,19 +77,91 @@ function AddNotes  ()  {
             <p>Delete Account</p>
           </a>
         </li>
-        
+
       </ul>
     </div>
-  </div><Form onSubmit={onSubmit}>
-        <FormGroup>
-          <Label>Note</Label>
-          <Input type="text" value={name} onChange={onChange} name="note" placeholder="Enter Note" required style={{
-        border: '3px solid #0e3285', 
-   }}></Input>
-        </FormGroup>
-        <Button type="submit" onclick="/notes">Submit</Button>
-        <Link to="/notes" className="btn btn-danger ml-2" style={{marginLeft: "10%"}}>Cancel</Link>
-      </Form></>
+  </div>
+  <nav class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
+    <div class="container-fluid">
+      <div class="navbar-wrapper">
+        <div class="navbar-toggle">
+          <button type="button" class="navbar-toggler">
+            <span class="navbar-toggler-bar bar1"></span>
+            <span class="navbar-toggler-bar bar2"></span>
+            <span class="navbar-toggler-bar bar3"></span>
+          </button>
+        </div>
+
+      </div>
+
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-bar navbar-kebab"></span>
+        <span class="navbar-toggler-bar navbar-kebab"></span>
+        <span class="navbar-toggler-bar navbar-kebab"></span>
+      </button>
+      <div>
+
+
+      </div>
+      <div class="collapse navbar-collapse justify-content-end" id="navigation">
+        <a class="navbar-brand" style={{ paddingRight: "700px" }} href="#">Password Vault</a>
+        <form>
+          <div class="input-group no-border">
+
+            <input type="text" value="" class="form-control" placeholder="Search..." />
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <i class="nc-icon nc-zoom-split"></i>
+              </div>
+            </div>
+          </div>
+        </form>
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link btn-magnify" href="javascript:;">
+              {/* <i class="nc-icon nc-layout-11"></i> */}
+              <p>
+                <span class="d-lg-none d-md-block">Stats</span>
+              </p>
+            </a>
+          </li>
+          {/* <li class="nav-item btn-rotate dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="nc-icon nc-bell-55"></i>
+              <p>
+                <span class="d-lg-none d-md-block">Some Actions</span>
+              </p>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+              <a class="dropdown-item" href="#">Action</a>
+              <a class="dropdown-item" href="#">Another action</a>
+              <a class="dropdown-item" href="#">Something else here</a>
+            </div>
+          </li> */}
+          <li class="nav-item">
+            <a class="nav-link btn-rotate" href="javascript:;">
+              <i class="nc-icon nc-settings-gear-65"></i>
+              <p>
+                <span class="d-lg-none d-md-block">Account</span>
+              </p>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <div style={{ maxWidth: "30rem", margin: "4rem auto", paddingTop: "40px" }}>
+    <Form onSubmit={onSubmit}>
+      <FormGroup>
+        <div style={{ paddingTop: '30px' }}><h3>Add Note</h3></div>
+        <Input type="text" value={name} onChange={onChange} name="note" placeholder="Enter Note" required style={{
+          border: '3px solid #0e3285',
+        }}></Input>
+      </FormGroup>
+      <Button type="submit" onclick="/notes">Submit</Button>
+      <Link to="/notes" className="btn btn-danger ml-2" style={{ marginLeft: "10%" }}>Cancel</Link>
+    </Form>
+  </div></>
   )
 }
 

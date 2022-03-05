@@ -15,10 +15,15 @@ function Login() {
     }
 
     const { handleChange, handleSubmit, values, setValues, errors, setErrors } = useForm(login);
+    const style = {
+		background:"url('../assets/img/Main.jpg') fixed",
+		backgroundSize: "cover",
+		textAlign:"center",
+	}
 
     return (
         <Fragment>
-            <div className="w3-main mt-5">
+            <div className="w3-main mt-5" style={style}>
                 <div className="about-bottom main-agile book-form">
                     <div className="alert-close"> </div>
                     <h2 className="tittle">Login Here</h2>
