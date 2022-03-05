@@ -8,19 +8,21 @@ import {
   Container
 } from "reactstrap";
 
-function Heading ()  {
+function Heading() {
   return (
-    <Navbar color="dark" dark>
-      <Container className='new-container'>
-        <NavbarBrand href="/">My Notes</NavbarBrand>
-        <Nav>
-          <NavItem>
-            <Link className="btn btn-primary" to="/add">Add Note</Link>
-          </NavItem>
-        </Nav>
+    <div style={{ maxWidth: "30rem", margin: "4rem auto", paddingTop: "40px" }}>
+      <Navbar color="dark" dark>
+        <Container className='new-container'>
+          <NavbarBrand href="/">My Notes</NavbarBrand>
+          <Nav>
+            <NavItem>
+              <Link className="btn btn-primary" to="/add">Add Note</Link>
+            </NavItem>
+          </Nav>
 
-      </Container>
-    </Navbar>
+        </Container>
+      </Navbar>
+    </div>
   )
 }
 

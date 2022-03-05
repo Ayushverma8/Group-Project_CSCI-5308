@@ -14,10 +14,15 @@ function Signup() {
 	}
 
 	const { handleChange, handleSubmit, values, setValues, errors, setErrors } = useForm(signUp);
+	const style = {
+		background:"url('../assets/img/Main.jpg') fixed",
+		backgroundSize: "cover",
+		textAlign:"center",
+	}
 
 	return (
 		<div>
-			<div className="w3-main mt-5">
+			<div className="w3-main mt-5" style={style}>
 				<div className="about-bottom main-agile book-form">
 					<h2 className="tittle">Register Here</h2>
 					<form onSubmit={handleSubmit}>
