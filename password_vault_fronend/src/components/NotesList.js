@@ -59,7 +59,7 @@ function NotesList  ()  {
               <p>Delete Account</p>
             </a>
           </li>
-          
+
         </ul>
       </div>
     </div>
@@ -73,23 +73,23 @@ function NotesList  ()  {
                 <span class="navbar-toggler-bar bar3"></span>
               </button>
             </div>
-            
+
           </div>
-         
+
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-bar navbar-kebab"></span>
             <span class="navbar-toggler-bar navbar-kebab"></span>
             <span class="navbar-toggler-bar navbar-kebab"></span>
           </button>
          <div>
-       
-        
+
+
          </div>
           <div class="collapse navbar-collapse justify-content-end" id="navigation">
           <a class="navbar-brand" style={{paddingRight:"700px"}} href="#">Password Vault</a>
             <form>
               <div class="input-group no-border">
-              
+
                 <input type="text" value="" class="form-control" placeholder="Search..."/>
                 <div class="input-group-append">
                   <div class="input-group-text">
