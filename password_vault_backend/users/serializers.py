@@ -82,6 +82,7 @@ class SignUpSerializer(serializers.Serializer):
         user.username = validated_data['email']
         user.email = validated_data['email']
         user.set_password(validated_data['password'])
+        user.is_active = False
         user.save()
         token = Token.objects.create(user=user)
 
@@ -90,10 +91,11 @@ class SignUpSerializer(serializers.Serializer):
 
 class LoginSerializer(serializers.Serializer):
     """
-       Serializer for signin body
+    Serializer for signin body
 
-       @author: Pooja Anandani <pooja.anandani@dal.ca>
-       """
+    @author: Pooja Anandani <pooja.anandani@dal.ca>
+    """
+
     email = serializers.EmailField()
     password = serializers.CharField(min_length=6)
 
@@ -105,18 +107,23 @@ class LoginSerializer(serializers.Serializer):
     def validate(self, data):
         email = data.get("email")
         password = data.get("password")
-        user = authenticate(username=email, password=password)
-        if not user:
-            raise serializers.ValidationError({"message": "Please check your username/password."})
+        is_valid = authenticate(username=email, password=password)
+
+        if not is_valid:
+            raise serializers.ValidationError({
+                "email": "Please check your username and password."
+            })
+
         return data
 
 
 class ForgotPasswordSerializer(serializers.Serializer):
     """
-          Serializer for Forgot Password
+    Serializer for Forgot Password
 
-          @author: Pooja Anandani <pooja.anandani@dal.ca>
+    @author: Pooja Anandani <pooja.anandani@dal.ca>
     """
+
     email = serializers.EmailField()
 
     def validate_email(self, email):
@@ -124,25 +131,26 @@ class ForgotPasswordSerializer(serializers.Serializer):
         validates if there is any existing account with the passed email or not.
         """
 
-        user_exists = User.objects.filter(email=email).exists()
+        user = User.objects.filter(email=email).last()
 
-        if user_exists:
+        if user:
             one_time_verification = random.randint(0, 999999)
-            data = Verification(email=email, verification_code=one_time_verification)
+            data = Verification(user=user, verification_code=one_time_verification)
             data.save()
         else:
-            raise serializers.ValidationError({"eror": "Account with this email "
-                                                       "does not exists"})
+            raise serializers.ValidationError({"email": "Account with this email "
+                                                        "does not exists"})
 
         return email
 
 
 class ResetPasswordSerializer(serializers.Serializer):
     """
-              Serializer for Resetting the password
+    Serializer for Resetting the password
 
-              @author: Pooja Anandani <pooja.anandani@dal.ca>
-        """
+    @author: Pooja Anandani <pooja.anandani@dal.ca>
+    """
+
     email = serializers.EmailField()
     otp = serializers.IntegerField()
     password = serializers.CharField(min_length=6)
@@ -151,8 +159,10 @@ class ResetPasswordSerializer(serializers.Serializer):
         """
         validates if there is any existing account with the passed email or not.
         """
+
         try:
-            user_otp = Verification.objects.get(email=data.get('email'))
+            user_otp = Verification.objects.filter(user__email=data.get('email'))\
+                .order_by('-created_at').first()
 
             if user_otp.verification_code == data.get('otp'):
                 user = User.objects.get(email=data.get('email'))
@@ -160,7 +170,8 @@ class ResetPasswordSerializer(serializers.Serializer):
                 user.save()
                 user_otp.delete()
             else:
-                raise serializers.ValidationError({"Record_error": "No record found"})
+                raise serializers.ValidationError({"otp": "No record found"})
         except:
-            raise serializers.ValidationError({"Record_error": "No record found"})
+            raise serializers.ValidationError({"otp": "No record found"})
+
         return data

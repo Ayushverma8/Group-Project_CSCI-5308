@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Email Confirmation</title>
+</head>
+
+<body>
+    {% if validated %}
+        <h1> Thank you for confirming your email, your account is activated now</h1>
+    {% else %}
+        <h1> Something went wrong </h1>
+    {% endif %}
+</body>
+
+</html>

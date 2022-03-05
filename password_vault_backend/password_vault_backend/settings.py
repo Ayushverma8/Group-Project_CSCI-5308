@@ -30,7 +30,8 @@ environ.Env.read_env()
 SECRET_KEY = '9#88f#6x=!b3nuwb1rgz1@7t9x5w5^kg3-ru+da4*gfifus$wu'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env('DEBUG')
+MODE = env("MODE")
 
 ALLOWED_HOSTS = []
 
@@ -43,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'rest_framework.authtoken',
     'corsheaders',
     'vault',
@@ -60,21 +62,23 @@ MIDDLEWARE = [
 ]
 
 
-MIDDLEWARE += ['corsheaders.middleware.CorsMiddleware',
-        'django.middleware.common.CommonMiddleware',
-    ]
+MIDDLEWARE += [
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
+]
+
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
         'http://localhost:3000',
     ]  # If this is used, then not need to use `CORS_ALLOW_ALL_ORIGINS = True`
-CORS_ALLOWED_ORIGIN_REGEXES = ['http://localhost:3000',]
+CORS_ALLOWED_ORIGIN_REGEXES = ['http://localhost:3000', ]
 
 ROOT_URLCONF = 'password_vault_backend.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR, 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -144,6 +148,8 @@ DEFAULT_RENDERER_CLASSES = (
     'rest_framework.renderers.JSONRenderer',
 )
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
 if DEBUG:
     DEFAULT_RENDERER_CLASSES = DEFAULT_RENDERER_CLASSES + (
         'rest_framework.renderers.BrowsableAPIRenderer',
@@ -158,7 +164,6 @@ REST_FRAMEWORK = {
 }
 
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = env("EMAIL_HOST")
 EMAIL_PORT = env("EMAIL_PORT")
 EMAIL_USE_TLS = env("EMAIL_USE_TLS")
