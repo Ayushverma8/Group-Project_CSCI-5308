@@ -1,3 +1,4 @@
+from multiprocessing import context
 import re
 import random
 
@@ -82,7 +83,7 @@ class SignUpSerializer(serializers.Serializer):
         user.username = validated_data['email']
         user.email = validated_data['email']
         user.set_password(validated_data['password'])
-        user.is_active = False
+        # user.is_active = False
         user.save()
         token = Token.objects.create(user=user)
 
@@ -97,7 +98,7 @@ class LoginSerializer(serializers.Serializer):
     """
 
     email = serializers.EmailField()
-    password = serializers.CharField(min_length=6)
+    password = serializers.CharField()
 
     class Meta:
         model = User,
@@ -107,11 +108,19 @@ class LoginSerializer(serializers.Serializer):
     def validate(self, data):
         email = data.get("email")
         password = data.get("password")
-        is_valid = authenticate(username=email, password=password)
+
+        user = User.objects.filter(email=email).first()
+
+        if not user:
+            raise serializers.ValidationError({
+                "email": "this account does not exists"
+            })
+
+        is_valid = user.check_password(password)
 
         if not is_valid:
             raise serializers.ValidationError({
-                "email": "Please check your username and password."
+                "password": "Please check your password."
             })
 
         return data

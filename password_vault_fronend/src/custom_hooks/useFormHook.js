@@ -7,7 +7,7 @@ const useForm = (callback) => {
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     useEffect(() => {
-        if (isSubmitting && Object.keys(errors).length == 0) {
+        if (isSubmitting) {
             callback();
         }
     }, [isSubmitting]);

@@ -1,7 +1,7 @@
 function Home(props) {
     return (
         <div>
-            Logged In sucessfully
+            Signup successfull, please verify your email
         </div>
     )
 }
