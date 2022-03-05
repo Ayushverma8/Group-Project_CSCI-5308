@@ -10,7 +10,6 @@ import ForgetPassword from './components/ForgetPassword';
 import ResetPassword from './components/ResetPassword';
 import Notes from './components/Notes'
 import  AddNotes  from "./components/AddNotes";
-//import "bootstrap/dist/css/bootstrap.min.css";
 import { GlobalProvider } from "./context/GlobalState";
 
 function App() {
@@ -34,17 +33,6 @@ function App() {
 					{/* <Route path='*' element={<PageNotFound />} /> */}
 				</Routes>
 			</BrowserRouter>
-			<div style={{ maxWidth: "30rem", margin: "4rem auto" }}>
-				<GlobalProvider>
-					<BrowserRouter>
-						<Routes>
-							<Route path='/notes' element={<Notes />} />
-							<Route path="/add" element={<AddNotes />}></Route>
-						</Routes>
-					</BrowserRouter>
-				</GlobalProvider>
-			</div>
-
 		</div>
 	);
 }
