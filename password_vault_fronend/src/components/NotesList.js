@@ -89,7 +89,6 @@ function NotesList  ()  {
           <a class="navbar-brand" style={{paddingRight:"700px"}} href="#">Password Vault</a>
             <form>
               <div class="input-group no-border">
-
                 <input type="text" value="" class="form-control" placeholder="Search..."/>
                 <div class="input-group-append">
                   <div class="input-group-text">
