@@ -1,4 +1,4 @@
-function LendingPage() {
+function LandingPage() {
     return (
         <>
             <nav class="navbar navbar-expand-lg bg-primary1  text-uppercase fixed-top" id="mainNav">
@@ -19,8 +19,8 @@ function LendingPage() {
                 </div>
             </nav><header className="masthead d-flex align-items-center">
                 <div className="container px-4 px-lg-5 text-center">
-                    <h1 className="mb-1">Password Managememnt from Anywhere</h1>
-                    <h2 className="mb-5"><em>Life is happening online. Work. Play. Family and friends. Password Vault puts your digital life at your fingertips, simply and securely.</em></h2>
+                    <h1 className="mb-1" style={{color:"rgb(15 46 74)",fontFamily:"auto",fontWeight:"bolder"}}>Password Managememnt from Anywhere</h1>
+                    <h2 className="mb-5" style={{color:"rgb(255 255 255 / 80%)",fontWeight:"bolder"}}><em>Life is happening online. Work. Play. Family and friends. Password Vault puts your digital life at your fingertips, simply and securely.</em></h2>
                     <a className="btn btn-primary btn-xl" href="#about">Find Out More</a>
                 </div>
             </header>
@@ -70,4 +70,4 @@ function LendingPage() {
     )
 }
 
-export default LendingPage;
+export default LandingPage;
