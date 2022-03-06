@@ -147,8 +147,8 @@ class ForgotPasswordSerializer(serializers.Serializer):
             data = Verification(user=user, verification_code=one_time_verification)
             data.save()
         else:
-            raise serializers.ValidationError({"email": "Account with this email "
-                                                        "does not exists"})
+            raise serializers.ValidationError("Account with this email "
+                                              "does not exists")
 
         return email
 
@@ -162,7 +162,7 @@ class ResetPasswordSerializer(serializers.Serializer):
 
     email = serializers.EmailField()
     otp = serializers.IntegerField()
-    password = serializers.CharField(min_length=6)
+    password = serializers.CharField()
 
     def validate(self, data):
         """
