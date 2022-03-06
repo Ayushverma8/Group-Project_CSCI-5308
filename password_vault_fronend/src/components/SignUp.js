@@ -2,6 +2,7 @@ import API_CLIENT from "../api/axiosClient";
 import Input from "./common/Input";
 import useForm from "../custom_hooks/useFormHook";
 import { setUserLoggedIn } from "../utils/authHelpers";
+import { Fragment } from "react/cjs/react.production.min";
 
 function Signup() {
 	const signUp = async () => {
@@ -14,15 +15,11 @@ function Signup() {
 	}
 
 	const { handleChange, handleSubmit, values, setValues, errors, setErrors } = useForm(signUp);
-	const style = {
-		background:"url('../assets/img/Main.jpg') fixed",
-		backgroundSize: "cover",
-		textAlign:"center",
-	}
 
 	return (
-		<div>
-			<div className="w3-main mt-5" style={style}>
+		<Fragment>
+			<link href="css/style_Login.css" rel="stylesheet" type="text/css" media="all"></link>
+			<div className="w3-main mt-5">
 				<div className="about-bottom main-agile book-form">
 					<h2 className="tittle">Register Here</h2>
 					<form onSubmit={handleSubmit}>
@@ -53,7 +50,7 @@ function Signup() {
 			<div className="footer-w3l">
 				<p>&copy; All rights reserved | Design by Password Vault</p>
 			</div>
-		</div>
+		</Fragment>
 	)
 }
 

@@ -20,6 +20,7 @@ function ResetPassword() {
 
 	return (
 		<Fragment>
+			<link href="css/style_Login.css" rel="stylesheet" type="text/css" media="all"></link>
 			<div className="w3-main mt-5">
 				<div className="about-bottom main-agile book-form">
 					<div className="alert-close"> </div>

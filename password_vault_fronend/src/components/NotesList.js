@@ -2,13 +2,13 @@ import React, { useContext } from 'react';
 import { GlobalContext } from "../context/GlobalState";
 import { Link } from "react-router-dom";
 import {
-  ListGroup,
-  ListGroupItem,
-  Button
+	ListGroup,
+	ListGroupItem,
+	Button
 } from "reactstrap";
 
-function NotesList  ()  {
-  const { notes, removeNote } = useContext(GlobalContext);
+function NotesList() {
+	const { notes, removeNote } = useContext(GlobalContext);
 
   return (
     <ListGroup className="mt-4">
@@ -119,35 +119,35 @@ function NotesList  ()  {
                   <a class="dropdown-item" href="#">Something else here</a>
                 </div>
               </li> */}
-              <li class="nav-item">
-                <a class="nav-link btn-rotate" href="javascript:;">
-                  <i class="nc-icon nc-settings-gear-65"></i>
-                  <p>
-                    <span class="d-lg-none d-md-block">Account</span>
-                  </p>
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </nav>
-      {notes.length > 0 ? (
-        <>
-          {notes.map(note => (
-            <ListGroupItem className="" key={note.id}>
-              <strong>{note.name}</strong>
-              <div className="ml-auto pull-right">
-                <Link to={`/edit/${note.id}`} className="btn btn-warning mr-3" style={{color:"#f8f9fa",backgroundColor: "#23314e",borderColor:"#23314e"}}>Edit</Link>
-                <Button onClick={() => removeNote(note.id)} color="danger">Delete</Button>
-              </div>
-            </ListGroupItem>
-          ))}
-        </>
-      ) : (
-          <h4 className="text-center">No Notes</h4>
-        )}
-    </ListGroup>
-  )
+							<li class="nav-item">
+								<a class="nav-link btn-rotate" href="javascript:;">
+									<i class="nc-icon nc-settings-gear-65"></i>
+									<p>
+										<span class="d-lg-none d-md-block">Account</span>
+									</p>
+								</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</nav>
+			{notes.length > 0 ? (
+				<>
+					{notes.map(note => (
+						<ListGroupItem className="" key={note.id}>
+							<strong>{note.name}</strong>
+							<div className="ml-auto pull-right">
+								<Link to={`/edit/${note.id}`} className="btn btn-warning mr-3" style={{ color: "#f8f9fa", backgroundColor: "#23314e", borderColor: "#23314e" }}>Edit</Link>
+								<Button onClick={() => removeNote(note.id)} color="danger">Delete</Button>
+							</div>
+						</ListGroupItem>
+					))}
+				</>
+			) : (
+				<h4 className="text-center">No Notes</h4>
+			)}
+		</ListGroup>
+	)
 }
 
 export default NotesList;

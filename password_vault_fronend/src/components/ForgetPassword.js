@@ -24,6 +24,7 @@ function ForgetPassword() {
 
     return (
         <Fragment>
+            <link href="css/style_Login.css" rel="stylesheet" type="text/css" media="all"></link>
             {successMessage &&
                 <div className="mt-3 rounded text-success about-bottom p-3 bg-light">
                     Successfully sent OTP to Your email. Click <a href="/reset-password">here</a> to reset password
