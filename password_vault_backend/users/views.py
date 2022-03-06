@@ -90,13 +90,14 @@ class ForgotPasswordView(core.views.AbstractBaseAPIView):
         """
 
         super(ForgotPasswordView, self).post(request, **kwargs)
-        otp = Verification.objects.filter(email=request.data.get("email"))\
+        otp = Verification.objects.filter(user__email=request.data.get("email"))\
             .order_by('-created_at').first()
         context = {
-            "otp": otp.verification_code
+            "otp": otp.verification_code,
+            "user": otp.user
         }
         core.helpers.send_email('reset_password.html', context,
-                                "Reset password request", otp.email)
+                                "Reset password request", otp.user.email)
         res = {"message": "success"}
 
         return Response(res, HTTP_200_OK)
@@ -120,7 +121,11 @@ class ResetPasswordView(core.views.AbstractBaseAPIView):
         """
 
         super(ResetPasswordView, self).post(request, **kwargs)
-        res = {'message': 'success'}
+
+        user = User.objects.get(email=request.data.get('email'))
+        Token.objects.filter(user=user).delete()
+        token = Token.objects.create(user=user)
+        res = {'message': 'success', 'token': token.key}
         return Response(res, HTTP_200_OK)
 
 

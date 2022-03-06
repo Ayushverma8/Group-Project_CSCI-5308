@@ -37,7 +37,7 @@ function Login() {
 
                         <div>
                             <p className="forgot-password text-right">
-                                <a href="#">Forgot password?</a>
+                                <a href="/forgot-password">Forgot password?</a>
                             </p>
                             <p className="forgot-password text-right">
                                 <a href="/signup">New User?</a>
