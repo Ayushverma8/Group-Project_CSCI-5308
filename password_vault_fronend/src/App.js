@@ -10,7 +10,6 @@ import ForgetPassword from './components/ForgetPassword';
 import ResetPassword from './components/ResetPassword';
 import Notes from './components/Notes'
 import  AddNotes  from "./components/AddNotes";
-import { GlobalProvider } from "./context/GlobalState";
 
 function App() {
 	return (
