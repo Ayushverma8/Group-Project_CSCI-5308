@@ -11,19 +11,17 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+import environ
+from pathlib import Path
 
-mode = os.environ.get('password_vault_mode') or 'dev'
 
-if mode == "prod":
-    import config.prod.credentials as creds
-elif mode == "staging":
-    import config.staging.credentials as creds
-else:
-    import config.dev.credentials as creds
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+root = environ.Path()  # get root of the project
+env = environ.Env()
+environ.Env.read_env()
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
@@ -32,10 +30,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '9#88f#6x=!b3nuwb1rgz1@7t9x5w5^kg3-ru+da4*gfifus$wu'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env('DEBUG')
+MODE = env("MODE")
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -46,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'rest_framework.authtoken',
     'corsheaders',
     'vault',
@@ -62,28 +61,24 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-if mode == 'dev':
-    MIDDLEWARE += [
-        'corsheaders.middleware.CorsMiddleware',
-        'django.middleware.common.CommonMiddleware',
-    ]
 
-    # CORS_ALLOW_ALL_ORIGINS = True If this is used then `CORS_ALLOWED_ORIGINS`
-    # will not have any effect
-    CORS_ALLOW_CREDENTIALS = True
-    CORS_ALLOWED_ORIGINS = [
+MIDDLEWARE += [
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
+]
+
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOWED_ORIGINS = [
         'http://localhost:3000',
-    ]  # If this is used, then not need to use `CORS_ALLOW_ALL_ORIGINS = True`
-    CORS_ALLOWED_ORIGIN_REGEXES = [
-        'http://localhost:3000',
-    ]
+]  # If this is used, then not need to use `CORS_ALLOW_ALL_ORIGINS = True`
+CORS_ALLOWED_ORIGIN_REGEXES = ['http://localhost:3000', ]
 
 ROOT_URLCONF = 'password_vault_backend.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR, 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -98,21 +93,19 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'password_vault_backend.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'Password_vault',
-        'USER': creds.MYSQL_USER,
-        'PASSWORD': creds.MYSQL_PASSWORD,
-        'HOST': 'localhost',
-        'PORT': '3306',
+         'NAME': env('DB_NAME'),
+        'USER': env('DB_USER'),
+        'PASSWORD': env('DB_PASSWORD'),
+        'HOST': env('DB_HOST'),
+        'PORT': env('DB_PORT'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
@@ -132,7 +125,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
@@ -146,7 +138,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
@@ -156,6 +147,8 @@ STATIC_URL = '/static/'
 DEFAULT_RENDERER_CLASSES = (
     'rest_framework.renderers.JSONRenderer',
 )
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 if DEBUG:
     DEFAULT_RENDERER_CLASSES = DEFAULT_RENDERER_CLASSES + (
@@ -170,3 +163,9 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 100
 }
 
+
+EMAIL_HOST = env("EMAIL_HOST")
+EMAIL_PORT = env("EMAIL_PORT")
+EMAIL_USE_TLS = env("EMAIL_USE_TLS")
+EMAIL_HOST_USER = env("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")

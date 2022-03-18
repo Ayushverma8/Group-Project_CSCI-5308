@@ -4,6 +4,7 @@ django-extensions==3.1.5
 django-filter==21.1
 django-shell-plus==1.1.7
 djangorestframework==3.13.1
+django_environ==0.8.1
 ipdb==0.13.9
 ipython==7.16.2
 ipython-genutils==0.2.0
@@ -16,3 +17,4 @@ social-auth-app-django==4.0.0
 social-auth-core==4.1.0
 sqlparse==0.4.2
 urllib3==1.22
+

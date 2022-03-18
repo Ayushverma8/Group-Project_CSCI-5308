@@ -35,12 +35,15 @@ class AbstractBaseAPIView(views.APIView):
 
     def validate_request_data(self, request, **kwargs):
         """
+        Validates request from the serializer class and also pass request
+        attribute to serializer so that it could be accessed there. 
         """
 
         if getattr(self, 'serializer_class') is None:
             return
 
-        self.serializer = self.serializer_class(data=request.data)
+        self.serializer = self.serializer_class(data=request.data,
+                                                context={'request': request})
         self.serializer.is_valid(raise_exception=True)
 
     def post(self, request, **kwargs):

@@ -1,20 +1,8 @@
-import { useEffect, useState } from "react";
-import API_CLIENT from "../api/axiosClient";
-
-function Home() {
-    const [test, setTest] = useState();
-
-    useEffect(async ()=>{
-        let res = await API_CLIENT.get('test/');
-        setTest(res.data)
-    },[])
-
+function Home(props) {
     return (
         <div>
-            hello this is main page.
-            backend returned {test && test.count}
+            Signup successfull, please verify your email
         </div>
     )
 }
-
 export default Home;

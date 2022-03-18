@@ -6,7 +6,6 @@ router = DefaultRouter()
 
 
 # ViewSet items will be set like this.
-router.register(r'test', views.TestView, basename='test')
 
 url_patterns = []
 
