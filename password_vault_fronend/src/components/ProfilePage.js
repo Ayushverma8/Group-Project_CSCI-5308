@@ -1,106 +1,82 @@
 import API_CLIENT from "../api/axiosClient";
 import Input from "./common/Input";
 import useForm from "../custom_hooks/useFormHook";
-import { setUserLoggedIn } from "../utils/authHelpers";
+import { getHeaders, setUserLoggedIn } from "../utils/authHelpers";
+import { Fragment } from "react/cjs/react.production.min";
+import SideBar from './SideBar'
+import { useEffect, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function ProfilePage() {
-	const profile = async () => {
+
+	const [successMessage, setSuccessMessage] = useState(false);
+	const [emailChanged, setEmailChanged] = useState(false);
+
+	useEffect(async () => {
 		try {
-			let res = await API_CLIENT.post('/profile/', values);
-			setUserLoggedIn(res.data.token);
-		} catch (e) {
-			setErrors(e.response.data);
+			let response = await API_CLIENT.get('user_profile/', {
+				headers: getHeaders()
+			});
+
+			setValues(response.data);
+		} catch (err) {
+			console.log(err);
+		}
+	}, []);
+
+	const updateProfile = async () => {
+		try {
+			let response = await API_CLIENT.patch('user_profile/', values, {
+				headers: getHeaders()
+			})
+
+			setSuccessMessage(true);
+			if (response.data.email_changed) {
+				setEmailChanged(true)
+			}
+		} catch (err) {
+			setErrors(err.response.data);
 		}
 	}
 
-	const { handleChange, handleSubmit, values, setValues, errors, setErrors } = useForm(profile);
-	const style = {
-		background: "url('../assets/img/Main.jpg') fixed",
-		backgroundSize: "cover",
-		textAlign: "center",
-	}
+	const { handleChange, handleSubmit, values, setValues, errors, setErrors } = useForm(updateProfile);
 
 	return (
-		<><div class="sidebar" data-color="white" data-active-color="danger">
-			<div class="logo">
-				<div class="logo-image-small">
-					<img src="../assets/img/user (1).png" class="user-icon" />
+		<Fragment>
+			<SideBar />
+			<div className="col-md-6 offset-4 mt-5">
+				<div className="col-md-6 offset-3">
+					{
+						successMessage &&
+						<div className="mt-3 mb-2 rounded text-success about-bottom p-3 bg-light border">
+							Profile updated
+							{
+								emailChanged && ". Please check your email"
+							}
+
+							<FontAwesomeIcon style={{ marginLeft: '5px' }} icon="fa-solid fa-check" />
+						</div>
+					}
+
+					<h2 className="tittle">Account Settings</h2>
+					<form onSubmit={handleSubmit}>
+						<div className="form-date-w3-agileits">
+							<label className="pull-left"> First name </label>
+							<Input type="text" name="first_name" placeholder="Your Name" required="true" value={values.first_name} onChange={handleChange} errors={errors} />
+							<label className="pull-left"> Last name </label>
+							<Input type="text" name="last_name" placeholder="Your Name" required="true" value={values.last_name} onChange={handleChange} errors={errors} />
+							<label className="pull-left"> Email </label>
+							<Input type="email" name="email" placeholder="Your Email" required="" value={values.email} onChange={handleChange} errors={errors} />
+							<label className="pull-left"> New Password </label>
+							<Input type="password" name="password" placeholder="Your Password" required="" value={values.password} onChange={handleChange} errors={errors} />
+						</div>
+						<div className="make wow shake">
+							<button type="submit" className="btn btn-primary" >Save changes</button>
+						</div>
+					</form>
 				</div>
-				<a href="#" class="simple-text logo-normal">
-					<label id="lbluserid" style={{ fontWeight: "bolder" }}></label>
-				</a>
 			</div>
-			<div class="sidebar-wrapper ">
-				<ul class="nav">
-					<li>
-						<a href="/">
-							<i class="nc-icon nc-bank logo-color"></i>
-							<p>Dashboard</p>
-						</a>
-					</li>
-					<li  >
-						<a href="/notes">
-							<i class="nc-icon nc-bullet-list-67 logo-color"></i>
-							<p>Notes</p>
-						</a>
-					</li>
-					<li  >
-						<a href="/notes">
-							<i class="nc-icon nc-box-2 logo-color"></i>
-							<p>Vault</p>
-						</a>
-					</li>
-					<li >
-						<a href="./map.html">
-							<i class="nc-icon nc-bookmark-2 logo-color"></i>
-							<p>Todo</p>
-						</a>
-					</li>
-					<li >
-						<a href="./notifications.html">
-							<i class="nc-icon nc-button-power logo-color"></i>
-							<p>Logout</p>
-						</a>
-					</li>
-					<li >
-						<a href="./user.html">
-							<i class="nc-icon nc-simple-remove logo-color"></i>
-							<p>Delete Account</p>
-						</a>
-					</li>
-
-				</ul>
-			</div>
-		</div>
-			<div>
-				<div className="w3-main mt-5" style={style}>
-					<div className="about-bottom main-agile book-form">
-						<h2 className="tittle">Account Settings</h2>
-						<form onSubmit={handleSubmit}>
-							<div className="form-date-w3-agileits">
-								<label> First name </label>
-								<Input type="text" name="first_name" placeholder="Your Name" required="true" value={values.first_name} onChange={handleChange} errors={errors} />
-								<label> Last name </label>
-								<Input type="text" name="last_name" placeholder="Your Name" required="true" value={values.last_name} onChange={handleChange} errors={errors} />
-								<label> Email </label>
-								<Input type="email" name="email" placeholder="Your Email" required="" value={values.email} onChange={handleChange} errors={errors} />
-								<label> New Password </label>
-								<Input type="password" name="password" placeholder="Your Password" required="" value={values.password} onChange={handleChange} errors={errors} />
-							</div>
-							<div className="make wow shake">
-								<input type="submit" value="Save Changes" />
-							</div>
-
-							<div>
-
-							</div>
-						</form>
-					</div>
-				</div>
-				<div className="footer-w3l">
-					<p>&copy; All rights reserved | Design by Password Vault</p>
-				</div>
-			</div></>
+		</Fragment>
 	)
 }
 

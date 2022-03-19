@@ -32,9 +32,15 @@ function SideBar() {
                         </a>
                     </li>
                     <li >
-                        <a href="./map.html">
+                        <a href="#">
                             <i class="nc-icon nc-bookmark-2 logo-color"></i>
                             <p>Todo</p>
+                        </a>
+                    </li>
+                    <li >
+                        <a href="/profile">
+                            <i class="nc-icon nc-settings-gear-65 logo-color"></i>
+                            <p>Profile</p>
                         </a>
                     </li>
                     <li >
