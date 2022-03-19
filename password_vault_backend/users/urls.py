@@ -16,7 +16,8 @@ url_patterns = [
     url(r'forgot_password/$', views.ForgotPasswordView.as_view(), name='forgot_password'),
     url(r'reset_password/$', views.ResetPasswordView.as_view(), name='reset_password'),
     url(r'confirm_email/$', views.EmailConfirmationView.as_view(), name='confirm-email'),
-    url(r'logout/$', views.LogOutView.as_view(), name='logout')
+    url(r'logout/$', views.LogOutView.as_view(), name='logout'),
+    url(r'user_profile/$', views.UserProfileView.as_view(), name='logout'),
 ]
 
 url_patterns += router.urls

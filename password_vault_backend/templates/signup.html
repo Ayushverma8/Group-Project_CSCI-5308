@@ -2,7 +2,11 @@
 {% autoescape off %}
 
 <p>
-    Hello {{ user.first_name }}, Thank you for signing up with Password vault
+    {% if email_changed %}
+        Hello {{ user.first_name }}, Your email has been changed
+    {% else %}
+        Hello {{ user.first_name }}, Thank you for signing up with Password vault
+    {% endif %}
 </p>
 
 <p>

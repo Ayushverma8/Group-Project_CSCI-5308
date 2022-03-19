@@ -146,6 +146,7 @@ class LogOutView(core.views.AuthRequiredView, core.views.AbstractBaseAPIView):
 
         Token.objects.filter(user=request.user).delete()
         logout(request)
+
         return Response({"message": "success"}, HTTP_200_OK)
 
 
@@ -179,3 +180,69 @@ class EmailConfirmationView(View):
         }
 
         return render(request, 'confirm_email.html', context)
+
+
+class UserProfileView(core.views.AuthRequiredView, core.views.AbstractBaseAPIView):
+    """
+    @author: Deep Adeshra <dp974154@dal.ca>
+    """
+
+    http_method_names = ["get", "patch"]
+    serializer_class = serializers.UserProfileSerializer
+
+    def get(self, request, *args, **kwargs):
+        """
+        Returns user profile of requested user
+        """
+
+        user = request.user
+
+        data = {
+            'first_name': user.first_name,
+            'last_name': user.last_name,
+            'email': user.email
+        }
+
+        return Response(data,  HTTP_200_OK)
+
+    def patch(self, request, *args, **kwargs):
+        """
+        Responsible for updating user profile
+        """
+
+        super(UserProfileView, self).patch(request, *args, **kwargs)
+        user = request.user
+        validated_data = self.serializer.validated_data
+        email_changed = False
+        user.first_name = validated_data['first_name']
+        user.last_name = validated_data['last_name']
+
+        if user.email != validated_data['email']:
+            # user.is_active = False
+            user.email = validated_data['email']
+            email_changed = True
+
+        if validated_data.get('password'):
+            user.set_password(validated_data['password'])
+
+        user.save()
+
+        if email_changed:
+            token, _ = Token.objects.get_or_create(user=user)
+
+            context = {
+                "user": token.user,
+                "url": "%s/confirm_email?token=%s" %
+                       (core.helpers.get_site_url(), token.key),
+                "email_changed": True
+            }
+
+            core.helpers.send_email("signup.html", context,
+                                    "Please confirm your email",
+                                    token.user.email)
+        response_data = {
+            "message": "success",
+            "email_changed": email_changed
+        }
+
+        return Response(response_data, HTTP_200_OK)
