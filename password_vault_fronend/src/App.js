@@ -9,8 +9,6 @@ import Home from './components/Home';
 import ForgetPassword from './components/ForgetPassword';
 import ResetPassword from './components/ResetPassword';
 import Notes from './components/Notes'
-import  AddNotes  from "./components/AddNotes";
-import { GlobalProvider } from "./context/GlobalState";
 
 function App() {
 	return (
@@ -27,6 +25,7 @@ function App() {
 
 					<Route path='/' element={<PrivateRoute />}>
 						<Route path='/home' element={<Home />} />
+						<Route path='/notes' element={<Notes />} />
 					</Route>
 
 					{/* TODO: FIX THIS : NOT WORKING */}
