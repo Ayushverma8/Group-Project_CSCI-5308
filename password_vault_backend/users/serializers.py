@@ -1,8 +1,6 @@
-from multiprocessing import context
 import re
 import random
 
-from django.contrib.auth import authenticate
 from django.db import transaction
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
@@ -83,7 +81,7 @@ class SignUpSerializer(serializers.Serializer):
         user.username = validated_data['email']
         user.email = validated_data['email']
         user.set_password(validated_data['password'])
-        # user.is_active = False
+        user.is_active = False
         user.save()
         token = Token.objects.create(user=user)
 

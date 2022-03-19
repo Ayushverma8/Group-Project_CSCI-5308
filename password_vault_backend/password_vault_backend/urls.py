@@ -19,9 +19,11 @@ from django.urls import path, include
 
 import users.urls
 import vault.urls
+import notes.urls
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     path('', include(users.urls.url_patterns)),
     path('vault', include(vault.urls.url_patterns)),
+    path('', include(notes.urls.url_patterns)),
 ]

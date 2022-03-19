@@ -18,7 +18,8 @@ function Login() {
 
     return (
         <Fragment>
-            <div className="w3-main mt-5">
+            <link href="css/style_Login.css" rel="stylesheet" type="text/css" media="all"></link>
+            <div className="w3-main mt-5" >
                 <div className="about-bottom main-agile book-form">
                     <div className="alert-close"> </div>
                     <h2 className="tittle">Login Here</h2>

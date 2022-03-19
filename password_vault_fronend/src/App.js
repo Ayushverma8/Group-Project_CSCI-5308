@@ -1,5 +1,5 @@
 import './App.css';
-import LendingPage from './components/LendingPage'
+import LandingPage from './components/LandingPage'
 import SignUp from './components/SignUp'
 import Login from './components/Login'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
@@ -8,6 +8,7 @@ import PageNotFound from './components/common/404';
 import Home from './components/Home';
 import ForgetPassword from './components/ForgetPassword';
 import ResetPassword from './components/ResetPassword';
+import Notes from './components/Notes'
 
 function App() {
 	return (
@@ -15,7 +16,7 @@ function App() {
 			<BrowserRouter>
 				<Routes>
 					<Route path='/' element={<PublicRoute restrictedToPublicOnly={true} />}>
-						<Route path='/' element={<LendingPage />} />
+						<Route path='/' element={<LandingPage />} />
 						<Route path='/login' element={<Login />} />
 						<Route path='/signup' element={<SignUp />} />
 						<Route path='/forgot-password' element={<ForgetPassword />} />
@@ -23,14 +24,14 @@ function App() {
 					</Route>
 
 					<Route path='/' element={<PrivateRoute />}>
-						<Route path='/home' element={<Home />}/>
+						<Route path='/home' element={<Home />} />
+						<Route path='/notes' element={<Notes />} />
 					</Route>
 
 					{/* TODO: FIX THIS : NOT WORKING */}
 					{/* <Route path='*' element={<PageNotFound />} /> */}
 				</Routes>
 			</BrowserRouter>
-
 		</div>
 	);
 }

@@ -31,11 +31,18 @@ img{max-width:100%;}
 body,p,h1,h2,h3,h4,h5,h6{
 	font-family: 'Cuprum', sans-serif;
 }
+.w3-main{
+	background:url('../assets/img/Main.jpg') fixed;
+    background-size: cover;
+	text-align:center;
+}
+
 body {
     background:url('../assets/img/Main.jpg') fixed;
     background-size: cover;
 	text-align:center;
 }
+
 /*--header--*/
 .header h1 {
     font-size: 2.8em;

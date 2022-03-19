@@ -10,4 +10,10 @@ const setUserLoggedIn = (token) => {
     window.location.href = '/home';
 }
 
-export { isUserLoggedIn, setUserLoggedIn };
+const getHeaders = () => {
+    return {
+        'Authorization': 'Token ' + localStorage.getItem(AUTH_TOKEN_KEY)
+    }
+}
+
+export { isUserLoggedIn, setUserLoggedIn, getHeaders };
