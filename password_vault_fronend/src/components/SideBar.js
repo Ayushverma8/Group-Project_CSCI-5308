@@ -1,3 +1,5 @@
+import { setUserLoggedOut } from "../utils/authHelpers";
+
 function SideBar() {
     return (
         <div class="sidebar" data-color="white" data-active-color="danger">
@@ -36,18 +38,11 @@ function SideBar() {
                         </a>
                     </li>
                     <li >
-                        <a href="./notifications.html">
+                        <a onClick={setUserLoggedOut}>
                             <i class="nc-icon nc-button-power logo-color"></i>
                             <p>Logout</p>
                         </a>
                     </li>
-                    <li >
-                        <a href="./user.html">
-                            <i class="nc-icon nc-simple-remove logo-color"></i>
-                            <p>Delete Account</p>
-                        </a>
-                    </li>
-
                 </ul>
             </div>
         </div>
