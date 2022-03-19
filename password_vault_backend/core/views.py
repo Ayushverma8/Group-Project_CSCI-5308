@@ -48,6 +48,16 @@ class AbstractBaseAPIView(views.APIView):
 
     def post(self, request, **kwargs):
         """
+        Validate the payload received from the request from the given
+        serializer.
+        """
+
+        return self.validate_request_data(request, **kwargs)
+
+    def patch(self, request, **kwargs):
+        """
+        Validates the payload received from the request from the given
+        serializer.
         """
 
         return self.validate_request_data(request, **kwargs)
