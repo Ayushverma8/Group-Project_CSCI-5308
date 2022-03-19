@@ -26,6 +26,8 @@ function App() {
 
 					<Route path='/' element={<PrivateRoute />}>
 						<Route path='/home' element={<Home />} />
+						<Route path='/notes' element={<Notes />} />
+						<Route path='/notes/add' element={<AddNotes />} />
 					</Route>
 
 					{/* TODO: FIX THIS : NOT WORKING */}
