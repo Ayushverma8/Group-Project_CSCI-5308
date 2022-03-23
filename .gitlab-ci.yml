@@ -38,7 +38,7 @@ variables:
   MYSQL_PASSWORD: $MYSQL_PASS
 
 default:
-  image: ubuntu:20.04
+  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   #
   # Pick zero or more services to be used on all builds.
   # Only needed when using a docker container to run your tests in.
