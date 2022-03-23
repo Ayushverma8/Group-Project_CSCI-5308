@@ -53,6 +53,7 @@ default:
       - ~/.cache/pip/
   before_script:
     - apt -y update
+    - apt install awscli
     - apt -y install apt-utils
     - apt -y install net-tools python3.8 python3-pip mysql-client libmysqlclient-dev
     - apt -y upgrade
@@ -71,3 +72,12 @@ django-tests:
     # The MYSQL user only gets permissions for MYSQL_DB, so Django can't create a test database.
     - echo "GRANT ALL on *.* to '${MYSQL_USER}';"| mysql -u root --password="${MYSQL_ROOT_PASSWORD}" -h mysql
     # use python3 explicitly. see https://wiki.ubuntu.com/Python/3
+    
+pages:
+  stage: deploy
+  script:
+  - aws deploy push --application-name myApp --s3-location s3://group5asdc/artifacts.zip --source public/
+  - aws deploy create-deployment --application-name myApp --deployment-group-name asdc-group-5-DeploymentGroup --s3-location bucket=group5asdc,bundleType=zip,key=artifacts.zip
+  artifacts:
+    paths:
+    - public
