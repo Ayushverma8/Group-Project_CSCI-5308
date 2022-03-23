@@ -53,7 +53,6 @@ default:
       - ~/.cache/pip/
   before_script:
     - apt -y update
-    - apt install awscli
     - apt -y install apt-utils
     - apt -y install net-tools python3.8 python3-pip mysql-client libmysqlclient-dev
     - apt -y upgrade
