@@ -75,7 +75,7 @@ default:
 pages:
   stage: deploy
   script:
-  - aws deploy push --application-name myApp --s3-location s3://group5asdc/artifacts.zip --source password_vault_backend/
+  - aws deploy push --application-name myApp --s3-location s3://group5asdc/artifacts.zip --source appspec.yml
   - aws deploy create-deployment --application-name myApp --deployment-group-name asdc-group-5-DeploymentGroup --s3-location bucket=group5asdc,bundleType=zip,key=artifacts.zip
   artifacts:
     paths:
