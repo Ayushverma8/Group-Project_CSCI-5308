@@ -53,10 +53,10 @@ default:
       - ~/.cache/pip/
   before_script:
     - apt -y update
-    - apt -y install apt-utils
-    - apt -y install net-tools python3.8 python3-pip mysql-client libmysqlclient-dev
-    - apt -y upgrade
-    - pip3 install -r requirements.txt
+    # - apt -y install apt-utils
+    # - apt -y install net-tools python3.8 python3-pip mysql-client libmysqlclient-dev
+    # - apt -y upgrade
+    # - pip3 install -r requirements.txt
 
 
 # migrations:
@@ -75,7 +75,7 @@ default:
 pages:
   stage: deploy
   script:
-  - aws deploy push --application-name myApp --s3-location s3://group5asdc/artifacts.zip --source .
+  - aws deploy push --application-name myApp --s3-location s3://group5asdc/artifacts.zip --source password_vault_backend/
   - aws deploy create-deployment --application-name myApp --deployment-group-name asdc-group-5-DeploymentGroup --s3-location bucket=group5asdc,bundleType=zip,key=artifacts.zip
   artifacts:
     paths:
