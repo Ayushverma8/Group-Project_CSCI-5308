@@ -72,7 +72,7 @@ default:
 #     - echo "GRANT ALL on *.* to '${MYSQL_USER}';"| mysql -u root --password="${MYSQL_ROOT_PASSWORD}" -h mysql
 #     # use python3 explicitly. see https://wiki.ubuntu.com/Python/3
     
-pages:
+deploy_to_aws:
   stage: deploy
   script:
   - aws deploy push --application-name myApp --s3-location s3://group5asdc/artifacts.zip
