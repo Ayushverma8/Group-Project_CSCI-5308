@@ -1,4 +1,4 @@
-
+#Defined Variables for Gitlab to use
 variables:
   MYSQL_DATABASE: $MYSQL_DB
   MYSQL_ROOT_PASSWORD: $MYSQL_PASS
