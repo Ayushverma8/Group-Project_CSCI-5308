@@ -17,6 +17,7 @@ from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path, include
 
+import todo.urls
 import users.urls
 import vault.urls
 import notes.urls
@@ -26,4 +27,5 @@ urlpatterns = [
     path('', include(users.urls.url_patterns)),
     path('vault', include(vault.urls.url_patterns)),
     path('', include(notes.urls.url_patterns)),
+    path('', include(todo.urls.url_patterns)),
 ]
