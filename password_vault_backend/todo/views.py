@@ -17,4 +17,4 @@ class ToDoViewSet(AuthRequiredView, viewsets.ModelViewSet):
 
     def get_queryset(self):
         return super(ToDoViewSet, self).get_queryset() \
-            .filter(created_by=self.request.user)
+            .filter(created_by=self.request.user).order_by('priority')

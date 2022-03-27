@@ -42,7 +42,7 @@ function SideBar() {
                         </a>
                     </li>
                     <li >
-                        <a href="#">
+                        <a href="/todo">
                             <i class="nc-icon nc-bookmark-2 logo-color"></i>
                             <p>Todo</p>
                         </a>
