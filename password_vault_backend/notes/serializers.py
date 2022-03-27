@@ -4,7 +4,7 @@ from .models import Note
 
 class NoteSerializer(serializers.ModelSerializer):
     """
-    Serializer not body
+    Note Serializer  body
 
     @author: Shalin Awadiya <shalin.awadiya@dal.ca>
     """
