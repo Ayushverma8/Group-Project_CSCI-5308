@@ -1,3 +1,5 @@
+import API_CLIENT from '../api/axiosClient'
+
 const AUTH_TOKEN_KEY = 'token'
 
 const isUserLoggedIn = () => {
@@ -16,4 +18,13 @@ const getHeaders = () => {
     }
 }
 
-export { isUserLoggedIn, setUserLoggedIn, getHeaders };
+const setUserLoggedOut = async () => {
+    await API_CLIENT.post('logout/',{},{
+        headers: getHeaders()
+    });
+
+    localStorage.removeItem(AUTH_TOKEN_KEY);
+    window.location.href = '/login'
+}
+
+export { isUserLoggedIn, setUserLoggedIn, getHeaders, setUserLoggedOut };

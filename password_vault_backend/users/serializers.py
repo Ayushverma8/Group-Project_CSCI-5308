@@ -9,30 +9,15 @@ from rest_framework import serializers
 from users.models import Verification
 
 
-class SignUpSerializer(serializers.Serializer):
+class UserProfileAbstractSerializer(serializers.Serializer):
     """
-    Serializer for signup body
+    Common serializer used for the validating user profile related data
 
     @author: Deep Adeshra <dp974154@dal.ca>
     """
 
-    first_name = serializers.CharField(max_length=50)
-    last_name = serializers.CharField(max_length=50)
-    email = serializers.EmailField()
-    password = serializers.CharField(min_length=6)
-    confirm_password = serializers.CharField(min_length=6)
-
-    def validate(self, data):
-        """
-        This method validates entire JSON body.
-        """
-
-        if data['password'] != data['confirm_password']:
-            raise serializers.ValidationError({
-                'confirm_password': "This should be same as password"
-            })
-
-        return data
+    class Meta:
+        abstract = True
 
     def validate_name(self, value):
         """
@@ -58,13 +43,43 @@ class SignUpSerializer(serializers.Serializer):
         validates if there is any existing account with the passed email or not.
         """
 
-        user_exists = User.objects.filter(email=email).exists()
+        if not self.context.get('request'):
+            user_exists = User.objects.filter(email=email).exists()
+        else:
+            user_exists = User.objects.filter(email=email)\
+                .exclude(id=self.context['request'].user.id).exists()
 
         if user_exists:
             raise serializers.ValidationError("Account with this email "
                                               "already exists")
 
         return email
+
+
+class SignUpSerializer(UserProfileAbstractSerializer):
+    """
+    Serializer for signup body
+
+    @author: Deep Adeshra <dp974154@dal.ca>
+    """
+
+    first_name = serializers.CharField(max_length=50)
+    last_name = serializers.CharField(max_length=50)
+    email = serializers.EmailField()
+    password = serializers.CharField(min_length=6)
+    confirm_password = serializers.CharField(min_length=6)
+
+    def validate(self, data):
+        """
+        This method validates entire JSON body.
+        """
+
+        if data['password'] != data['confirm_password']:
+            raise serializers.ValidationError({
+                'confirm_password': "This should be same as password"
+            })
+
+        return data
 
     @transaction.atomic()
     def create(self, validated_data):
@@ -81,7 +96,7 @@ class SignUpSerializer(serializers.Serializer):
         user.username = validated_data['email']
         user.email = validated_data['email']
         user.set_password(validated_data['password'])
-        user.is_active = False
+        # user.is_active = False
         user.save()
         token = Token.objects.create(user=user)
 
@@ -182,3 +197,17 @@ class ResetPasswordSerializer(serializers.Serializer):
             raise serializers.ValidationError({"otp": "No record found"})
 
         return data
+
+
+class UserProfileSerializer(UserProfileAbstractSerializer):
+    """
+    Serializer that is resposible for updating/fetching user profile
+
+    @author: Deep Adeshra<dp974154@dal.ca>
+    """
+
+    first_name = serializers.CharField(max_length=25)
+    last_name = serializers.CharField(max_length=25)
+    email = serializers.EmailField()
+    password = serializers.CharField(min_length=6, required=False)
+    

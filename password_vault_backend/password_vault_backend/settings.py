@@ -33,7 +33,7 @@ SECRET_KEY = '9#88f#6x=!b3nuwb1rgz1@7t9x5w5^kg3-ru+da4*gfifus$wu'
 DEBUG = env('DEBUG')
 MODE = env("MODE")
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'rest_framework.authtoken',
+    'rest_framework',
     'corsheaders',
     'vault',
     'users',

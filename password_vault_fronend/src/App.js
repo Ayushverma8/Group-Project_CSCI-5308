@@ -9,6 +9,7 @@ import Home from './components/Home';
 import ForgetPassword from './components/ForgetPassword';
 import ResetPassword from './components/ResetPassword';
 import Notes from './components/Notes'
+import ProfilePage from './components/ProfilePage';
 
 function App() {
 	return (
@@ -26,6 +27,7 @@ function App() {
 					<Route path='/' element={<PrivateRoute />}>
 						<Route path='/home' element={<Home />} />
 						<Route path='/notes' element={<Notes />} />
+						<Route path='/profile' element={<ProfilePage />} />
 					</Route>
 
 					{/* TODO: FIX THIS : NOT WORKING */}

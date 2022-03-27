@@ -1,4 +1,3 @@
-from turtle import back
 from django.db import models
 from core.models import BaseModel
 from rest_framework.authtoken.admin import User
