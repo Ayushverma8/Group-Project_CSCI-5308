@@ -49,7 +49,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'vault',
     'users',
-    'notes'
+    'notes',
+    'todo'
 ]
 
 MIDDLEWARE = [
