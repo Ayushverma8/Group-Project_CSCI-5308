@@ -210,4 +210,3 @@ class UserProfileSerializer(UserProfileAbstractSerializer):
     last_name = serializers.CharField(max_length=25)
     email = serializers.EmailField()
     password = serializers.CharField(min_length=6, required=False)
-    

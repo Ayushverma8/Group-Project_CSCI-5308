@@ -67,7 +67,14 @@ class LoginView(core.views.AbstractBaseAPIView):
         super(LoginView, self).post(request, **kwargs)
         user = User.objects.get(email=request.data.get('email'))
         token, _ = Token.objects.get_or_create(user=user)
-        res = {'message': 'success', 'token': token.key}
+        res = {
+            'message': 'success',
+            'token': token.key,
+            'user': {
+                'first_name': user.first_name,
+                'last_name': user.last_name,
+            }
+        }
 
         return Response(res, HTTP_200_OK)
 
