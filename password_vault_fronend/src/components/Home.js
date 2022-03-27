@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import 'react-quill/dist/quill.snow.css';
 import { Button, Modal } from 'react-bootstrap';
 import Input from "./common/Input";
+import PasswordVaultEdit from "./PasswordVaultEdit";
 
 
 function Home() {
@@ -16,6 +17,12 @@ function Home() {
 
 	const handleClose = () => setShow(false);
 	const handleShow = () => setShow(true);
+
+	const [modalShowEdit, setModalShowEdit] = useState(false);
+	const [showEdit, setShowEdit] = useState(false);
+
+	const handleCloseEdit = () => setShowEdit(false);
+	const handleShowEdit = () => setShowEdit(true);
 
 	const Vaults = [
 		{ image_path: "../assets/img/outlook.jpeg", title: "Outlook" },
@@ -27,12 +34,13 @@ function Home() {
 		{ image_path: "../assets/img/facebook.png", title: "Facebook" }
 	];
 
+
 	const renderboostrapCard = (data, index) => {
 		return (
 			<>
 				<div class="col-lg-3 col-md-6 col-sm-6">
 					<div class="card card-stats">
-						<div class="card-body" onClick={handleShow}>
+						<div class="card-body" onClick={handleShowEdit}>
 							<div class="row">
 								<div class="col-5 col-md-10">
 									<div>
@@ -63,25 +71,52 @@ function Home() {
 			onHide={handleClose}
 			backdrop="static"
 			keyboard={false}
-			
+
 		>
 			<Modal.Header closeButton>
 				<Modal.Title>Enter M-PIN</Modal.Title>
 			</Modal.Header>
 			<Modal.Body>
-				<Input type="text" name="m_pin" placeholder="M-PIN" required="true"/>
+				<Input type="text" name="m_pin" placeholder="M-PIN" required="true" />
 			</Modal.Body>
 			<Modal.Footer>
 				<Button variant="secondary" onClick={handleClose}>
 					Close
 				</Button>
-				<Button variant="primary" onClick={() => setModalShow(true)}>Submit</Button>
+				<Button variant="primary" onClick={() => { handleClose(true); setModalShow(true) }}>Submit</Button>
 			</Modal.Footer>
 		</Modal>
 		<PasswordVault
+			onHide={handleClose}
 			show={modalShow}
 			onHide={() => setModalShow(false)}
 		/>
+		<Modal
+			show={showEdit}
+			onHide={handleCloseEdit}
+			backdrop="static"
+			keyboard={false}
+
+		>
+			<Modal.Header closeButton>
+				<Modal.Title>Enter M-PIN</Modal.Title>
+			</Modal.Header>
+			<Modal.Body>
+				<Input type="text" name="m_pin" placeholder="M-PIN" required="true" />
+			</Modal.Body>
+			<Modal.Footer>
+				<Button variant="secondary" onClick={handleCloseEdit}>
+					Close
+				</Button>
+				<Button variant="primary" onClick={() => { handleCloseEdit(true); setModalShowEdit(true) }}>Submit</Button>
+			</Modal.Footer>
+		</Modal>
+		<PasswordVaultEdit
+			onHide={handleCloseEdit}
+			show={modalShowEdit}
+			onHide={() => setModalShowEdit(false)}
+		/>
+
 		<Fragment>
 			<div class="wrapper ">
 				<SideBar />
