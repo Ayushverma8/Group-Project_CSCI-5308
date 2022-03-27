@@ -10,6 +10,7 @@ import ForgetPassword from './components/ForgetPassword';
 import ResetPassword from './components/ResetPassword';
 import Notes from './components/Notes'
 import ProfilePage from './components/ProfilePage';
+import PasswordVault from './components/PasswordVault';
 
 function App() {
 	return (
@@ -26,6 +27,7 @@ function App() {
 
 					<Route path='/' element={<PrivateRoute />}>
 						<Route path='/home' element={<Home />} />
+						<Route path='/password' element={<PasswordVault />} />
 						<Route path='/notes' element={<Notes />} />
 						<Route path='/profile' element={<ProfilePage />} />
 					</Route>

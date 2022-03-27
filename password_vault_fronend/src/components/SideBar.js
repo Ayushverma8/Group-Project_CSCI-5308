@@ -21,7 +21,7 @@ function SideBar() {
                     </li>
                     <li>
                         <li>
-                            <a href="/notes">
+                            <a href="/password">
                                 <i class="nc-icon nc-box-2 logo-color"></i>
                                 <p>Vault</p>
                             </a>

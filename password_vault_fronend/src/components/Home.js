@@ -3,9 +3,20 @@ import API_CLIENT from "../api/axiosClient";
 import { Card } from "react-bootstrap";
 import { Fragment } from "react/cjs/react.production.min";
 import SideBar from "./SideBar";
+import PasswordVault from "./PasswordVault";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import 'react-quill/dist/quill.snow.css';
+import { Button, Modal } from 'react-bootstrap';
+import Input from "./common/Input";
 
 
 function Home() {
+	const [modalShow, setModalShow] = useState(false);
+	const [show, setShow] = useState(false);
+
+	const handleClose = () => setShow(false);
+	const handleShow = () => setShow(true);
+
 	const Vaults = [
 		{ image_path: "../assets/img/outlook.jpeg", title: "Outlook" },
 		{ image_path: "../assets/img/google.png", title: "Google" },
@@ -21,7 +32,7 @@ function Home() {
 			<>
 				<div class="col-lg-3 col-md-6 col-sm-6">
 					<div class="card card-stats">
-						<div class="card-body">
+						<div class="card-body" onClick={handleShow}>
 							<div class="row">
 								<div class="col-5 col-md-10">
 									<div>
@@ -46,10 +57,34 @@ function Home() {
 		)
 	}
 
-	return (
+	return (<>
+		<Modal
+			show={show}
+			onHide={handleClose}
+			backdrop="static"
+			keyboard={false}
+			
+		>
+			<Modal.Header closeButton>
+				<Modal.Title>Enter M-PIN</Modal.Title>
+			</Modal.Header>
+			<Modal.Body>
+				<Input type="text" name="m_pin" placeholder="M-PIN" required="true"/>
+			</Modal.Body>
+			<Modal.Footer>
+				<Button variant="secondary" onClick={handleClose}>
+					Close
+				</Button>
+				<Button variant="primary" onClick={() => setModalShow(true)}>Submit</Button>
+			</Modal.Footer>
+		</Modal>
+		<PasswordVault
+			show={modalShow}
+			onHide={() => setModalShow(false)}
+		/>
 		<Fragment>
 			<div class="wrapper ">
-				<SideBar/>
+				<SideBar />
 				<div class="main-panel">
 					<nav class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
 						<div class="container-fluid">
@@ -61,7 +96,7 @@ function Home() {
 										<span class="navbar-toggler-bar bar3"></span>
 									</button>
 								</div>
-								<a class="navbar-brand" href="javascript:;">Password Vault</a>
+								<a class="navbar-brand" href="javascript:;">Password Vault  {show ? null : <FontAwesomeIcon className='ms-2' data-tip="Click to add new password" onClick={handleShow} icon="fa-solid fa-plus" />}</a>
 							</div>
 							<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
 								<span class="navbar-toggler-bar navbar-kebab"></span>
@@ -108,6 +143,7 @@ function Home() {
 				</div>
 			</div>
 		</Fragment>
+	</>
 	)
 }
 
