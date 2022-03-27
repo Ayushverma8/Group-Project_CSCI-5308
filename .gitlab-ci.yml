@@ -13,26 +13,29 @@ default:
     paths:
       - ~/.cache/pip/
   before_script:
-      - apt -y update
-      - apt -y install apt-utils
-      - apt -y install net-tools python3.8 python3-pip mysql-client libmysqlclient-dev
-      - apt -y upgrade
-      - pip3 install -r requirements.txt
-      - aws s3 cp s3://group5asdc/env.example password_vault_backend/password_vault_backend/.env
+    - aws s3 cp s3://group5asdc/env.example password_vault_backend/password_vault_backend/.env
 
 
-#migrations:
-#  stage: build
-#  script:
-#    - python3 password_vault_backend/manage.py migrate
+migrations:
+  stage: build
+  script:
+    - apt -y update
+    - apt -y install apt-utils
+    - apt -y install net-tools python3.8 python3-pip mysql-client libmysqlclient-dev
+    - pip3 install -r requirements.txt
+    - python3 password_vault_backend/manage.py migrate
 #
-#django-tests:
-#  stage: test
-#  script:
-#    # The MYSQL user only gets permissions for MYSQL_DB, so Django can't create a test database.
-#    - echo "GRANT ALL on *.* to '${MYSQL_USER}';"| mysql -u root --password="${MYSQL_ROOT_PASSWORD}" -h mysql
-#    # use python3 explicitly. see https://wiki.ubuntu.com/Python/3
-#    - python3 password_vault_backend/manage.py test
+django-tests:
+  stage: test
+  script:
+    # The MYSQL user only gets permissions for MYSQL_DB, so Django can't create a test database.
+    - echo "GRANT ALL on *.* to '${MYSQL_USER}';"| mysql -u root --password="${MYSQL_ROOT_PASSWORD}" -h mysql
+    # use python3 explicitly. see https://wiki.ubuntu.com/Python/3
+    - apt -y update
+    - apt -y install apt-utils
+    - apt -y install net-tools python3.8 python3-pip mysql-client libmysqlclient-dev
+    - pip3 install -r requirements.txt
+    - python3 password_vault_backend/manage.py test
 
 deploy_to_aws:
   stage: deploy
@@ -43,19 +46,19 @@ deploy_to_aws:
     paths:
       - password_vault_backend/*
 
-#sonarqube-check:
-#  image:
-#    name: sonarsource/sonar-scanner-cli:latest
-#    entrypoint: [""]
-#  variables:
-#    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"
-#    GIT_DEPTH: "0"
-#  cache:
-#    key: "${CI_JOB_NAME}"
-#    paths:
-#      - .sonar/cache
-#  script:
-#    - sonar-scanner -Dsonar.projectKey="$CI_PROJECT_NAME"
-#  allow_failure: true
-#  only:
-#    - master
+sonarqube-check:
+  image:
+    name: sonarsource/sonar-scanner-cli:latest
+    entrypoint: [""]
+  variables:
+    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"
+    GIT_DEPTH: "0"
+  cache:
+    key: "${CI_JOB_NAME}"
+    paths:
+      - .sonar/cache
+  script:
+    - sonar-scanner -Dsonar.projectKey="$CI_PROJECT_NAME"
+  allow_failure: true
+  only:
+    - master
