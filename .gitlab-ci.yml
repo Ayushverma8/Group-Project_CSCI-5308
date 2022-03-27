@@ -41,7 +41,7 @@ deploy_to_aws:
     - aws deploy create-deployment --application-name myApp --deployment-group-name asdc-group-5-DeploymentGroup --s3-location bucket=group5asdc,bundleType=zip,key=artifacts.zip
   artifacts:
     paths:
-      - public
+      - password_vault_backend/*
 
 #sonarqube-check:
 #  image:
