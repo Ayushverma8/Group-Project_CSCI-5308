@@ -1,10 +1,10 @@
-from unittest.mock import Mock
+from unittest.mock import MagicMock
 
 from django.core.exceptions import ValidationError
 from django.test import TestCase
-import mock
+
 from .serializers import *
-from unittest.mock import MagicMock
+
 
 class UserProfileAbstractSerializerTestCase(TestCase):
     """
@@ -12,7 +12,6 @@ class UserProfileAbstractSerializerTestCase(TestCase):
 
     @author: Ayush Verma <ayush.verma@dal.ca>
     """
-
 
     def test_validate_name_with_correct_arguments(self):
         instantiated_profile_class = UserProfileAbstractSerializer()
@@ -54,3 +53,30 @@ class UserProfileAbstractSerializerTestCase(TestCase):
         instantiated_profile_class.validate_email = MagicMock(side_effect=ValidationError('Account with this email '
                                                                                           'already exists'))
         self.assertRaises(ValidationError, instantiated_profile_class.validate_email, "dp974154@dal.ca")
+
+
+class SignUpSerializerTest(TestCase):
+    """
+   Testing the SignUp serializer to verify the signup methods
+
+   @author: Ayush Verma <ayush.verma@dal.ca>
+   """
+
+    def test_validate_if_password_is_correct(self):
+        instantiated_signup_class = SignUpSerializer()
+        serializer_object = ({
+            'password': 'Qwertyu@1234',
+            'confirm_password': 'Qwertyu@1234'
+        })
+
+        self.assertEqual(instantiated_signup_class.validate(serializer_object), serializer_object)
+
+    def test_validate_if_password_is_incorrect(self):
+        instantiated_signup_class = SignUpSerializer()
+        serializer_object = ({
+            'password': 'Qwertyu@1234',
+            'confirm_password': 'Qwertyu@1234@'
+        })
+
+        instantiated_signup_class.validate = MagicMock(side_effect=ValidationError('This should be same as password'))
+        self.assertRaises(ValidationError, instantiated_signup_class.validate, serializer_object)
