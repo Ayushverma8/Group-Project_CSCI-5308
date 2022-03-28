@@ -80,3 +80,25 @@ class SignUpSerializerTest(TestCase):
 
         instantiated_signup_class.validate = MagicMock(side_effect=ValidationError('This should be same as password'))
         self.assertRaises(ValidationError, instantiated_signup_class.validate, serializer_object)
+
+    def test_create_user_success(self):
+        instantiated_signup_class = SignUpSerializer()
+        serializer_object = ({
+            'first_name': 'Ayush',
+            'last_name': 'Verma',
+            'email' : 'ayush.verma@dal.ca',
+            'password' : 'Qwerty@1234'
+        })
+        generated_token = instantiated_signup_class.create(serializer_object)
+        self.assertTrue(generated_token)
+
+    def test_create_user_failure(self):
+        instantiated_signup_class = SignUpSerializer()
+        serializer_object = ({
+            'first_name': 'Ayush',
+            'email' : 'ayush.verma@dal.ca',
+            'password' : 'Qwerty@1234'
+        })
+        instantiated_signup_class.create = MagicMock(side_effect=ValidationError('No last_name key present'))
+        self.assertRaises(ValidationError, instantiated_signup_class.create, serializer_object)
+
