@@ -57,10 +57,11 @@ class UserProfileAbstractSerializerTestCase(TestCase):
 
 class SignUpSerializerTest(TestCase):
     """
-   Testing the SignUp serializer to verify the signup methods
+    Testing Serializer for Signup methods
 
-   @author: Ayush Verma <ayush.verma@dal.ca>
-   """
+    @author:Ayush Verma <ayush.verma@dal.ca>
+    """
+
 
     def test_validate_if_password_is_correct(self):
         instantiated_signup_class = SignUpSerializer()
@@ -103,7 +104,11 @@ class SignUpSerializerTest(TestCase):
         self.assertRaises(ValidationError, instantiated_signup_class.create, serializer_object)
 
 class LoginSerializerTest(TestCase):
+    """
+      Testing the Login serializer to verify the Login methods
 
+      @author: Ayush Verma <ayush.verma@dal.ca>
+    """
     def test_validate_unsuccessful_no_account(self):
         instantiated_login_class = LoginSerializer()
         serializer_object = ({
@@ -127,3 +132,33 @@ class LoginSerializerTest(TestCase):
         instantiated_login_class.validate = MagicMock(side_effect=ValidationError('Please check your password'))
         with self.assertRaises(ValidationError):
             instantiated_login_class.validate(serializer_object)
+
+    def test_validate_on_successful_login(self):
+        serializer_object = ({
+            'email': 'ayush.verma@dal.ca',
+            'password' : 'Qwerty@1234',
+            'token' : 'ffnrfnfnn4nttnti5ntinfnnffnvvs',
+            'confirm_password' : 'Qwerty@1234'
+        })
+        instantiated_login_class = LoginSerializer()
+        instantiated_login_class.validate = MagicMock(return_value=serializer_object)
+        self.assertEqual(instantiated_login_class.validate(serializer_object), serializer_object)
+
+
+class ForgotPasswordSerializerTest(TestCase):
+    """
+    Testing Serializer for Signup methods
+
+    @author:Ayush Verma <ayush.verma@dal.ca>
+    """
+    def test_validate_email_unsuccess_email_does_not_exist(self):
+        instantiated_forget_password_class = ForgotPasswordSerializer()
+        instantiated_forget_password_class.validate_email = MagicMock(side_effect=ValidationError('Account with this email does not exists'))
+        self.assertRaises(ValidationError,instantiated_forget_password_class.validate_email, "ayush.verma@dal.ca")
+
+    def test_validate_email_success(self):
+        valid_email = "ayush.verma@dal.ca"
+        instantiated_forget_password_class = ForgotPasswordSerializer()
+        instantiated_forget_password_class.validate_email = MagicMock(return_value=valid_email)
+        self.assertEqual(instantiated_forget_password_class.validate_email(valid_email), valid_email)
+
