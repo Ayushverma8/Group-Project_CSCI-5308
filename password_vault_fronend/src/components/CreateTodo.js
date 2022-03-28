@@ -2,6 +2,9 @@ import { useState } from 'react';
 import Modal from 'react-modal'
 import Input from './common/Input'
 import useForm from '../custom_hooks/useFormHook';
+import API_CLIENT from '../api/axiosClient';
+import { getHeaders } from '../utils/authHelpers';
+import classNames from 'classnames';
 
 function CreateTodo(props) {
     const customStyles = {
@@ -16,8 +19,44 @@ function CreateTodo(props) {
         },
     };
 
-    const createOrUpdateTodo = () => {
+    const HIGH_PRIORITY = 0
+    const NORMAL_PRIORITY = 1
+    const LOW_PRIORITY = 2
 
+    const createOrUpdateTodo = async () => {
+        try {
+            await API_CLIENT.post('todo/', values, {
+                headers: getHeaders()
+            });
+            props.getTodos();
+            props.setShowCreateModal(false);
+        } catch (err) {
+            setErrors(err.response.data)
+        }
+    }
+
+    const setPriority = (e, priority) => {
+        e.preventDefault();
+        values['priority'] = priority;
+        setValues(values)
+
+        const high_priority_btn = document.getElementById('high-priority')
+        const low_priority_btn = document.getElementById('low-priority')
+        const normal_priority_btn = document.getElementById('normal-priority')
+
+        if (priority == HIGH_PRIORITY) {
+            high_priority_btn.classList.add('btn-danger')
+            low_priority_btn.classList.remove('btn-success')
+            normal_priority_btn.classList.remove('btn-warning')
+        } else if (priority == NORMAL_PRIORITY) {
+            high_priority_btn.classList.remove('btn-danger')
+            low_priority_btn.classList.remove('btn-success')
+            normal_priority_btn.classList.add('btn-warning')
+        } else {
+            high_priority_btn.classList.remove('btn-danger')
+            low_priority_btn.classList.add('btn-success')
+            normal_priority_btn.classList.remove('btn-warning')
+        }
     }
 
     const { handleChange, handleSubmit, values, setValues, errors, setErrors } = useForm(createOrUpdateTodo);
@@ -32,9 +71,9 @@ function CreateTodo(props) {
                 </div>
                 <div className='todo-modal-input'>
                     <label><strong>Priority</strong></label><br />
-                    <button className='btn border'> Low</button>
-                    <button className='btn border m-2'> Normal</button>
-                    <button className='btn border'> High</button>
+                    <button id='low-priority' className='btn border' onClick={(e)=> setPriority(e, LOW_PRIORITY)}> Low</button>
+                    <button id='normal-priority' className='btn border m-2' onClick={(e)=> setPriority(e, NORMAL_PRIORITY)}> Normal</button>
+                    <button id='high-priority' className='btn border' onClick={(e)=> setPriority(e, HIGH_PRIORITY)}> High</button>
                     <Input type="hidden" name="priority" errors={errors} value={values.priority}></Input>
                 </div>
                 <div className='todo-modal-input'>
@@ -48,7 +87,7 @@ function CreateTodo(props) {
             </form>
             <div className='pull-right'>
                 <button className='btn btn-secondary m-2' onClick={() => props.setShowCreateModal(false)}>Cancel</button>
-                <button className='btn btn-primary m-2'>Save</button>
+                <button className='btn btn-primary m-2' onClick={(e) => handleSubmit()}>Save</button>
             </div>
         </Modal>
     );
