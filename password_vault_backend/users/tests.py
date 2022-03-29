@@ -184,11 +184,3 @@ class ResetPasswordSerializerTest(TestCase):
         })
         instantiated_reset_password_class.validate = MagicMock(return_value=serializer_object)
         self.assertEqual(instantiated_reset_password_class.validate(serializer_object), serializer_object)
-
-
-class UserProfileSerializerTest(TestCase):
-    """
-    Testing Serializer for User Profile methods
-
-    @author:Ayush Verma <ayush.verma@dal.ca>
-    """
