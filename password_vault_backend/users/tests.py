@@ -5,6 +5,13 @@ from django.test import TestCase
 
 from .serializers import *
 
+instantiated_profile_class = UserProfileAbstractSerializer()
+instantiated_signup_class = SignUpSerializer()
+instantiated_login_class = LoginSerializer()
+instantiated_forget_password_class = ForgotPasswordSerializer()
+instantiated_reset_password_class = ResetPasswordSerializer()
+instantiated_user_profile_class = ResetPasswordSerializer()
+
 
 class UserProfileAbstractSerializerTestCase(TestCase):
     """
@@ -14,42 +21,34 @@ class UserProfileAbstractSerializerTestCase(TestCase):
     """
 
     def test_validate_name_with_correct_arguments(self):
-        instantiated_profile_class = UserProfileAbstractSerializer()
         t = instantiated_profile_class.validate_name("Ayush Verma")
         self.assertEqual(t, "Ayush Verma")
 
     def test_validate_name_with_incorrect_arguments(self):
-        instantiated_profile_class = UserProfileAbstractSerializer()
         t = instantiated_profile_class.validate_name("Ayush Verma@$%&*($*#^#&$")
         self.assertNotEqual(t, "Ayush Verma")
 
     def test_validate_first_name_with_correct_argument(self):
-        instantiated_profile_class = UserProfileAbstractSerializer()
         t = instantiated_profile_class.validate_first_name("Ayush")
         self.assertEqual(t, "Ayush")
 
     def test_validate_first_name_with_incorrect_argument(self):
-        instantiated_profile_class = UserProfileAbstractSerializer()
         t = instantiated_profile_class.validate_first_name("Ayush@")
         self.assertNotEqual(t, "Ayush")
 
     def test_validate_last_name_with_correct_argument(self):
-        instantiated_profile_class = UserProfileAbstractSerializer()
         t = instantiated_profile_class.validate_last_name("Verma")
         self.assertEqual(t, "Verma")
 
     def test_validate_last_name_with_incorrect_argument(self):
-        instantiated_profile_class = UserProfileAbstractSerializer()
         t = instantiated_profile_class.validate_last_name("Verma@")
         self.assertNotEqual(t, "Verma")
 
     def test_validate_email_if_email_does_not_exist(self):
-        instantiated_profile_class = UserProfileAbstractSerializer()
         t = instantiated_profile_class.validate_email("ayush.verma@dal.ca")
         self.assertEqual(t, "ayush.verma@dal.ca")
 
     def test_validate_email_if_email_exist(self):
-        instantiated_profile_class = UserProfileAbstractSerializer()
         instantiated_profile_class.validate_email = MagicMock(side_effect=ValidationError('Account with this email '
                                                                                           'already exists'))
         self.assertRaises(ValidationError, instantiated_profile_class.validate_email, "dp974154@dal.ca")
@@ -63,7 +62,6 @@ class SignUpSerializerTest(TestCase):
     """
 
     def test_validate_if_password_is_correct(self):
-        instantiated_signup_class = SignUpSerializer()
         serializer_object = ({
             'password': 'Qwertyu@1234',
             'confirm_password': 'Qwertyu@1234'
@@ -72,7 +70,6 @@ class SignUpSerializerTest(TestCase):
         self.assertEqual(instantiated_signup_class.validate(serializer_object), serializer_object)
 
     def test_validate_if_password_is_incorrect(self):
-        instantiated_signup_class = SignUpSerializer()
         serializer_object = ({
             'password': 'Qwertyu@1234',
             'confirm_password': 'Qwertyu@1234@'
@@ -82,7 +79,6 @@ class SignUpSerializerTest(TestCase):
         self.assertRaises(ValidationError, instantiated_signup_class.validate, serializer_object)
 
     def test_create_user_success(self):
-        instantiated_signup_class = SignUpSerializer()
         serializer_object = ({
             'first_name': 'Ayush',
             'last_name': 'Verma',
@@ -93,7 +89,6 @@ class SignUpSerializerTest(TestCase):
         self.assertTrue(generated_token)
 
     def test_create_user_failure(self):
-        instantiated_signup_class = SignUpSerializer()
         serializer_object = ({
             'first_name': 'Ayush',
             'email': 'ayush.verma@dal.ca',
@@ -111,7 +106,6 @@ class LoginSerializerTest(TestCase):
     """
 
     def test_validate_unsuccessful_no_account(self):
-        instantiated_login_class = LoginSerializer()
         serializer_object = ({
             'email': 'Ayush',
             'password': 'john.doe@dal.ca',
@@ -123,7 +117,6 @@ class LoginSerializerTest(TestCase):
             instantiated_login_class.validate(serializer_object)
 
     def test_validate_unsuccessful_wrong_password(self):
-        instantiated_login_class = LoginSerializer()
         serializer_object = ({
             'email': 'john.doe@dal.ca',
             'password': 'Qwerty@1234',
@@ -141,7 +134,6 @@ class LoginSerializerTest(TestCase):
             'token': 'ffnrfnfnn4nttnti5ntinfnnffnvvs',
             'confirm_password': 'Qwerty@1234'
         })
-        instantiated_login_class = LoginSerializer()
         instantiated_login_class.validate = MagicMock(return_value=serializer_object)
         self.assertEqual(instantiated_login_class.validate(serializer_object), serializer_object)
 
@@ -154,14 +146,12 @@ class ForgotPasswordSerializerTest(TestCase):
     """
 
     def test_validate_email_unsuccess_email_does_not_exist(self):
-        instantiated_forget_password_class = ForgotPasswordSerializer()
         instantiated_forget_password_class.validate_email = MagicMock(
             side_effect=ValidationError('Account with this email does not exists'))
         self.assertRaises(ValidationError, instantiated_forget_password_class.validate_email, "ayush.verma@dal.ca")
 
     def test_validate_email_success(self):
         valid_email = "ayush.verma@dal.ca"
-        instantiated_forget_password_class = ForgotPasswordSerializer()
         instantiated_forget_password_class.validate_email = MagicMock(return_value=valid_email)
         self.assertEqual(instantiated_forget_password_class.validate_email(valid_email), valid_email)
 
@@ -174,7 +164,6 @@ class ResetPasswordSerializerTest(TestCase):
     """
 
     def test_validate_unsuccessful_no_otp(self):
-        instantiated_reset_password_class = ResetPasswordSerializer()
         serializer_object = ({
             'user__email': 'ayush.verma@dal.ca',
             'email': 'ayush.verma@dal.ca',
@@ -186,7 +175,6 @@ class ResetPasswordSerializerTest(TestCase):
         self.assertRaises(ValidationError, instantiated_reset_password_class.validate, "No record found")
 
     def test_validate_successful_reset_password(self):
-        instantiated_reset_password_class = ResetPasswordSerializer()
         serializer_object = ({
             'user__email': 'ayush.verma@dal.ca',
             'email': 'ayush.verma@dal.ca',
@@ -197,10 +185,10 @@ class ResetPasswordSerializerTest(TestCase):
         instantiated_reset_password_class.validate = MagicMock(return_value=serializer_object)
         self.assertEqual(instantiated_reset_password_class.validate(serializer_object), serializer_object)
 
+
 class UserProfileSerializerTest(TestCase):
     """
     Testing Serializer for User Profile methods
 
     @author:Ayush Verma <ayush.verma@dal.ca>
     """
-    instantiated_user_profile_class = ResetPasswordSerializer()
