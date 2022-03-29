@@ -30,3 +30,13 @@ class HelperMethodsTest(TestCase):
         send_email = MagicMock(side_effect=ValidationError('Template name not provided '
                                                            'with send email'))
         self.assertRaises(ValidationError, send_email)
+
+    def test_get_site_url_on_localhost(self):
+        # Check for localhost environment
+        self.assertEqual(get_site_url(),'http://localhost:8000')
+
+    def test_get_site_url_on_prod_machine(self):
+        ROOT_URL = "13.2.3.2"
+        # Check for localhost environment
+        get_site_url = MagicMock(return_value=ROOT_URL)
+        self.assertEqual(get_site_url(),ROOT_URL)
