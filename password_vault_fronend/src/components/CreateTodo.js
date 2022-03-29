@@ -18,7 +18,6 @@ function CreateTodo(props) {
             transform: 'translate(-50%, -50%)',
         },
     };
-
     const HIGH_PRIORITY = 0
     const NORMAL_PRIORITY = 1
     const LOW_PRIORITY = 2
