@@ -10,7 +10,7 @@ instantiated_notes_class = NoteSerializer()
 
 class NoteSerializerTest(TestCase):
     """
-    Testing the c
+    Testing the notes functionality
 
     @author: Ayush Verma <ayush.verma@dal.ca>
     """
