@@ -39,4 +39,4 @@ const getUserProfile = () => {
     }
 }
 
-export { isUserLoggedIn, setUserLoggedIn, getHeaders, setUserLoggedOut, getUserProfile, setUserProfile };
+export { isUserLoggedIn, setUserLoggedIn, getHeaders, setUserLoggedOut, getUserProfile, setUserProfile, AUTH_TOKEN_KEY };

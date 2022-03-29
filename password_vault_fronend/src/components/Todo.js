@@ -20,6 +20,7 @@ function Todo() {
 
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [currentMode, setCurrentMode] = useState(ALL);
+    const [objToUpdate, setObjToUpdate] = useState();
 
     const getPriorityClass = (integer) => {
         if (integer == HIGH_PRIORITY) {
@@ -43,7 +44,7 @@ function Todo() {
 
     const getTodos = async () => {
         try {
-            let response = await API_CLIENT.get(`todo/?status=${currentMode  }`, {
+            let response = await API_CLIENT.get(`todo/?status=${currentMode}`, {
                 headers: getHeaders()
             })
             setTodos(response.data.results);
@@ -59,15 +60,14 @@ function Todo() {
             }, {
                 headers: getHeaders()
             });
+            getTodos();
         } catch (err) {
         }
     }
 
     const deleteTodo = async (todoId) => {
         try {
-            await API_CLIENT.delete(`todo/${todoId}/`, {
-                headers: getHeaders()
-            });
+            await API_CLIENT.delete(`todo/${todoId}/`);
             getTodos();
         } catch (err) {
         }
@@ -85,6 +85,16 @@ function Todo() {
     useEffect(() => {
         getTodos();
     }, [currentMode])
+
+    const openUpdateModal = (item) => {
+        setObjToUpdate(item);
+        setShowCreateModal(true);
+    }
+
+    const closeTodoModal = () => {
+        setObjToUpdate(null);
+        setShowCreateModal(false);
+    }
 
     return (
         <ListGroup className="mt-4">
@@ -105,9 +115,11 @@ function Todo() {
                 </div>
             </nav>
 
-            <CreateTodo show={showCreateModal}
+            <CreateTodo
+                show={showCreateModal}
                 getTodos={getTodos}
-                setShowCreateModal={setShowCreateModal}
+                closeTodoModal={closeTodoModal}
+                objToUpdate={objToUpdate}
             />
 
             <div className='col-md-9 offset-3 row mt-5' id="todo">
@@ -137,7 +149,7 @@ function Todo() {
                                                                 <div className={"todo-indicator bg-" + getPriorityClass(item.priority)}></div>
                                                                 <div className="widget-content p-0">
                                                                     <div className="widget-content-wrapper">
-                                                                        <div className="widget-content-left">
+                                                                        <div className="widget-content-left cursor-pointer" onClick={(e) => openUpdateModal(item)}>
                                                                             <div className="widget-heading">
                                                                                 {item.title}
                                                                                 <div className={"badge badge-" + getPriorityClass(item.priority) + " ml-2"} style={{ marginLeft: '3px' }}>{getTextPriority(item.priority)}</div>
@@ -148,9 +160,13 @@ function Todo() {
                                                                             </div>
                                                                         </div>
                                                                         <div className="widget-content-right">
-                                                                            <button onClick={(e) => { e.preventDefault(); updateTodo(item.id) }} className="border-0 m-1 btn-transition btn btn-outline-success">
-                                                                                <i className="fa fa-check"></i>
-                                                                            </button>
+                                                                            {
+                                                                                !item.completed ?
+                                                                                    <button onClick={(e) => { e.preventDefault(); updateTodo(item.id) }} className="border-0 m-1 btn-transition btn btn-outline-success">
+                                                                                        <i className="fa fa-check"></i>
+                                                                                    </button>
+                                                                                    : null
+                                                                            }
                                                                             <button onClick={(e) => { e.preventDefault(); deleteTodo(item.id) }} className="border-0 m-1 btn-transition btn btn-outline-danger">
                                                                                 <i className="fa fa-trash"></i>
                                                                             </button>

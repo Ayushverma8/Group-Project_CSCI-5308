@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Modal from 'react-modal'
 import Input from './common/Input'
 import useForm from '../custom_hooks/useFormHook';
@@ -25,18 +25,31 @@ function CreateTodo(props) {
 
     const createOrUpdateTodo = async () => {
         try {
-            await API_CLIENT.post('todo/', values, {
-                headers: getHeaders()
-            });
+            if (values.id) {
+                await API_CLIENT.patch(`todo/${values.id}/`, values, {
+                    headers: getHeaders()
+                });
+            } else {
+                await API_CLIENT.post('todo/', values, {
+                    headers: getHeaders()
+                });
+            }
+
             props.getTodos();
-            props.setShowCreateModal(false);
+            props.closeTodoModal(false);
+            setValues({});
         } catch (err) {
             setErrors(err.response.data)
         }
     }
 
-    const setPriority = (e, priority) => {
-        e.preventDefault();
+    const setPriority = async (e, priority) => {
+        if (e) {
+            e.preventDefault();
+        }
+
+        await setTimeout(300)
+
         values['priority'] = priority;
         setValues(values)
 
@@ -59,11 +72,24 @@ function CreateTodo(props) {
         }
     }
 
+    useEffect(() => {
+        if (props.objToUpdate) {
+            setValues(props.objToUpdate)
+            values['id'] = props.objToUpdate.id
+            setPriority(null, props.objToUpdate.priority)
+        }
+    }, [props.show])
+
+    const closeTodoModal = () => {
+        setValues({});
+        props.closeTodoModal();
+    }
+
     const { handleChange, handleSubmit, values, setValues, errors, setErrors } = useForm(createOrUpdateTodo);
 
     return (
         <Modal isOpen={props.show} style={customStyles}>
-            <h4 className='text-center'><strong>Create new TODO</strong></h4>
+            <h4 className='text-center'><strong>{values.id ? 'Update' :'Create'} TODO</strong></h4>
             <form>
                 <div className='todo-modal-input'>
                     <label><strong>Title</strong></label>
@@ -71,9 +97,9 @@ function CreateTodo(props) {
                 </div>
                 <div className='todo-modal-input'>
                     <label><strong>Priority</strong></label><br />
-                    <button id='low-priority' className='btn border' onClick={(e)=> setPriority(e, LOW_PRIORITY)}> Low</button>
-                    <button id='normal-priority' className='btn border m-2' onClick={(e)=> setPriority(e, NORMAL_PRIORITY)}> Normal</button>
-                    <button id='high-priority' className='btn border' onClick={(e)=> setPriority(e, HIGH_PRIORITY)}> High</button>
+                    <button id='low-priority' className='btn border' onClick={(e) => setPriority(e, LOW_PRIORITY)}> Low</button>
+                    <button id='normal-priority' className='btn border m-2' onClick={(e) => setPriority(e, NORMAL_PRIORITY)}> Normal</button>
+                    <button id='high-priority' className='btn border' onClick={(e) => setPriority(e, HIGH_PRIORITY)}> High</button>
                     <Input type="hidden" name="priority" errors={errors} value={values.priority}></Input>
                 </div>
                 <div className='todo-modal-input'>
@@ -86,7 +112,7 @@ function CreateTodo(props) {
                 </div>
             </form>
             <div className='pull-right'>
-                <button className='btn btn-secondary m-2' onClick={() => props.setShowCreateModal(false)}>Cancel</button>
+                <button className='btn btn-secondary m-2' onClick={() => closeTodoModal()}>Cancel</button>
                 <button className='btn btn-primary m-2' onClick={(e) => handleSubmit()}>Save</button>
             </div>
         </Modal>
