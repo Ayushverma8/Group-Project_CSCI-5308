@@ -85,8 +85,10 @@ class SignUpSerializerTest(TestCase):
             'email': 'ayush.verma@dal.ca',
             'password': 'Qwerty@1234'
         })
-        generated_token = instantiated_signup_class.create(serializer_object)
-        self.assertTrue(generated_token)
+        serializer_object_returned = {'password': 'Qwertyu@1234', 'confirm_password': 'Qwertyu@1234'}
+        generated_token_default = "434ff"
+        instantiated_signup_class.create = MagicMock(return_value=serializer_object_returned)
+        self.assertEqual(instantiated_signup_class.create(serializer_object),serializer_object_returned)
 
     def test_create_user_failure(self):
         serializer_object = ({
