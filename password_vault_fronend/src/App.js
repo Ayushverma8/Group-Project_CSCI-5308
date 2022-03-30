@@ -32,8 +32,7 @@ function App() {
 						<Route path='/profile' element={<ProfilePage />} />
 					</Route>
 
-					{/* TODO: FIX THIS : NOT WORKING */}
-					{/* <Route path='*' element={<PageNotFound />} /> */}
+					<Route path='*' element={<PageNotFound />} />
 				</Routes>
 			</BrowserRouter>
 		</div>
