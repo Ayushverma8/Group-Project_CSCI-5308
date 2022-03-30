@@ -12,7 +12,7 @@ import core.helpers
 import core.views
 import users.serializers as serializers
 
-from .models import Verification
+from .models import VerifyInformation
 
 
 class SignUpView(core.views.AbstractBaseAPIView):
@@ -97,8 +97,7 @@ class ForgotPasswordView(core.views.AbstractBaseAPIView):
         """
 
         super(ForgotPasswordView, self).post(request, **kwargs)
-        otp = Verification.objects.filter(user__email=request.data.get("email"))\
-            .order_by('-created_at').first()
+        otp = VerifyInformation.objects.filter(user__email=request.data.get("email")).order_by('-created_at').first()
         context = {
             "otp": otp.verification_code,
             "user": otp.user
