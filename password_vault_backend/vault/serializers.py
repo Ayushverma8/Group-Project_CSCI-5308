@@ -5,14 +5,15 @@ from .utils import password_encrypt
 
 class VaultSerializer(serializers.ModelSerializer):
     """
-    validate the data provided, encrypt the password and store it into the vault.
+    Validate the data provided, encrypt the password and store it into the vault.
 
     author: Pooja Anandani <pooja.anandani@dal.ca>
     """
 
     class Meta:
         model = Vault
-        exclude = ("created_by", "created_at", "modified_at", "encrypted_ciphertext", "encrypted_remainder")
+        exclude = ("created_by", "created_at", "modified_at",
+                   "encrypted_ciphertext", "encrypted_remainder")
 
     def create(self, validated_data):
         user = self.context['request'].user
@@ -21,6 +22,7 @@ class VaultSerializer(serializers.ModelSerializer):
         validated_data['password'] = password
         validated_data['encrypted_ciphertext'] = cypher
         validated_data['encrypted_remainder'] = remainder
+
         return super(VaultSerializer, self).create(validated_data)
 
     def update(self, instance, validated_data):
@@ -29,4 +31,5 @@ class VaultSerializer(serializers.ModelSerializer):
         instance.encrypted_ciphertext = cypher
         instance.encrypted_remainder = remainder
         instance.save()
+
         return instance
