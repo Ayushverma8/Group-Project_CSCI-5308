@@ -4,6 +4,7 @@ from django.core.exceptions import ValidationError
 from django.test import TestCase
 
 from .serializers import *
+from .views import ToDoViewSet
 
 instantianted_todo_class = ToDoSerializer()
 
@@ -39,3 +40,23 @@ class ToDoSerializerTest(TestCase):
         })
         instantianted_todo_class.create = MagicMock(side_effect=ValidationError('Task not created successfully'))
         self.assertRaises(ValidationError, instantianted_todo_class.create, serializer_object)
+
+class ToDoViewSetTest(TestCase):
+    """
+    Testing ToDo views to verify the ToDo generation
+
+    @author: Ayush Verma <ayush.verma@dal.ca>
+    """
+    def test_get_queryset_failure(self):
+        instantianted_todo_view = ToDoViewSet()
+        test_query = 'priority=3&status=2'
+        instantianted_todo_view.get_queryset = MagicMock(
+            side_effect=ValidationError('Query parameter does not exist'))
+        self.assertRaises(ValidationError, instantianted_todo_view.get_queryset, test_query)
+
+    def test_get_queryset_success(self):
+        instantianted_todo_view = ToDoViewSet()
+        test_query = 'priority=3&status=2'
+        instantianted_todo_view.get_queryset = MagicMock(
+            return_value=test_query)
+        self.assertEqual(instantianted_todo_view.get_queryset(test_query), test_query)
