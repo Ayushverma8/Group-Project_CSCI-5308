@@ -38,6 +38,7 @@ class UserProfileAbstractSerializer(serializers.Serializer):
     def validate_last_name(self, value):
         return self.validate_name(value)
 
+
     def validate_email(self, email):
         """
         validates if there is any existing account with the passed email or not.
