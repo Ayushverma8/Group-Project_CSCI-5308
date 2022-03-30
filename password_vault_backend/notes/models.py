@@ -1,4 +1,3 @@
-from turtle import back
 from django.db import models
 from core.models import BaseModel
 from rest_framework.authtoken.admin import User
@@ -6,7 +5,7 @@ from rest_framework.authtoken.admin import User
 
 class Note(BaseModel):
     """
-    Model to store the not created by the users
+    Model to store the notes created by the users
 
     @author: Shalin Awadiya <shalin.awadiya@dal.ca>
     """

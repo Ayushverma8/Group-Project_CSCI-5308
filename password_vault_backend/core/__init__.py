@@ -1,0 +1,2 @@
+class AuthRequiredView:
+    pass

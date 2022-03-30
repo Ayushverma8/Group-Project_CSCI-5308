@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 from rest_framework import serializers
 
-from users.models import Verification
+from users.models import VerifyInformation
 
 
 class UserProfileAbstractSerializer(serializers.Serializer):
@@ -157,7 +157,7 @@ class ForgotPasswordSerializer(serializers.Serializer):
 
         if user:
             one_time_verification = random.randint(0, 999999)
-            data = Verification(user=user, verification_code=one_time_verification)
+            data = VerifyInformation(user=user, verification_code=one_time_verification)
             data.save()
         else:
             raise serializers.ValidationError("Account with this email "
@@ -210,4 +210,3 @@ class UserProfileSerializer(UserProfileAbstractSerializer):
     last_name = serializers.CharField(max_length=25)
     email = serializers.EmailField()
     password = serializers.CharField(min_length=6, required=False)
-    

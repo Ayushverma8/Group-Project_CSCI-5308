@@ -4,7 +4,7 @@ from core.models import BaseModel
 # Create your models here.
 
 
-class Verification(BaseModel):
+class VerifyInformation(BaseModel):
     """
     Model to store the OTP verification upon forgot password
 

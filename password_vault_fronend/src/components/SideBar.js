@@ -1,14 +1,24 @@
-import { setUserLoggedOut } from "../utils/authHelpers";
+import { useEffect, useState } from "react";
+import { getUserProfile, setUserLoggedOut } from "../utils/authHelpers";
+import Avatar from 'avataaars';
+
 
 function SideBar() {
+
+    const [userProfile, setUserProfile] = useState({});
+
+    useEffect(() => {
+        setUserProfile(getUserProfile());
+    }, [])
+
     return (
         <div class="sidebar" data-color="white" data-active-color="danger">
             <div class="logo">
                 <div class="logo-image-small">
-                    <img src="../assets/img/user (1).png" class="user-icon" />
+                    <Avatar avatarStyle="Circle" className="user-icon"></Avatar>
                 </div>
                 <a href="#" class="simple-text logo-normal">
-                    <label id="lbluserid" style={{ fontWeight: "bolder" }}>Manasvi Sharma</label>
+                    <label id="lbluserid" style={{ fontWeight: "bolder" }}>{userProfile.firstName} {userProfile.lastName}</label>
                 </a>
             </div>
             <div class="sidebar-wrapper ">
@@ -20,19 +30,13 @@ function SideBar() {
                         </a>
                     </li>
                     <li>
-                        <li>
-                            <a href="/password">
-                                <i class="nc-icon nc-box-2 logo-color"></i>
-                                <p>Vault</p>
-                            </a>
-                        </li>
                         <a href="/notes">
                             <i class="nc-icon nc-bullet-list-67 logo-color"></i>
                             <p>Notes</p>
                         </a>
                     </li>
                     <li >
-                        <a href="#">
+                        <a href="/todo">
                             <i class="nc-icon nc-bookmark-2 logo-color"></i>
                             <p>Todo</p>
                         </a>

@@ -12,7 +12,7 @@ import core.helpers
 import core.views
 import users.serializers as serializers
 
-from .models import Verification
+from .models import VerifyInformation
 
 
 class SignUpView(core.views.AbstractBaseAPIView):
@@ -67,7 +67,14 @@ class LoginView(core.views.AbstractBaseAPIView):
         super(LoginView, self).post(request, **kwargs)
         user = User.objects.get(email=request.data.get('email'))
         token, _ = Token.objects.get_or_create(user=user)
-        res = {'message': 'success', 'token': token.key}
+        res = {
+            'message': 'success',
+            'token': token.key,
+            'user': {
+                'first_name': user.first_name,
+                'last_name': user.last_name,
+            }
+        }
 
         return Response(res, HTTP_200_OK)
 
@@ -90,8 +97,7 @@ class ForgotPasswordView(core.views.AbstractBaseAPIView):
         """
 
         super(ForgotPasswordView, self).post(request, **kwargs)
-        otp = Verification.objects.filter(user__email=request.data.get("email"))\
-            .order_by('-created_at').first()
+        otp = VerifyInformation.objects.filter(user__email=request.data.get("email")).order_by('-created_at').first()
         context = {
             "otp": otp.verification_code,
             "user": otp.user

@@ -14,8 +14,6 @@ import os
 import environ
 from pathlib import Path
 
-
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -33,7 +31,7 @@ SECRET_KEY = '9#88f#6x=!b3nuwb1rgz1@7t9x5w5^kg3-ru+da4*gfifus$wu'
 DEBUG = env('DEBUG')
 MODE = env("MODE")
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
@@ -46,10 +44,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'rest_framework.authtoken',
+    'rest_framework',
     'corsheaders',
     'vault',
     'users',
-    'notes'
+    'notes',
+    'todo'
 ]
 
 MIDDLEWARE = [
@@ -143,6 +143,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # rest framework config
 DEFAULT_RENDERER_CLASSES = (
@@ -170,3 +171,6 @@ EMAIL_PORT = env("EMAIL_PORT")
 EMAIL_USE_TLS = env("EMAIL_USE_TLS")
 EMAIL_HOST_USER = env("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
+
+AES_KEY = env('AES_KEY')
+MATRIX_KEY = env('MATRIX_KEY')
