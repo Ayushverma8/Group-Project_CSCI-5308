@@ -59,4 +59,4 @@ class ToDoViewSetTest(TestCase):
         test_query = 'priority=3&status=2'
         instantianted_todo_view.get_queryset = MagicMock(
             return_value=test_query)
-        self.assertEqual(instantianted_todo_view.get_queryset(test_query), test_query)
+        self.assertEqual(instantianted_todo_view.get_queryset(), test_query)
