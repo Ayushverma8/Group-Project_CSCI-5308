@@ -5,8 +5,12 @@ from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 from rest_framework import serializers
 
+<<<<<<< HEAD
 from users.models import UserMpin, VerifyInformation
 import users.utils
+=======
+from users.models import VerifyInformation, Media
+>>>>>>> 86bad92 (profile-picture-upload)
 
 
 class UserProfileAbstractSerializer(serializers.Serializer):
@@ -38,7 +42,6 @@ class UserProfileAbstractSerializer(serializers.Serializer):
     def validate_last_name(self, value):
         return self.validate_name(value)
 
-
     def validate_email(self, email):
         """
         validates if there is any existing account with the passed email or not.
@@ -47,7 +50,7 @@ class UserProfileAbstractSerializer(serializers.Serializer):
         if not self.context.get('request'):
             user_exists = User.objects.filter(email=email).exists()
         else:
-            user_exists = User.objects.filter(email=email)\
+            user_exists = User.objects.filter(email=email) \
                 .exclude(id=self.context['request'].user.id).exists()
 
         if user_exists:
@@ -76,6 +79,13 @@ class SignUpSerializer(UserProfileAbstractSerializer):
         This method validates entire JSON body.
         """
 
+<<<<<<< HEAD
+=======
+        if not data['mpin']:
+            raise serializers.ValidationError({
+                "message": "Please enter mpin"
+            })
+>>>>>>> 86bad92 (profile-picture-upload)
         if data['password'] != data['confirm_password']:
             raise serializers.ValidationError({
                 'confirm_password': "This should be same as password"
@@ -191,7 +201,11 @@ class ResetPasswordSerializer(serializers.Serializer):
         """
 
         try:
+<<<<<<< HEAD
             user_otp = VerifyInformation.objects.filter(user__email=data.get('email'))\
+=======
+            user_otp = Verification.objects.filter(user__email=data.get('email')) \
+>>>>>>> 86bad92 (profile-picture-upload)
                 .order_by('-created_at').first()
 
             if user_otp.verification_code == data.get('otp'):
@@ -244,3 +258,15 @@ class MPINValidateSerializer(serializers.Serializer):
             raise serializers.ValidationError("Make sure it is correct one")
 
         return data
+    media = serializers.URLField()
+
+
+class UserMediaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Media
+        exclude = ("user", "created_at", "modified_at")
+
+    def create(self, validated_data):
+        user = self.context['request'].user
+        validated_data['user'] = user
+        return super(UserMediaSerializer, self).create(validated_data)

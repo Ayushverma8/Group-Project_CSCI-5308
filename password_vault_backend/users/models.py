@@ -25,6 +25,7 @@ class UserMpin(BaseModel):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     mpin = models.CharField(max_length=255, null=False, blank=False)
+<<<<<<< HEAD
     is_authenticated = models.BooleanField(default=True)
 
     def check_mpin(self, data):
@@ -55,3 +56,18 @@ class UserMpin(BaseModel):
 
         return super().save(*args, **kwargs)
 
+=======
+    encrypted_ciphertext = models.CharField(max_length=255, null=True, blank=True)
+    encrypted_remainder = models.IntegerField(null=True, blank=True)
+
+
+class Media(BaseModel):
+    """
+    Model to store profile picture of user
+
+    @author: Pooja Anandani <pooja.anandani@dal.ca>
+    """
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    image = models.FileField(max_length=30, null=False, blank=False)
+>>>>>>> 86bad92 (profile-picture-upload)
