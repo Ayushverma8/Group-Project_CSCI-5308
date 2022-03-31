@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 from rest_framework import serializers
 
-from users.models import VerifyInformation
+from users.models import UserMpin, VerifyInformation
 
 
 class UserProfileAbstractSerializer(serializers.Serializer):
@@ -75,7 +75,7 @@ class SignUpSerializer(UserProfileAbstractSerializer):
         """
         This method validates entire JSON body.
         """
-    
+
         if not data['mpin']:
             raise serializers.ValidationError({
                 "message": "Please enter mpin"
@@ -86,6 +86,10 @@ class SignUpSerializer(UserProfileAbstractSerializer):
             })
 
         return data
+
+    def validate_mpin(self, pin):
+        if len(str(pin)) != 4:
+            raise serializers.ValidationError("Make sure it is of 4 digits")
 
     @transaction.atomic()
     def create(self, validated_data):
@@ -102,9 +106,11 @@ class SignUpSerializer(UserProfileAbstractSerializer):
         user.username = validated_data['email']
         user.email = validated_data['email']
         user.set_password(validated_data['password'])
-        # user.is_active = False
         user.save()
         token = Token.objects.create(user=user)
+
+        mpin_instance = UserMpin(mpin=validated_data["mpin"], user=token.user)
+        mpin_instance.save()
 
         return token
 
@@ -189,7 +195,7 @@ class ResetPasswordSerializer(serializers.Serializer):
         """
 
         try:
-            user_otp = Verification.objects.filter(user__email=data.get('email'))\
+            user_otp = VerifyInformation.objects.filter(user__email=data.get('email'))\
                 .order_by('-created_at').first()
 
             if user_otp.verification_code == data.get('otp'):
@@ -216,4 +222,29 @@ class UserProfileSerializer(UserProfileAbstractSerializer):
     last_name = serializers.CharField(max_length=25)
     email = serializers.EmailField()
     password = serializers.CharField(min_length=6, required=False)
-    
+
+
+class MPINValidateSerializer(serializers.Serializer):
+    """
+    Serializer to validate the MPIN
+
+    @author: Deep Adeshra<dp974154@dal.ca>
+    """
+
+    mpin = serializers.CharField()
+
+    def validate_mpin(self, data):
+        """
+        Validates the mpin and returns bad request if not validated
+        """
+
+        if len(data) != 4:
+            raise serializers.ValidationError("Make sure it is of 4 length only")
+
+        user = self.context['request'].user
+        mpin_instance = UserMpin.objects.get(user=user)
+
+        if not mpin_instance.check_mpin(data):
+            raise serializers.ValidationError("Make sure it is correct one")
+
+        return data

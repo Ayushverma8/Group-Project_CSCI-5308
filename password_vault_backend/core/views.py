@@ -2,6 +2,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 from rest_framework import views
 
+from core.permissions import MpinAuthenticated
+
 
 class AuthRequiredView(object):
     """
@@ -14,7 +16,7 @@ class AuthRequiredView(object):
     @author: Deep Adeshra <dp974154@dal.ca>
     """
 
-    permission_classes = [IsAuthenticated]
+    permission_classes = [MpinAuthenticated]
     authentication_classes = [TokenAuthentication]
 
 
@@ -36,7 +38,7 @@ class AbstractBaseAPIView(views.APIView):
     def validate_request_data(self, request, **kwargs):
         """
         Validates request from the serializer class and also pass request
-        attribute to serializer so that it could be accessed there. 
+        attribute to serializer so that it could be accessed there.
         """
 
         if getattr(self, 'serializer_class') is None:

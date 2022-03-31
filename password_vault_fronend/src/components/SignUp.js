@@ -26,14 +26,21 @@ function Signup() {
 						<div className="form-date-w3-agileits">
 							<label> First name </label>
 							<Input type="text" name="first_name" placeholder="Your Name" required="true" value={values.first_name} onChange={handleChange} errors={errors} />
+
 							<label> Last name </label>
 							<Input type="text" name="last_name" placeholder="Your Name" required="true" value={values.last_name} onChange={handleChange} errors={errors} />
+
 							<label> Email </label>
 							<Input type="email" name="email" placeholder="Your Email" required="" value={values.email} onChange={handleChange} errors={errors} />
+
 							<label> Password </label>
 							<Input type="password" name="password" placeholder="Your Password" required="" value={values.password} onChange={handleChange} errors={errors} />
+
 							<label> Confirm Password </label>
-							<Input type="password" name="confirm_password" placeholder="Confirm Password" required="" value={values.confirm_password} onChange={handleChange} errors={errors} />
+							<Input type="password" name="confirm_password" placeholder="Confirm Password" required="true" value={values.confirm_password} onChange={handleChange} errors={errors} />
+
+							<label> Mpin </label>
+							<Input type="password" name="mpin" placeholder="4 digit pin" required="true" value={values.mpin} onChange={handleChange} errors={errors} />
 						</div>
 						<div className="make wow shake">
 							<input type="submit" value="Register" />

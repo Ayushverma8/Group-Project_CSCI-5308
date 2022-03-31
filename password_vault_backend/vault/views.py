@@ -29,5 +29,5 @@ class VaultViewSet(AuthRequiredView, viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         response = super().create(request, *args, **kwargs)
         response.data['password'] = None
-        
+
         return response
