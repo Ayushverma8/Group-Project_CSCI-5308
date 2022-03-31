@@ -3,11 +3,12 @@ import API_CLIENT from "../api/axiosClient";
 import useForm from "../custom_hooks/useFormHook";
 import { useNavigate } from "react-router-dom";
 import Input from "./common/Input";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 
 function MpinValidation() {
     const navigate = useNavigate();
+    const [showForgetSuccess, setShowForgetSuccess] = useState(false)
 
     const validateMpin = async () => {
         try {
@@ -15,6 +16,15 @@ function MpinValidation() {
             navigate('/');
         } catch (err) {
             setErrors(err.response.data);
+        }
+    }
+
+    const resetMpin = async () => {
+        try {
+            await API_CLIENT.patch('validate_mpin/', {});
+            setShowForgetSuccess(true);
+        } catch (err) {
+            console.log(err)
         }
     }
 
@@ -34,6 +44,13 @@ function MpinValidation() {
     return (
         <Fragment>
             <link href="css/style_Login.css" rel="stylesheet" type="text/css" media="all"></link>
+            {
+                showForgetSuccess ?
+                    <div className="mt-3 rounded text-success about-bottom p-3 bg-light">
+                        Successfully sent new MPIN to Your email
+                    </div>
+                    : null
+            }
             <div className="w3-main mt-5" >
                 <div className="about-bottom main-agile book-form">
                     <h2 className="tittle">Validate your Mpin here</h2>
@@ -41,7 +58,7 @@ function MpinValidation() {
                     <form onSubmit={handleSubmit}>
                         <div className="form-date-w3-agileits">
                             <label> Mpin </label>
-                            <Input type="text" name="mpin" value={values.mpin} onChange={handleChange} errors={errors} placeholder="Your Mpin" required="" />
+                            <Input type="password" name="mpin" value={values.mpin} onChange={handleChange} errors={errors} placeholder="Your Mpin" required="" />
                         </div>
 
                         <div className="make wow shake">
@@ -49,8 +66,8 @@ function MpinValidation() {
                         </div>
 
                         <div>
-                            <p className="forgot-password text-right">
-                                <a href="#">Forgot Mpin ?</a>
+                            <p className="forgot-password text-right cursor-pointer">
+                                <a onClick={resetMpin}>Forgot Mpin ?</a>
                             </p>
                         </div>
                     </form>

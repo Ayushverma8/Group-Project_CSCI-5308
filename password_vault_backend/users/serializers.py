@@ -7,6 +7,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework import serializers
 
 from users.models import UserMpin, VerifyInformation
+import users.utils
 
 
 class UserProfileAbstractSerializer(serializers.Serializer):
@@ -97,14 +98,12 @@ class SignUpSerializer(UserProfileAbstractSerializer):
         Creates the User instance based on passed data.
         """
 
-        # TODO: by default create the users inactive and send the email to
-        #  verify them
-
         user = User()
         user.first_name = validated_data['first_name']
         user.last_name = validated_data['last_name']
         user.username = validated_data['email']
         user.email = validated_data['email']
+        user.is_active = False
         user.set_password(validated_data['password'])
         user.save()
         token = Token.objects.create(user=user)
@@ -168,7 +167,7 @@ class ForgotPasswordSerializer(serializers.Serializer):
         user = User.objects.filter(email=email).last()
 
         if user:
-            one_time_verification = random.randint(0, 999999)
+            one_time_verification = users.utils.get_random_number(6)
             data = VerifyInformation(user=user, verification_code=one_time_verification)
             data.save()
         else:

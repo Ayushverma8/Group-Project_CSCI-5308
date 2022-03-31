@@ -13,6 +13,7 @@ import ProfilePage from './components/ProfilePage';
 import PasswordVault from './components/PasswordVault';
 import Todo from './components/Todo';
 import MpinValidation from './components/MpinValidation';
+import VerifyEmailMessgage from './components/VerifyEmailMessage';
 
 function App() {
 	return (
@@ -34,6 +35,7 @@ function App() {
 						<Route path='/todo' element={<Todo />} />
 						<Route path='/profile' element={<ProfilePage />} />
 						<Route path='/validate_mpin' element={<MpinValidation />} />
+						<Route path='/verify_email_message' element={<VerifyEmailMessgage />} />
 					</Route>
 
 					<Route path='*' element={<PageNotFound />} />
