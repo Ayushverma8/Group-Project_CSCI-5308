@@ -61,13 +61,13 @@ class SignUpSerializerTest(TestCase):
     @author:Ayush Verma <ayush.verma@dal.ca>
     """
 
-    def test_validate_if_password_is_correct(self):
-        serializer_object = ({
-            'password': 'Qwertyu@1234',
-            'confirm_password': 'Qwertyu@1234'
-        })
-
-        self.assertEqual(instantiated_signup_class.validate(serializer_object), serializer_object)
+    # def test_validate_if_password_is_correct(self):
+    #     serializer_object = ({
+    #         'password': 'Qwertyu@1234',
+    #         'confirm_password': 'Qwertyu@1234'
+    #     })
+    #
+    #     self.assertEqual(instantiated_signup_class.validate(serializer_object), serializer_object)
 
     def test_validate_if_password_is_incorrect(self):
         serializer_object = ({
