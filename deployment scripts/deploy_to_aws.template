@@ -1,0 +1,276 @@
+AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+  AppName:
+    Type: String
+    Description: 'ASDC Project'
+  BucketName:
+    AllowedPattern: ^[a-z0-9]*$
+    Type: String
+    Description: 'Name for Bucket used for deployment. Only lowercase and numbers. Must be unique in AWS, otherwise will fail.'
+  SourceIpIngress:
+    Type: 'String'
+    Default: 0.0.0.0/0
+    Description: Source IP address for ingress traffic. Must be a vaild CIDR. Default value 0.0.0.0/0 makes EC2 open to world. For more security put your IP address - <your-ip>/32 e.g. 80.120.3.134/32
+Mappings:
+  RegionMap:
+    us-east-1:
+      "AmazonLinux": "ami-0dc2d3e4c0f9ebd18"
+    eu-central-1:
+      "AmazonLinux": "ami-00f22f6155d6d92c5"
+Resources:
+  S3Bucket:
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      BucketName: !Ref BucketName
+      VersioningConfiguration:
+        Status: Enabled
+  VPC:
+    Type: 'AWS::EC2::VPC'
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref AppName
+              - VPC
+  InternetGateway:
+    Type: 'AWS::EC2::InternetGateway'
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref AppName
+              - InternetGateway
+  VPCGatewayAttachment:
+    Type: 'AWS::EC2::VPCGatewayAttachment'
+    Properties:
+      InternetGatewayId: !Ref InternetGateway
+      VpcId: !Ref VPC
+  PublicSubnet:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      CidrBlock: 10.0.0.0/24
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref AppName
+              - PublicSubnet
+      VpcId: !Ref VPC
+  PublicRouteTable:
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      Tags:
+        - Key: Name
+          Value:  !Join
+            - '-'
+            - - !Ref AppName
+              - PublicRouteTable
+      VpcId: !Ref VPC
+  PublicRouteTableAssocation:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      SubnetId: !Ref PublicSubnet
+  RouteToInternetGateway:
+    Type: 'AWS::EC2::Route'
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+      RouteTableId: !Ref PublicRouteTable
+  PublicSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: Security Group for HTTP and SSH access to EC2
+      GroupName: PublicSecuirtyGroup
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: !Ref SourceIpIngress
+      Tags:
+        - Key: Name
+          Value:  !Join
+            - '-'
+            - - !Ref AppName
+              - PublicSecurityGroup
+      VpcId: !Ref VPC
+  PublicEC2:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      IamInstanceProfile: !Ref EC2RoleInstanceProfile
+      ImageId: !FindInMap
+        - RegionMap
+        - !Ref AWS::Region
+        - AmazonLinux
+      InstanceType: t2.micro
+      NetworkInterfaces:
+        - AssociatePublicIpAddress: 'true'
+          DeviceIndex: 0
+          GroupSet:
+            - !Ref PublicSecurityGroup
+          SubnetId: !Ref PublicSubnet
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref AppName
+              - PublicEC2
+      UserData:
+        Fn::Base64:
+          !Sub |
+            #!/bin/bash
+            yum update -y
+            yum install -y ruby wget https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm
+            amazon-linux-extras install -y nginx1
+            cd /home/ec2-user
+            wget https://aws-codedeploy-us-east-1.s3.us-east-1.amazonaws.com/latest/install
+            chmod +x ./install
+            ./install auto
+            systemctl enable nginx amazon-ssm-agent
+            systemctl restart nginx amazon-ssm-agent
+    DependsOn:
+      - VPCGatewayAttachment
+  DeploymentAppRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - codedeploy.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Description: Role necessary for CodeDeploy deployment
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSCodeDeployRole
+      Path: /
+      RoleName: !Join
+        - '-'
+        - - !Ref AppName
+          - DeploymentAppRole
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref AppName
+              - DeploymentAppRole
+  CodeDeployApp:
+    Type: AWS::CodeDeploy::Application
+    Properties:
+      ApplicationName: myApp
+      ComputePlatform: Server
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref AppName
+              - CodeDeployApp
+  CodeDeploymentGroup:
+    Type: AWS::CodeDeploy::DeploymentGroup
+    Properties:
+      ApplicationName: !Ref CodeDeployApp
+      DeploymentConfigName: CodeDeployDefault.AllAtOnce
+      DeploymentGroupName: !Join
+        - '-'
+        - - !Ref AppName
+          - DeploymentGroup
+      Ec2TagFilters:
+        - Key: Name
+          Type: KEY_AND_VALUE
+          Value: !Join
+            - '-'
+            - - !Ref AppName
+              - PublicEC2
+      ServiceRoleArn: !GetAtt DeploymentAppRole.Arn
+  EC2Role:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Description: Role necessary for EC2 - codedeploy, system manager
+      Path: /
+      RoleName: !Join
+        - '-'
+        - - !Ref AppName
+          - EC2Role
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref AppName
+              - EC2Role
+  EC2RoleSSMPolicy:
+    Type: 'AWS::IAM::Policy'
+    Properties:
+      PolicyName: !Join
+        - '-'
+        - - !Ref AppName
+          - EC2RoleSSMPolicy
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action:
+              - 'ssm:UpdateInstanceInformation'
+              - 'ssmmessages:CreateControlChannel'
+              - 'ssmmessages:CreateDataChannel'
+              - 'ssmmessages:OpenControlChannel'
+              - 'ssmmessages:OpenDataChannel'
+            Resource: '*'
+          - Effect: Allow
+            Action: 's3:GetEncryptionConfiguration'
+            Resource: '*'
+      Roles:
+        - !Ref EC2Role
+  EC2RoleCodeDeployPolicy:
+    Type: 'AWS::IAM::Policy'
+    Properties:
+      PolicyName: !Join
+        - '-'
+        - - !Ref AppName
+          - EC2RoleCodeDeployPolicy
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action:
+              - 's3:Get*'
+              - 's3:List*'
+            Resource: !Join
+              - ''
+              - - 'arn:aws:s3:::'
+                - !Ref S3Bucket
+                - '/*'
+      Roles:
+        - !Ref EC2Role
+  EC2RoleInstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Path: /
+      Roles:
+        - !Ref EC2Role
+Outputs:
+  EC2PublicIP:
+    Description: Public IP of EC2 instance
+    Value: !GetAtt PublicEC2.PublicIp
+  BucketName:
+    Description: Name of deployment bucket
+    Value: !Ref S3Bucket
+  CodeDeployAppName:
+    Description: Name of CodeDeploy application
+    Value: !Ref CodeDeployApp
+  CodeDeployGroupName:
+    Description: Name of CodeDeploy group
+    Value: !Ref CodeDeploymentGroup
