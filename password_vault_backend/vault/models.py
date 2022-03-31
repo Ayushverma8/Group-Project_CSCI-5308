@@ -8,6 +8,7 @@ from tldextract import extract
 
 from core.models import BaseModel
 from vault import choices
+from .utils import password_encrypt
 
 
 class Vault(BaseModel):
@@ -40,3 +41,17 @@ class Vault(BaseModel):
             return None
 
         return request_url
+
+    def save(self, *args, **kwargs):
+        """
+        Override save method to add the ciphertect and remainder
+
+        @author: Deep Adeshra <dp974154@dal.ca>
+        """
+
+        password, cypher, remainder = password_encrypt(self.password)
+        self.password = password
+        self.encrypted_ciphertext = cypher
+        self.encrypted_remainder = remainder
+
+        return super().save(*args, **kwargs)

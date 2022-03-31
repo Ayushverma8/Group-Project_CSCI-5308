@@ -31,24 +31,5 @@ class VaultSerializer(ModelActionSerializer):
 
         user = self.context['request'].user
         validated_data['created_by'] = user
-        password, cypher, remainder = password_encrypt(validated_data['password'])
-        validated_data['password'] = password
-        validated_data['encrypted_ciphertext'] = cypher
-        validated_data['encrypted_remainder'] = remainder
 
         return super(VaultSerializer, self).create(validated_data)
-
-    def update(self, instance, validated_data):
-        """
-        Updates the instance of the vault model
-
-        author: Pooja Anandani <pooja.anandani@dal.ca>
-        """
-
-        password, cypher, remainder = password_encrypt(validated_data['password'])
-        instance.password = password
-        instance.encrypted_ciphertext = cypher
-        instance.encrypted_remainder = remainder
-        instance.save()
-
-        return instance

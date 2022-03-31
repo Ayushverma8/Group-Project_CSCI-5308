@@ -6,19 +6,6 @@ import API_CLIENT from '../api/axiosClient';
 import { getHeaders } from '../utils/authHelpers';
 
 function CreateTodo(props) {
-    const customStyles = {
-        // content: {
-        //     top: '50%',
-        //     left: '50%',
-        //     right: 'auto',
-        //     bottom: 'auto',
-        //     marginRight: '-50%',
-        //     width: '120%',
-        //     paddingLeft: '5%',
-        //     paddingRight: '5%',
-        //     transform: 'translate(-50%, -50%)',
-        // },
-    };
     const HIGH_PRIORITY = 0
     const NORMAL_PRIORITY = 1
     const LOW_PRIORITY = 2

@@ -7,13 +7,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import 'react-quill/dist/quill.snow.css';
 import { Button, Modal } from 'react-bootstrap';
 import Input from "./common/Input";
-import { getHeaders } from "../utils/authHelpers";
 
 
 function Home() {
 	const [modalShow, setModalShow] = useState(false);
 	const [passwords, setPasswords] = useState([]);
 	const [objectData, setObjectData] = useState({})
+
+	const closeModal = () => {
+		setModalShow(false);
+		setObjectData({})
+	}
 
 	const getPasswords = async () => {
 		try {
@@ -67,9 +71,10 @@ function Home() {
 
 	return (<>
 		<PasswordVault
-			onHide={setModalShow}
+			onHide={closeModal}
 			show={modalShow}
 			objectData={objectData}
+			getPasswords={getPasswords}
 		/>
 
 		<Fragment>
