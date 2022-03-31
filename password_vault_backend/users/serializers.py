@@ -38,6 +38,7 @@ class UserProfileAbstractSerializer(serializers.Serializer):
     def validate_last_name(self, value):
         return self.validate_name(value)
 
+
     def validate_email(self, email):
         """
         validates if there is any existing account with the passed email or not.
@@ -68,12 +69,17 @@ class SignUpSerializer(UserProfileAbstractSerializer):
     email = serializers.EmailField()
     password = serializers.CharField(min_length=6)
     confirm_password = serializers.CharField(min_length=6)
+    mpin = serializers.IntegerField()
 
     def validate(self, data):
         """
         This method validates entire JSON body.
         """
-
+    
+        if not data['mpin']:
+            raise serializers.ValidationError({
+                "message": "Please enter mpin"
+            })
         if data['password'] != data['confirm_password']:
             raise serializers.ValidationError({
                 'confirm_password': "This should be same as password"
@@ -210,3 +216,4 @@ class UserProfileSerializer(UserProfileAbstractSerializer):
     last_name = serializers.CharField(max_length=25)
     email = serializers.EmailField()
     password = serializers.CharField(min_length=6, required=False)
+    
