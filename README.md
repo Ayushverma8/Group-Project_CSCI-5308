@@ -64,4 +64,28 @@ $ python3 password_vault_backend/manage.py migrate
  ```sh
 $ python3 password_vault_backend/manage.py runserver
 ```
-9. Open  `127.0.0.1:8080` to view the API specifications. 
+9. Open  `127.0.0.1:8080` to view the API specifications.
+
+### Deployment Instructions
+
+#### Cloud platform used : Amazon Web Services
+
+1. AWS Elastic Compute Cloud (EC2)
+2. AWS Simple Secure Storage (S3)
+3. AWS CloudDeploy
+4. AWS Cloudformation
+5. AWS Virtual Private Cloud (VPC)
+
+Start with AWS Cloudformation template present in the `deployment scripts/deploy_to_aws.template` by adding it to the cloudformation runner [here](https://us-east-1.console.aws.amazon.com/cloudformation/home?).
+
+![enter image description here](https://i.imgur.com/cvzeYnr.png)
+
+This will generate our technical stack on AWS which includes all above mentioned services.
+
+![enter image description here](https://i.imgur.com/LIZBuI4.png)
+
+Post that, you can navigate to the AWS Codedeploy page by clicking [here](https://us-east-1.console.aws.amazon.com/codesuite/codedeploy).  You can create a project with the configuration given below.
+
+![enter image description here](https://i.imgur.com/jN2WQt1.png)
+
+Once the deployment succeeds, you can open the URL in the web browser. 
