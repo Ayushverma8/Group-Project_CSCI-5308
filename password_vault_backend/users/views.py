@@ -4,6 +4,7 @@ from django.contrib.auth import logout
 from django.contrib.auth.models import User
 from django.views import View
 from django.shortcuts import render
+from rest_framework import viewsets
 
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -14,8 +15,10 @@ import core.helpers
 import core.views
 import users.serializers as serializers
 
-from .models import VerifyInformation, UserMpin
+from .models import VerifyInformation, UserMpin, Media
 from vault.utils import password_encrypt
+
+from .serializers import UserMediaSerializer
 
 
 class SignUpView(core.views.AbstractBaseAPIView):
@@ -257,3 +260,12 @@ class UserProfileView(core.views.AuthRequiredView, core.views.AbstractBaseAPIVie
         }
 
         return Response(response_data, HTTP_200_OK)
+
+
+class MediaUpload(core.views.AuthRequiredView, viewsets.ModelViewSet):
+    """
+    @author: Pooja Anandani <pooja.anandani@dal.ca>
+    """
+    queryset = Media.objects.all()
+    serializer_class = UserMediaSerializer
+    http_method_names = ['get', 'post', 'patch', 'delete']

@@ -4,8 +4,7 @@ from rest_framework.routers import DefaultRouter
 import users.views as views
 
 router = DefaultRouter()
-
-
+router.register(viewset=views.MediaUpload, prefix='user')
 # rest_framework's ViewSet items will be set like this.
 # router.register()
 
@@ -17,7 +16,7 @@ url_patterns = [
     url(r'reset_password/$', views.ResetPasswordView.as_view(), name='reset_password'),
     url(r'confirm_email/$', views.EmailConfirmationView.as_view(), name='confirm-email'),
     url(r'logout/$', views.LogOutView.as_view(), name='logout'),
-    url(r'user_profile/$', views.UserProfileView.as_view(), name='logout'),
+    url(r'user_profile/$', views.UserProfileView.as_view(), name='user-profile'),
 ]
 
 url_patterns += router.urls

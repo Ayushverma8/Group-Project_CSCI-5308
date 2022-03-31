@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 from rest_framework import serializers
 
-from users.models import VerifyInformation
+from users.models import VerifyInformation, Media
 
 
 class UserProfileAbstractSerializer(serializers.Serializer):
@@ -38,7 +38,6 @@ class UserProfileAbstractSerializer(serializers.Serializer):
     def validate_last_name(self, value):
         return self.validate_name(value)
 
-
     def validate_email(self, email):
         """
         validates if there is any existing account with the passed email or not.
@@ -47,7 +46,7 @@ class UserProfileAbstractSerializer(serializers.Serializer):
         if not self.context.get('request'):
             user_exists = User.objects.filter(email=email).exists()
         else:
-            user_exists = User.objects.filter(email=email)\
+            user_exists = User.objects.filter(email=email) \
                 .exclude(id=self.context['request'].user.id).exists()
 
         if user_exists:
@@ -75,7 +74,7 @@ class SignUpSerializer(UserProfileAbstractSerializer):
         """
         This method validates entire JSON body.
         """
-    
+
         if not data['mpin']:
             raise serializers.ValidationError({
                 "message": "Please enter mpin"
@@ -189,7 +188,7 @@ class ResetPasswordSerializer(serializers.Serializer):
         """
 
         try:
-            user_otp = Verification.objects.filter(user__email=data.get('email'))\
+            user_otp = Verification.objects.filter(user__email=data.get('email')) \
                 .order_by('-created_at').first()
 
             if user_otp.verification_code == data.get('otp'):
@@ -216,4 +215,15 @@ class UserProfileSerializer(UserProfileAbstractSerializer):
     last_name = serializers.CharField(max_length=25)
     email = serializers.EmailField()
     password = serializers.CharField(min_length=6, required=False)
-    
+    media = serializers.URLField()
+
+
+class UserMediaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Media
+        exclude = ("user", "created_at", "modified_at")
+
+    def create(self, validated_data):
+        user = self.context['request'].user
+        validated_data['user'] = user
+        return super(UserMediaSerializer, self).create(validated_data)
