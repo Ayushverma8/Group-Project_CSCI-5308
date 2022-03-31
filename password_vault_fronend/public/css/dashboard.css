@@ -2314,11 +2314,12 @@ a[data-toggle="collapse"][aria-expanded="true"] .caret,
 
 img {
   max-width: 100%;
-  border-radius: 3px; 
-}
-.user-icon{
-  max-width: 20% !important;
   border-radius: 3px;
+}
+
+.user-icon{
+  height: 100px;
+  width: 100px;
 }
 
 .card-logo{
@@ -2914,7 +2915,7 @@ License - nucleoapp.com/license/
   .sidebar .sidebar-wrapper,
   .off-canvas-sidebar .sidebar-wrapper {
     background-color: #23314e;
-    
+
     position: relative;
     height: calc(100vh - 75px);
     overflow: auto;

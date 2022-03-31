@@ -4503,6 +4503,7 @@ textarea.form-control-lg {
   flex-direction: column;
   min-width: 0;
   word-wrap: break-word;
+  min-height: 100px;
   background-color: #fff;
   background-clip: border-box;
   border: 1px solid rgba(0, 0, 0, 0.125);
@@ -11439,7 +11440,7 @@ footer.footer {
 }
 
 .footer-text{
- 
+
     color: #314c87;
     font-size: 28px;
 

@@ -1,4 +1,4 @@
-import './App.css';
+import './App.scss';
 import LandingPage from './components/LandingPage'
 import SignUp from './components/SignUp'
 import Login from './components/Login'
@@ -10,6 +10,8 @@ import ForgetPassword from './components/ForgetPassword';
 import ResetPassword from './components/ResetPassword';
 import Notes from './components/Notes'
 import ProfilePage from './components/ProfilePage';
+import PasswordVault from './components/PasswordVault';
+import Todo from './components/Todo';
 
 function App() {
 	return (
@@ -26,12 +28,13 @@ function App() {
 
 					<Route path='/' element={<PrivateRoute />}>
 						<Route path='/home' element={<Home />} />
+						<Route path='/password' element={<PasswordVault />} />
 						<Route path='/notes' element={<Notes />} />
+						<Route path='/todo' element={<Todo />} />
 						<Route path='/profile' element={<ProfilePage />} />
 					</Route>
 
-					{/* TODO: FIX THIS : NOT WORKING */}
-					{/* <Route path='*' element={<PageNotFound />} /> */}
+					<Route path='*' element={<PageNotFound />} />
 				</Routes>
 			</BrowserRouter>
 		</div>

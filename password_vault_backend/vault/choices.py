@@ -1,0 +1,1 @@
+LOGO_SERVICE_URL = "https://logo.clearbit.com/"

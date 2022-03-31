@@ -19,7 +19,7 @@ const getHeaders = () => {
 }
 
 const setUserLoggedOut = async () => {
-    await API_CLIENT.post('logout/',{},{
+    await API_CLIENT.post('logout/', {}, {
         headers: getHeaders()
     });
 
@@ -27,4 +27,16 @@ const setUserLoggedOut = async () => {
     window.location.href = '/login'
 }
 
-export { isUserLoggedIn, setUserLoggedIn, getHeaders, setUserLoggedOut };
+const setUserProfile = ({firstName, lastName}) => {
+    localStorage.setItem('USER_FIRSTNAME', firstName);
+    localStorage.setItem('USER_LASTNAME', lastName);
+}
+
+const getUserProfile = () => {
+    return {
+        firstName: localStorage.getItem('USER_FIRSTNAME'),
+        lastName: localStorage.getItem('USER_LASTNAME')
+    }
+}
+
+export { isUserLoggedIn, setUserLoggedIn, getHeaders, setUserLoggedOut, getUserProfile, setUserProfile, AUTH_TOKEN_KEY };

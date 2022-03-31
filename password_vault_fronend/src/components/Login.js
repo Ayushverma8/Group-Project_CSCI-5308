@@ -2,13 +2,17 @@ import { Fragment } from "react/cjs/react.production.min";
 import API_CLIENT from "../api/axiosClient";
 import Input from "./common/Input";
 import useForm from "../custom_hooks/useFormHook";
-import { setUserLoggedIn } from "../utils/authHelpers";
+import { setUserLoggedIn, setUserProfile } from "../utils/authHelpers";
 
 function Login() {
     const login = async () => {
         try {
             let res = await API_CLIENT.post('/login/', values);
             setUserLoggedIn(res.data.token);
+            setUserProfile({
+                firstName: res.data.user.first_name,
+                lastName: res.data.user.last_name
+            })
         } catch (err) {
             setErrors(err.response.data);
         }

@@ -1,12 +1,21 @@
+from datetime import date
+import re
 from rest_framework import serializers
+from django.utils.timezone import datetime
 
 from todo.models import ToDo
 
 
 class ToDoSerializer(serializers.ModelSerializer):
+    end_date = serializers.DateField(format=None, input_formats=['%Y-%m-%d'],
+                                     required=False)
+
     class Meta:
         model = ToDo
         exclude = ("created_by", "created_at", "modified_at")
+
+    def validate_title(self, value):
+        return value.strip()
 
     def create(self, validated_data):
         """

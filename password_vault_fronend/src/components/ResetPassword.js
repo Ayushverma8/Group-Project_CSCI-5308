@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { Fragment } from "react/cjs/react.production.min";
 import API_CLIENT from "../api/axiosClient";
 import Input from "./common/Input";
