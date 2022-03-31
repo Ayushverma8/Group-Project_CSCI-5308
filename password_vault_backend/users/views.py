@@ -1,3 +1,5 @@
+from hashlib import md5
+
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
 from django.views import View
@@ -40,7 +42,9 @@ class SignUpView(core.views.AbstractBaseAPIView):
             "url": "%s/confirm_email?token=%s" %
                    (core.helpers.get_site_url(), token.key)
         }
-
+        pin, ctext, remainder = password_encrypt(str(request.data.get("mpin")))
+        mpin_instance = UserMpin(mpin=pin, encrypted_ciphertext=ctext, encrypted_remainder=remainder, user=token.user)
+        mpin_instance.save()
         core.helpers.send_email("signup.html", context,
                                 "Welcome to password vault", token.user.email)
 

@@ -76,6 +76,10 @@ class SignUpSerializer(UserProfileAbstractSerializer):
         This method validates entire JSON body.
         """
 
+        if not data['mpin']:
+            raise serializers.ValidationError({
+                "message": "Please enter mpin"
+            })
         if data['password'] != data['confirm_password']:
             raise serializers.ValidationError({
                 'confirm_password': "This should be same as password"

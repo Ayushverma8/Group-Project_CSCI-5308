@@ -2,7 +2,6 @@ from hashlib import sha1
 from django.db import models
 from django.contrib.auth.models import User
 from core.models import BaseModel
-from vault.utils import password_encrypt
 
 
 class VerifyInformation(BaseModel):
@@ -61,4 +60,4 @@ class UserMpin(BaseModel):
         self.mpin = UserMpin.get_hash(self.mpin)
 
         return super().save(*args, **kwargs)
-        
+
