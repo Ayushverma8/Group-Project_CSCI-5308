@@ -1,14 +1,18 @@
+import random
+import string
+
 from django.conf import settings
 from django.test import TestCase
 
 from .Aes import *
+from .MatrixTranspositionCypher import MatrixTranspositionCypher
 
 pivot = AESCipher(settings.AES_KEY)
 string_to_be_encrypted = "Knock Knock! Encrypt this text please"
 encrypted_string = pivot.encrypt(string_to_be_encrypted)
 
 
-class UserProfileAbstractSerializerTestCase(TestCase):
+class AESCipherTestCase(TestCase):
     """
     Testing the serializer for Encryption
 
@@ -28,3 +32,4 @@ class UserProfileAbstractSerializerTestCase(TestCase):
         # Passing the encrypted content to the decryption function
         decrypted_message = pivot.decrypt(encrypted_string)
         self.assertNotEqual(decrypted_message, "Some random string")
+
