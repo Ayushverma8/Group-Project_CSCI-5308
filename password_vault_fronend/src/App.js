@@ -12,6 +12,7 @@ import Notes from './components/Notes'
 import ProfilePage from './components/ProfilePage';
 import PasswordVault from './components/PasswordVault';
 import Todo from './components/Todo';
+import MpinValidation from './components/MpinValidation';
 
 function App() {
 	return (
@@ -32,6 +33,7 @@ function App() {
 						<Route path='/notes' element={<Notes />} />
 						<Route path='/todo' element={<Todo />} />
 						<Route path='/profile' element={<ProfilePage />} />
+						<Route path='/validate_mpin' element={<MpinValidation />} />
 					</Route>
 
 					<Route path='*' element={<PageNotFound />} />

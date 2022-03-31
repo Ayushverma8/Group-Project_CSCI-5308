@@ -18,6 +18,7 @@ url_patterns = [
     url(r'confirm_email/$', views.EmailConfirmationView.as_view(), name='confirm-email'),
     url(r'logout/$', views.LogOutView.as_view(), name='logout'),
     url(r'user_profile/$', views.UserProfileView.as_view(), name='logout'),
+    url(r'validate_mpin/$', views.MPINValidationView.as_view(), name='mpin-validation'),
 ]
 
 url_patterns += router.urls

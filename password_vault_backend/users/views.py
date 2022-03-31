@@ -1,5 +1,3 @@
-from hashlib import md5
-
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
 from django.views import View
@@ -42,9 +40,7 @@ class SignUpView(core.views.AbstractBaseAPIView):
             "url": "%s/confirm_email?token=%s" %
                    (core.helpers.get_site_url(), token.key)
         }
-        pin, ctext, remainder = password_encrypt(str(request.data.get("mpin")))
-        mpin_instance = UserMpin(mpin=pin, encrypted_ciphertext=ctext, encrypted_remainder=remainder, user=token.user)
-        mpin_instance.save()
+
         core.helpers.send_email("signup.html", context,
                                 "Welcome to password vault", token.user.email)
 
@@ -72,6 +68,7 @@ class LoginView(core.views.AbstractBaseAPIView):
         super(LoginView, self).post(request, **kwargs)
         user = User.objects.get(email=request.data.get('email'))
         token, _ = Token.objects.get_or_create(user=user)
+
         res = {
             'message': 'success',
             'token': token.key,
@@ -102,7 +99,8 @@ class ForgotPasswordView(core.views.AbstractBaseAPIView):
         """
 
         super(ForgotPasswordView, self).post(request, **kwargs)
-        otp = VerifyInformation.objects.filter(user__email=request.data.get("email")).order_by('-created_at').first()
+        otp = VerifyInformation.objects.filter(
+            user__email=request.data.get("email")).order_by('-created_at').first()
         context = {
             "otp": otp.verification_code,
             "user": otp.user
@@ -148,14 +146,16 @@ class LogOutView(core.views.AuthRequiredView, core.views.AbstractBaseAPIView):
     """
 
     http_method_names = ["post"]
-    permission_classes = [IsAuthenticated]
 
     def post(self, request, **kwargs):
         """
         Removes token from the dababase and logout the user
         """
 
+        UserMpin.objects.filter(user=request.user).update(
+            is_authenticated=False)
         Token.objects.filter(user=request.user).delete()
+        UserMpin.objects.filter(user=request.user)
         logout(request)
 
         return Response({"message": "success"}, HTTP_200_OK)
@@ -193,8 +193,48 @@ class EmailConfirmationView(View):
         return render(request, 'confirm_email.html', context)
 
 
+class MPINValidationView(core.views.AbstractBaseAPIView):
+    """
+    View to validate the MPIN
+
+    @author: Deep Adeshra <dp974154@gmail.com>
+    """
+
+    http_method_names = ["post", "get"]
+    permission_classes = [IsAuthenticated]
+    serializer_class = serializers.MPINValidateSerializer
+
+    def post(self, request, *args, **kwargs):
+        """
+        Validates the user's mpin
+        """
+
+        super().post(request, *args, **kwargs)
+        mpin_instance = UserMpin.objects.get(user=request.user)
+        mpin_instance.is_authenticated = True
+        mpin_instance.save(update_fields=['is_authenticated'])
+
+        return Response({"message": "success"}, HTTP_200_OK)
+
+    def get(self, request, *args, **kwargs):
+        """
+        Returns true if current user has validated his mPIn
+        """
+
+        user = request.user
+        mpin_instance = UserMpin.objects.filter(user=user).first()
+
+        response = {
+            "validated": mpin_instance and mpin_instance.is_authenticated
+        }
+
+        return Response(response, HTTP_200_OK)
+
+
 class UserProfileView(core.views.AuthRequiredView, core.views.AbstractBaseAPIView):
     """
+    View to get and update the user profile after logging in.
+
     @author: Deep Adeshra <dp974154@dal.ca>
     """
 

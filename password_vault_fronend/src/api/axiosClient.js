@@ -7,7 +7,10 @@ const API_CLIENT = axios.create({
 });
 
 API_CLIENT.interceptors.request.use(function (config) {
-    config.headers.Authorization = 'Token ' + localStorage.getItem(AUTH_TOKEN_KEY);
+    if (localStorage.getItem(AUTH_TOKEN_KEY)) {
+        config.headers.Authorization = 'Token ' + localStorage.getItem(AUTH_TOKEN_KEY);
+    }
+
     return config;
 })
 
