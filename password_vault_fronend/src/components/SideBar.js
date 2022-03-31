@@ -30,12 +30,6 @@ function SideBar() {
                         </a>
                     </li>
                     <li>
-                        <li>
-                            <a href="#">
-                                <i class="nc-icon nc-box-2 logo-color"></i>
-                                <p>Vault</p>
-                            </a>
-                        </li>
                         <a href="/notes">
                             <i class="nc-icon nc-bullet-list-67 logo-color"></i>
                             <p>Notes</p>

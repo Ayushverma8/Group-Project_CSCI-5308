@@ -20,6 +20,14 @@ class VaultViewSet(AuthRequiredView, viewsets.ModelViewSet):
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
-        instance.password = password_decrypt(instance.password, instance.encrypted_ciphertext, instance.encrypted_remainder)
+        instance.password = password_decrypt(instance.password,
+            instance.encrypted_ciphertext, instance.encrypted_remainder)
         serializer = self.get_serializer(instance)
+
         return Response(serializer.data)
+
+    def create(self, request, *args, **kwargs):
+        response = super().create(request, *args, **kwargs)
+        response.data['password'] = None
+        
+        return response
