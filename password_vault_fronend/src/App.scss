@@ -210,9 +210,16 @@
 }
 
 .todo-modal-input {
-	margin-top: 15px
+	margin-top: 15px;
 }
 
 .cursor-pointer {
 	cursor: pointer;
+}
+
+#todo-modal {
+	.modal-content {
+		width: 120%;
+		padding: 5%;
+	}
 }

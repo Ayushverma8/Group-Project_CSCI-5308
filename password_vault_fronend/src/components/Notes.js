@@ -4,7 +4,6 @@ import {
 } from "reactstrap";
 import SideBar from "./SideBar";
 import API_CLIENT from "../api/axiosClient";
-import { getHeaders } from '../utils/authHelpers';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import ReactTooltip from 'react-tooltip';
 import ReactQuill from 'react-quill'
@@ -21,9 +20,7 @@ function Notes() {
 
 	const getNotes = async () => {
 		try {
-			let response = await API_CLIENT.get('notes/', {
-				headers: getHeaders()
-			})
+			let response = await API_CLIENT.get('notes/');
 			setNotes(response.data.results)
 			setAddNotes(false)
 		} catch (err) {
@@ -37,10 +34,7 @@ function Notes() {
 
 	const deleteNote = async (noteId) => {
 		try {
-			await API_CLIENT.delete(`notes/${noteId}/`, {
-				headers: getHeaders(),
-			})
-
+			await API_CLIENT.delete(`notes/${noteId}/`);
 			getNotes();
 		} catch (err) {
 			console.log(err)
@@ -63,13 +57,9 @@ function Notes() {
 
 		try {
 			if (beingEditedId) {
-				await API_CLIENT.put(`notes/${beingEditedId}/`, data, {
-					headers: getHeaders()
-				});
+				await API_CLIENT.put(`notes/${beingEditedId}/`, data);
 			} else {
-				await API_CLIENT.post('notes/', data, {
-					headers: getHeaders()
-				});
+				await API_CLIENT.post('notes/', data);
 			}
 
 			getNotes();

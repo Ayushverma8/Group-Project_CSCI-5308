@@ -1,22 +1,23 @@
 import { useEffect, useState } from 'react';
-import Modal from 'react-modal'
+import { Modal } from 'react-bootstrap'
 import Input from './common/Input'
 import useForm from '../custom_hooks/useFormHook';
 import API_CLIENT from '../api/axiosClient';
 import { getHeaders } from '../utils/authHelpers';
-import classNames from 'classnames';
 
 function CreateTodo(props) {
     const customStyles = {
-        content: {
-            top: '50%',
-            left: '50%',
-            right: 'auto',
-            bottom: 'auto',
-            marginRight: '-50%',
-            width: '40%',
-            transform: 'translate(-50%, -50%)',
-        },
+        // content: {
+        //     top: '50%',
+        //     left: '50%',
+        //     right: 'auto',
+        //     bottom: 'auto',
+        //     marginRight: '-50%',
+        //     width: '120%',
+        //     paddingLeft: '5%',
+        //     paddingRight: '5%',
+        //     transform: 'translate(-50%, -50%)',
+        // },
     };
     const HIGH_PRIORITY = 0
     const NORMAL_PRIORITY = 1
@@ -25,13 +26,9 @@ function CreateTodo(props) {
     const createOrUpdateTodo = async () => {
         try {
             if (values.id) {
-                await API_CLIENT.patch(`todo/${values.id}/`, values, {
-                    headers: getHeaders()
-                });
+                await API_CLIENT.patch(`todo/${values.id}/`, values);
             } else {
-                await API_CLIENT.post('todo/', values, {
-                    headers: getHeaders()
-                });
+                await API_CLIENT.post('todo/', values);
             }
 
             props.getTodos();
@@ -87,8 +84,8 @@ function CreateTodo(props) {
     const { handleChange, handleSubmit, values, setValues, errors, setErrors } = useForm(createOrUpdateTodo);
 
     return (
-        <Modal isOpen={props.show} style={customStyles}>
-            <h4 className='text-center'><strong>{values.id ? 'Update' :'Create'} TODO</strong></h4>
+        <Modal show={props.show} id="todo-modal">
+            <h4 className='text-center'><strong>{values.id ? 'Update' : 'Create'} TODO</strong></h4>
             <form>
                 <div className='todo-modal-input'>
                     <label><strong>Title</strong></label>
@@ -110,9 +107,9 @@ function CreateTodo(props) {
                     <textarea name="description" errors={errors} value={values.description} onChange={handleChange} className='form-control' />
                 </div>
             </form>
-            <div className='pull-right'>
-                <button className='btn btn-secondary m-2' onClick={() => closeTodoModal()}>Cancel</button>
+            <div className='pull-right mt-2 mb-2'>
                 <button className='btn btn-primary m-2' onClick={(e) => handleSubmit()}>Save</button>
+                <button className='btn btn-secondary m-2' onClick={() => closeTodoModal()}>Cancel</button>
             </div>
         </Modal>
     );

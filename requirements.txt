@@ -16,3 +16,5 @@ sqlparse==0.4.2
 urllib3==1.22
 django-cors-headers
 pycryptodome==3.14.1
+drf-action-serializer
+tldextract

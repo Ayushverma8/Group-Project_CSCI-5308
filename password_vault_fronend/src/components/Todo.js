@@ -4,7 +4,6 @@ import { ListGroup } from "reactstrap";
 import SideBar from "./SideBar";
 import { useEffect, useState } from "react";
 import API_CLIENT from "../api/axiosClient";
-import { getHeaders } from "../utils/authHelpers";
 import CreateTodo from "./CreateTodo";
 import moment from 'moment';
 
@@ -44,9 +43,7 @@ function Todo() {
 
     const getTodos = async () => {
         try {
-            let response = await API_CLIENT.get(`todo/?status=${currentMode}`, {
-                headers: getHeaders()
-            })
+            let response = await API_CLIENT.get(`todo/?status=${currentMode}`)
             setTodos(response.data.results);
         } catch (err) {
             console.log(err)
@@ -57,8 +54,6 @@ function Todo() {
         try {
             await API_CLIENT.patch(`todo/${todoId}/`, {
                 completed: true
-            }, {
-                headers: getHeaders()
             });
             getTodos();
         } catch (err) {

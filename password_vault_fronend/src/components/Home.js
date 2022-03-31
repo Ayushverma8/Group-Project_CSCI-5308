@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import API_CLIENT from "../api/axiosClient";
-import { Card } from "react-bootstrap";
 import { Fragment } from "react/cjs/react.production.min";
 import SideBar from "./SideBar";
 import PasswordVault from "./PasswordVault";
@@ -8,54 +7,55 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import 'react-quill/dist/quill.snow.css';
 import { Button, Modal } from 'react-bootstrap';
 import Input from "./common/Input";
-import PasswordVaultEdit from "./PasswordVaultEdit";
+import { getHeaders } from "../utils/authHelpers";
 
 
 function Home() {
 	const [modalShow, setModalShow] = useState(false);
-	const [show, setShow] = useState(false);
+	const [passwords, setPasswords] = useState([]);
+	const [objectData, setObjectData] = useState({})
 
-	const handleClose = () => setShow(false);
-	const handleShow = () => setShow(true);
+	const getPasswords = async () => {
+		try {
+			let response = await API_CLIENT.get('vault/');
+			setPasswords(response.data.results)
+			setModalShow(false)
+			setObjectData({})
+		} catch (err) {
+			console.log(err)
+		}
+	}
 
-	const [modalShowEdit, setModalShowEdit] = useState(false);
-	const [showEdit, setShowEdit] = useState(false);
+	useEffect(() => {
+		getPasswords();
+	}, [])
 
-	const handleCloseEdit = () => setShowEdit(false);
-	const handleShowEdit = () => setShowEdit(true);
-
-	const Vaults = [
-		{ image_path: "../assets/img/outlook.jpeg", title: "Outlook" },
-		{ image_path: "../assets/img/google.png", title: "Google" },
-		{ image_path: "../assets/img/linkedin.png", title: "Linkedin" },
-		{ image_path: "../assets/img/dalhousie.png", title: "Dalhousie" },
-		{ image_path: "../assets/img/netflix.png", title: "Netflix" },
-		{ image_path: "../assets/img/amazon.png", title: "Amazon" },
-		{ image_path: "../assets/img/facebook.png", title: "Facebook" }
-	];
-
+	const openPasswordModal = async (id) => {
+		try {
+			let response = await API_CLIENT.get(`vault/${id}/`)
+			setObjectData(response.data)
+			setModalShow(true)
+		} catch (err) {
+			console.log(err)
+		}
+	}
 
 	const renderboostrapCard = (data, index) => {
 		return (
 			<>
-				<div class="col-lg-3 col-md-6 col-sm-6">
+				<div class="col-lg-3 col-md-6 col-sm-6 cursor-pointer" onClick={() => openPasswordModal(data.id)}>
 					<div class="card card-stats">
-						<div class="card-body" onClick={handleShowEdit}>
+						<div class="card-body">
 							<div class="row">
 								<div class="col-5 col-md-10">
 									<div>
-										<img src={data.image_path} class="card-logo"></img>
+										<img src={data.logo_url || "../assets/img/user.png"} class="card-logo"></img>
 									</div>
 								</div>
 							</div>
 							<div class="row">
 								<div class="col-12 col-md-10">
-									<p class="card-title">{data.title}</p>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-5 col-md-10">
-									<p class="card-category">{data.user_id}</p>
+									<p class="card-title">{data.website_name}</p>
 								</div>
 							</div>
 						</div>
@@ -66,55 +66,10 @@ function Home() {
 	}
 
 	return (<>
-		<Modal
-			show={show}
-			onHide={handleClose}
-			backdrop="static"
-			keyboard={false}
-
-		>
-			<Modal.Header closeButton>
-				<Modal.Title>Enter M-PIN</Modal.Title>
-			</Modal.Header>
-			<Modal.Body>
-				<Input type="text" name="m_pin" placeholder="M-PIN" required="true" />
-			</Modal.Body>
-			<Modal.Footer>
-				<Button variant="secondary" onClick={handleClose}>
-					Close
-				</Button>
-				<Button variant="primary" onClick={() => { handleClose(true); setModalShow(true) }}>Submit</Button>
-			</Modal.Footer>
-		</Modal>
 		<PasswordVault
-			onHide={handleClose}
+			onHide={setModalShow}
 			show={modalShow}
-			onHide={() => setModalShow(false)}
-		/>
-		<Modal
-			show={showEdit}
-			onHide={handleCloseEdit}
-			backdrop="static"
-			keyboard={false}
-
-		>
-			<Modal.Header closeButton>
-				<Modal.Title>Enter M-PIN</Modal.Title>
-			</Modal.Header>
-			<Modal.Body>
-				<Input type="text" name="m_pin" placeholder="M-PIN" required="true" />
-			</Modal.Body>
-			<Modal.Footer>
-				<Button variant="secondary" onClick={handleCloseEdit}>
-					Close
-				</Button>
-				<Button variant="primary" onClick={() => { handleCloseEdit(true); setModalShowEdit(true) }}>Submit</Button>
-			</Modal.Footer>
-		</Modal>
-		<PasswordVaultEdit
-			onHide={handleCloseEdit}
-			show={modalShowEdit}
-			onHide={() => setModalShowEdit(false)}
+			objectData={objectData}
 		/>
 
 		<Fragment>
@@ -131,7 +86,7 @@ function Home() {
 										<span class="navbar-toggler-bar bar3"></span>
 									</button>
 								</div>
-								<a class="navbar-brand" href="javascript:;">Password Vault  {show ? null : <FontAwesomeIcon className='ms-2' data-tip="Click to add new password" onClick={handleShow} icon="fa-solid fa-plus" />}</a>
+								<a class="navbar-brand" href="javascript:;">Password Vault  <FontAwesomeIcon onClick={() => setModalShow(true)} className='ms-2' data-tip="Click to add new password" icon="fa-solid fa-plus" /></a>
 							</div>
 
 							<div class="collapse navbar-collapse justify-content-end" id="navigation">
@@ -151,7 +106,7 @@ function Home() {
 
 					<div class="content">
 						<div class="row">
-							{Vaults.map(renderboostrapCard)}
+							{passwords.map(renderboostrapCard)}
 						</div>
 					</div>
 				</div>

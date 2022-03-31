@@ -19,16 +19,21 @@ function PasswordVault(props) {
             </Modal.Header>
             <Modal.Body>
                 <div className="form-date-w3-agileits">
-                    <label className="pull-left"> Item </label>
-                    <Input type="text" name="item" placeholder="Item" required="true" />
+                    <label className="pull-left"> Website </label>
+                    <Input type="text" name="item" value={props.objectData.website_name} placeholder="Website name" required="true" />
+
+                    <label className="pull-left"> URL </label>
+                    <Input type="text" name="item" value={props.objectData.website_url} placeholder="website url" required="true" />
+
+                    <label className="pull-left"> Username </label>
+                    <Input type="text" name="item" value={props.objectData.website_username} placeholder="website username" required="true" />
+
                     <label className="pull-left"> Password </label>
-                    <Input type="text" name="password" placeholder="Password" required="true" />
-                    <label className="pull-left"> Email </label>
-                    <Input type="email" name="email" placeholder="Your Email" required="" />
+                    <Input name="password" type="password" value={props.objectData.password} placeholder="Password" required="true" />
                 </div>
             </Modal.Body>
             <Modal.Footer>
-                <Button onClick={props.onHide}>Close</Button>
+                <Button onClick={() => props.onHide(false)}>Close</Button>
                 <Button variant="primary" >Submit</Button>
             </Modal.Footer>
         </Modal>

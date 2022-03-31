@@ -1,7 +1,6 @@
 import API_CLIENT from "../api/axiosClient";
 import Input from "./common/Input";
 import useForm from "../custom_hooks/useFormHook";
-import { getHeaders, setUserLoggedIn } from "../utils/authHelpers";
 import { Fragment } from "react/cjs/react.production.min";
 import SideBar from './SideBar'
 import { useEffect, useState } from "react";
@@ -14,9 +13,7 @@ function ProfilePage() {
 
 	useEffect(async () => {
 		try {
-			let response = await API_CLIENT.get('user_profile/', {
-				headers: getHeaders()
-			});
+			let response = await API_CLIENT.get('user_profile/');
 
 			setValues(response.data);
 		} catch (err) {
@@ -26,9 +23,7 @@ function ProfilePage() {
 
 	const updateProfile = async () => {
 		try {
-			let response = await API_CLIENT.patch('user_profile/', values, {
-				headers: getHeaders()
-			})
+			let response = await API_CLIENT.patch('user_profile/', values);
 
 			setSuccessMessage(true);
 			if (response.data.email_changed) {
