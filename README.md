@@ -64,7 +64,13 @@ $ python3 password_vault_backend/manage.py migrate
  ```sh
 $ python3 password_vault_backend/manage.py runserver
 ```
-9. Open  `127.0.0.1:8080` to view the API specifications.
+8. Open  `127.0.0.1:8080` to view the API specifications.
+
+### Architecture
+
+*ReactJS Frontend* -
+
+![enter image description here](https://i.imgur.com/bFRLB8j.png)
 
 ### Deployment Instructions
 
