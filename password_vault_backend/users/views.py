@@ -13,6 +13,7 @@ from rest_framework.authtoken.models import Token
 import core.helpers
 import core.views
 import users.serializers as serializers
+import users.utils
 
 from .models import VerifyInformation, UserMpin
 from vault.utils import password_encrypt
@@ -43,7 +44,8 @@ class SignUpView(core.views.AbstractBaseAPIView):
                    (core.helpers.get_site_url(), token.key)
         }
         pin, ctext, remainder = password_encrypt(str(request.data.get("mpin")))
-        mpin_instance = UserMpin(mpin=pin, encrypted_ciphertext=ctext, encrypted_remainder=remainder, user=token.user)
+        mpin_instance = UserMpin(
+            mpin=pin, encrypted_ciphertext=ctext, encrypted_remainder=remainder, user=token.user)
         mpin_instance.save()
         core.helpers.send_email("signup.html", context,
                                 "Welcome to password vault", token.user.email)
@@ -204,7 +206,7 @@ class MPINValidationView(core.views.AbstractBaseAPIView):
     @author: Deep Adeshra <dp974154@gmail.com>
     """
 
-    http_method_names = ["post", "get"]
+    http_method_names = ["post", "get", "patch"]
     permission_classes = [IsAuthenticated]
     serializer_class = serializers.MPINValidateSerializer
 
@@ -233,6 +235,26 @@ class MPINValidationView(core.views.AbstractBaseAPIView):
         }
 
         return Response(response, HTTP_200_OK)
+
+    def patch(self, request, *args, **kwargs):
+        """
+        Responsible for sending MPIN in email upon requested from `forgot mpin`
+        """
+
+        user = request.user
+        mpin = users.utils.get_random_number(4)
+        mpin_instance = UserMpin.objects.get(user=user)
+        mpin_instance.mpin = str(mpin)
+        mpin_instance.save()
+
+        context = {
+            "mpin": mpin,
+            "user": user
+        }
+        core.helpers.send_email('reset_mpin.html', context,
+                                "Reset MPIN request", user.email)
+
+        return Response({"Message": "Kindly check your email"}, HTTP_200_OK)
 
 
 class UserProfileView(core.views.AuthRequiredView, core.views.AbstractBaseAPIView):

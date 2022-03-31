@@ -93,19 +93,6 @@ function Home() {
 								</div>
 								<a class="navbar-brand" href="javascript:;">Password Vault  <FontAwesomeIcon onClick={() => setModalShow(true)} className='ms-2' data-tip="Click to add new password" icon="fa-solid fa-plus" /></a>
 							</div>
-
-							<div class="collapse navbar-collapse justify-content-end" id="navigation">
-								<form>
-									<div class="input-group no-border">
-										<input type="text" value="" class="form-control" placeholder="Search..." />
-										<div class="input-group-append">
-											<div class="input-group-text">
-												<i class="nc-icon nc-zoom-split"></i>
-											</div>
-										</div>
-									</div>
-								</form>
-							</div>
 						</div>
 					</nav>
 

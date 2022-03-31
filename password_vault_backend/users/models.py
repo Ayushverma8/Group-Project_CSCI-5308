@@ -56,8 +56,14 @@ class UserMpin(BaseModel):
 
         @author: Manasvi Sharma <mn838732@dal.ca>
         """
+        mpin_changed = False
 
-        self.mpin = UserMpin.get_hash(self.mpin)
+        if self.id:
+            db_obj = UserMpin.objects.get(id=self.id)
+            mpin_changed = db_obj.mpin != self.mpin
+
+        if mpin_changed:
+            self.mpin = UserMpin.get_hash(self.mpin)
 
         return super().save(*args, **kwargs)
 
