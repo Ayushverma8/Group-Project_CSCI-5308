@@ -1,7 +1,7 @@
 This directory is responsible for the overall management of notes feature including its creation, retrieval, updation,
 deletion, API calls and Model formations.
 
-Description of working of each of the Classes and Methods in this directory(along with file utils.py) is provided as below:
+Description of working of each of the Classes and Methods in this directory is provided as below:
 
 1) class NotesConfig(AppConfig):
    The class initializes a notes model for the Application Configuration Object.
