@@ -82,4 +82,14 @@ class MatrixTranspositionCipherTestCase(TestCase):
         self.assertNotEqual(decrypted_string[:-remainder],"olsivt");
 
 
+    def test_matrix_transposition_cipher_remainder(self):
+        "Determine if remainder and cipher text are not of same length"
+        self.assertNotEqual(cipherText,remainder);
+
+
+    def test_matrix_transposition_cipher_remainder_length(self):
+        "Determine if length of ciphertext and remainder are not same to ensure cipher success"
+        self.assertNotEqual(len(cipherText),len(str(remainder)));
+
+
 
