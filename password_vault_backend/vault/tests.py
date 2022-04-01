@@ -52,3 +52,34 @@ class AESCipherTestCase(TestCase):
             returnError = True
         self.assertEqual(returnError, False)
 
+
+cipher_initializer=MatrixTranspositionCypher();
+encryption_string="tvislo"
+cipherText,remainder = cipher_initializer.encrypt(encryption_string,[int(x) for x in str(settings.MATRIX_KEY)]);
+
+
+
+
+class MatrixTranspositionCipherTestCase(TestCase):
+    """
+    Determining working of encryption for Matrix Transposition Cipher
+
+    @author: Shalin Awadiya <sh290595@dal.ca>
+
+    """
+    def test_matrix_transposition_encryption_success(self):
+        "Determine if encryption success"
+        self.assertTrue(cipherText);
+
+    def test_matrix_transposition_decryption_success(self):
+        "Determine if decryption success"
+        decrypted_string=cipher_initializer.decrypt(cipherText,[int(x) for x in str(settings.MATRIX_KEY)])
+        self.assertEqual(decrypted_string[:-remainder], encryption_string);
+
+    def test_matrix_transposition_decryption_failure(self):
+        "Determine if decryption results into a failure"
+        decrypted_string=cipher_initializer.decrypt(cipherText,[int(x) for x in str(settings.MATRIX_KEY)])
+        self.assertNotEqual(decrypted_string[:-remainder],"olsivt");
+
+
+
