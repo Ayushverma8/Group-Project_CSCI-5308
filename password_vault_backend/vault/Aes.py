@@ -1,15 +1,14 @@
-from Crypto.Cipher import AES
-from Crypto import Random
 import hashlib
 from base64 import b64encode, b64decode
-import environ
 
-import logging
-from logdna import LogDNAHandler
-import os
+from Crypto import Random
+from Crypto.Cipher import AES
+
 from .logging import LogDNACloudHandler
+
 logging_handler = LogDNACloudHandler()
 log = logging_handler.initiate_cloud_logging()
+
 
 class AESCipher:
     """
