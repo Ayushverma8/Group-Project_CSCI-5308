@@ -43,10 +43,6 @@ class SignUpView(core.views.AbstractBaseAPIView):
             "url": "%s/confirm_email?token=%s" %
                    (core.helpers.get_site_url(), token.key)
         }
-        pin, ctext, remainder = password_encrypt(str(request.data.get("mpin")))
-        mpin_instance = UserMpin(
-            mpin=pin, encrypted_ciphertext=ctext, encrypted_remainder=remainder, user=token.user)
-        mpin_instance.save()
         core.helpers.send_email("signup.html", context,
                                 "Welcome to password vault", token.user.email)
 
@@ -158,8 +154,8 @@ class LogOutView(core.views.AuthRequiredView, core.views.AbstractBaseAPIView):
         Removes token from the dababase and logout the user
         """
 
-        UserMpin.objects.filter(user=request.user).update(
-            is_authenticated=False)
+        UserMpin.objects.filter(user=request.user)\
+            .update(is_authenticated=False)
         Token.objects.filter(user=request.user).delete()
         UserMpin.objects.filter(user=request.user)
         logout(request)

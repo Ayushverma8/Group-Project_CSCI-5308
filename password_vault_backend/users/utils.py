@@ -22,6 +22,7 @@ def get_hash(data):
     @author: Deep Adeshra<dp974154@dal.ca>
     """
 
+    data = str(data)
     hash_object = sha1(data.encode('utf-8'))
     hash = hash_object.hexdigest()
 

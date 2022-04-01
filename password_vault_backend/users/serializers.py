@@ -8,6 +8,7 @@ from rest_framework import serializers
 
 from users.models import UserMpin, VerifyInformation
 import users.utils
+import vault.utils
 
 
 class UserProfileAbstractSerializer(serializers.Serializer):
@@ -77,10 +78,6 @@ class SignUpSerializer(UserProfileAbstractSerializer):
         This method validates entire JSON body.
         """
 
-        if not data['mpin']:
-            raise serializers.ValidationError({
-                "message": "Please enter mpin"
-            })
         if data['password'] != data['confirm_password']:
             raise serializers.ValidationError({
                 'confirm_password': "This should be same as password"
@@ -92,7 +89,9 @@ class SignUpSerializer(UserProfileAbstractSerializer):
         if len(str(pin)) != 4:
             raise serializers.ValidationError("Make sure it is of 4 digits")
 
-    @transaction.atomic()
+        return pin
+
+    @transaction.atomic
     def create(self, validated_data):
         """
         Creates the User instance based on passed data.
@@ -107,8 +106,8 @@ class SignUpSerializer(UserProfileAbstractSerializer):
         user.set_password(validated_data['password'])
         user.save()
         token = Token.objects.create(user=user)
-
-        mpin_instance = UserMpin(mpin=validated_data["mpin"], user=token.user)
+        mpin_instance = UserMpin(mpin=validated_data["mpin"],
+                                 user=token.user)
         mpin_instance.save()
 
         return token

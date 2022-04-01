@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from core.models import BaseModel
 from vault import utils
+import users.utils
 
 
 class VerifyInformation(BaseModel):
@@ -33,7 +34,7 @@ class UserMpin(BaseModel):
         @author: Deep Adeshra<dp974154@dal.ca>
         """
 
-        hash = utils.get_hash(data)
+        hash = users.utils.get_hash(data)
 
         return hash == self.mpin
 
@@ -49,8 +50,8 @@ class UserMpin(BaseModel):
             db_obj = UserMpin.objects.get(id=self.id)
             mpin_changed = db_obj.mpin != self.mpin
 
-        if mpin_changed:
-            self.mpin = UserMpin.get_hash(self.mpin)
+        if mpin_changed or not self.id:
+            self.mpin = users.utils.get_hash(self.mpin)
 
         return super().save(*args, **kwargs)
 
