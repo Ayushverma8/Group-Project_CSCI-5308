@@ -26,6 +26,7 @@ class Vault(BaseModel):
                                             blank=True)
     encrypted_remainder = models.IntegerField(null=True, blank=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    shared_with = models.ManyToManyField(User, related_name='shared_with')
 
     def logo_url(self):
         """

@@ -273,7 +273,8 @@ class UserProfileView(core.views.AuthRequiredView, core.views.AbstractBaseAPIVie
         data = {
             'first_name': user.first_name,
             'last_name': user.last_name,
-            'email': user.email
+            'email': user.email,
+            'id': user.id
         }
 
         return Response(data, HTTP_200_OK)

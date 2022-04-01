@@ -1,9 +1,8 @@
 from rest_framework import viewsets
-from rest_framework.response import Response
 
+from django.db.models import Q
 from . import serializers
 from .models import Vault
-from .utils import password_decrypt
 from core.views import AuthRequiredView
 
 
@@ -17,6 +16,15 @@ class VaultViewSet(AuthRequiredView, viewsets.ModelViewSet):
     http_method_names = ["post", "get", "patch", "delete"]
     serializer_class = serializers.VaultSerializer
     queryset = Vault.objects.all()
+
+    def get_queryset(self):
+        """
+        Returns current user's passwords only
+        """
+        user = self.request.user
+        return super(VaultViewSet, self).get_queryset()\
+            .filter(Q(created_by=user) |
+                    Q(shared_with=user))
 
     def create(self, request, *args, **kwargs):
         """

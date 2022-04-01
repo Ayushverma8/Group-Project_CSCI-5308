@@ -63,7 +63,7 @@ function Home() {
 								{
 									data.password_pwned ?
 										<div class="col-md-2">
-											<FontAwesomeIcon data-html="true" data-tip="This password is previously exposed.<br/> We suggest to change it"  className="red-font" icon="fas fa-exclamation-triangle" />
+											<FontAwesomeIcon data-html="true" data-tip="This password is previously exposed and very likely to be breached.<br/> We suggest to change it"  className="red-font" icon="fas fa-exclamation-triangle" />
 											<ReactTooltip/>
 										</div>
 										: null
