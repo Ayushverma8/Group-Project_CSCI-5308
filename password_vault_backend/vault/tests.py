@@ -93,3 +93,17 @@ class MatrixTranspositionCipherTestCase(TestCase):
 
 
 
+    def test_matrix_transposition_cipher_return_type(self):
+        "Confirm if return type is in string and not in bytes"
+        returnError=False
+        if isinstance(cipherText, bytes):
+            returnError=True
+        self.assertEqual(returnError,False)
+
+    def test_matrix_transposition_cipher_key_length(self):
+        "Ensure that the remainder is always less than the length of the encryption string"
+        noError=False
+        if remainder<len(encryption_string):
+            noError=True;
+        self.assertEqual(noError,True);
+
