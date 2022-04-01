@@ -2,7 +2,7 @@ from rest_framework import serializers
 from tldextract import extract
 
 from .models import Vault
-from .utils import password_encrypt
+from .utils import password_decrypt
 from action_serializer import ModelActionSerializer
 from vault import choices
 
@@ -13,13 +13,15 @@ class VaultSerializer(ModelActionSerializer):
     """
 
     logo_url = serializers.CharField(required=False)
+    password_pwned = serializers.BooleanField(required=False)
 
     class Meta:
         model = Vault
         exclude = ("created_by", "created_at", "modified_at",
                    "encrypted_ciphertext", "encrypted_remainder")
         action_fields = {
-            'list': {'fields': ('id', 'website_url', 'website_name' , 'logo_url')},
+            'list': {'fields': ('id', 'website_url', 'website_name',
+                                'logo_url', 'password_pwned')},
         }
 
     def create(self, validated_data):
@@ -33,3 +35,20 @@ class VaultSerializer(ModelActionSerializer):
         validated_data['created_by'] = user
 
         return super(VaultSerializer, self).create(validated_data)
+
+    def to_representation(self, instance):
+        """
+        Converts ORM data to JSON object to send in the response.
+
+        author: Deep Adeshra <dp974154@dal.ca>
+        """
+
+        data = super().to_representation(instance)
+        password = password_decrypt(instance.password,
+            instance.encrypted_ciphertext, instance.encrypted_remainder)
+
+        data.update({
+            'password': password
+        })
+
+        return data

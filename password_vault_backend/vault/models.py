@@ -1,5 +1,3 @@
-import re
-from xml import dom
 import requests
 
 from django.contrib.auth.models import User
@@ -8,7 +6,8 @@ from tldextract import extract
 
 from core.models import BaseModel
 from vault import choices
-from .utils import password_encrypt
+from .utils import password_decrypt, password_encrypt
+import users.utils
 
 
 class Vault(BaseModel):
@@ -20,9 +19,11 @@ class Vault(BaseModel):
 
     website_name = models.CharField(max_length=250, null=False, blank=False)
     website_url = models.URLField(max_length=250, null=False, blank=False)
-    website_username = models.CharField(max_length=250, null=False, blank=False)
+    website_username = models.CharField(
+        max_length=250, null=False, blank=False)
     password = models.TextField(blank=False, null=False)
-    encrypted_ciphertext = models.CharField(max_length=255, null=True, blank=True)
+    encrypted_ciphertext = models.CharField(
+        max_length=255, null=True, blank=True)
     encrypted_remainder = models.IntegerField(null=True, blank=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
 
@@ -34,13 +35,39 @@ class Vault(BaseModel):
         """
 
         subdomain, domain, suffix = extract(self.website_url)
-        request_url = "%s%s.%s" %(choices.LOGO_SERVICE_URL, domain, suffix)
+        request_url = "%s%s.%s" % (choices.LOGO_SERVICE_URL, domain, suffix)
         response = requests.get(request_url)
 
         if response.status_code == 404:
             return None
 
         return request_url
+
+    def password_pwned(self):
+        """
+        Checks that the password is is pwned or not, so that we can suggest user
+        to change the password
+
+        @author: Deep Adeshra <do974154@dal.ca>
+        """
+
+        password = password_decrypt(self.password,
+            self.encrypted_ciphertext, self.encrypted_remainder)
+        hash = users.utils.get_hash(password)
+
+        req_url = "%s%s" % (choices.PASSWORD_PWNED_API, hash[:5])
+
+        response = requests.get(req_url)
+        data = response.text.split('\n')
+
+        for item in data:
+            half_hash, occurance = item.split(':')
+            full_hash = "%s%s" % (hash[:5], half_hash)
+
+            if full_hash.upper() == hash.upper():
+                return True
+
+        return False
 
     def save(self, *args, **kwargs):
         """

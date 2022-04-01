@@ -5,8 +5,7 @@ import SideBar from "./SideBar";
 import PasswordVault from "./PasswordVault";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import 'react-quill/dist/quill.snow.css';
-import { Button, Modal } from 'react-bootstrap';
-import Input from "./common/Input";
+import ReactTooltip from "react-tooltip";
 
 
 function Home() {
@@ -61,6 +60,14 @@ function Home() {
 								<div class="col-12 col-md-10">
 									<p class="card-title">{data.website_name}</p>
 								</div>
+								{
+									data.password_pwned ?
+										<div class="col-md-2">
+											<FontAwesomeIcon data-html="true" data-tip="This password is previously exposed.<br/> We suggest to change it"  className="red-font" icon="fas fa-exclamation-triangle" />
+											<ReactTooltip/>
+										</div>
+										: null
+								}
 							</div>
 						</div>
 					</div>
@@ -92,6 +99,7 @@ function Home() {
 									</button>
 								</div>
 								<a class="navbar-brand" href="javascript:;">Password Vault  <FontAwesomeIcon onClick={() => setModalShow(true)} className='ms-2' data-tip="Click to add new password" icon="fa-solid fa-plus" /></a>
+								<ReactTooltip />
 							</div>
 						</div>
 					</nav>

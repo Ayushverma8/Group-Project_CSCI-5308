@@ -1,7 +1,7 @@
-from hashlib import sha1
 from django.db import models
 from django.contrib.auth.models import User
 from core.models import BaseModel
+from vault import utils
 
 
 class VerifyInformation(BaseModel):
@@ -26,19 +26,6 @@ class UserMpin(BaseModel):
     mpin = models.CharField(max_length=255, null=False, blank=False)
     is_authenticated = models.BooleanField(default=False)
 
-    @staticmethod
-    def get_hash(data):
-        """
-        returns SHA1 hash for given data string.
-
-        @author: Deep Adeshra<dp974154@dal.ca>
-        """
-
-        hash_object = sha1(data.encode('utf-8'))
-        hash = hash_object.hexdigest()
-
-        return hash
-
     def check_mpin(self, data):
         """
         checks current mpin is same as given data string or not.
@@ -46,7 +33,7 @@ class UserMpin(BaseModel):
         @author: Deep Adeshra<dp974154@dal.ca>
         """
 
-        hash = UserMpin.get_hash(data)
+        hash = utils.get_hash(data)
 
         return hash == self.mpin
 

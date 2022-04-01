@@ -1,3 +1,16 @@
+/* Our colors */
+$blue: #0090cc;
+$red: #f74a58;
+$green: #02bfa0;
+$teal: #687b82;
+$orange: #ec8a52;
+$highlight: #bbf1dd;
+$cream: #fbf7e9;
+$yellow: #fbc02d;
+$cream-dark: #efeadb;
+$hover-blue: #23527c;
+$light-blue: #f5fdff;
+
 .App {
 	text-align: center;
 }
@@ -38,7 +51,7 @@
 }
 
 .form-err {
-	color: red;
+	color: $red;
 	margin-top: -24px;
 	font-size: 11px;
 	margin-left: 5px;
@@ -222,4 +235,8 @@
 		width: 120%;
 		padding: 5%;
 	}
+}
+
+.red-font {
+	color: $red;
 }
