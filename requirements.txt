@@ -18,3 +18,4 @@ django-cors-headers
 pycryptodome==3.14.1
 drf-action-serializer
 tldextract
+logdna

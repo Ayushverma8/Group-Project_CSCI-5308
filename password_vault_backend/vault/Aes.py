@@ -1,7 +1,13 @@
-from Crypto.Cipher import AES
-from Crypto import Random
 import hashlib
 from base64 import b64encode, b64decode
+
+from Crypto import Random
+from Crypto.Cipher import AES
+
+from .logging import LogDNACloudHandler
+
+logging_handler = LogDNACloudHandler()
+log = logging_handler.initiate_cloud_logging()
 
 
 class AESCipher:
@@ -34,8 +40,9 @@ class AESCipher:
         iv = Random.new().read(self.block_size)
         cipher = AES.new(self.key, AES.MODE_CBC, iv)
         encrypted_text = cipher.encrypt(padded_plain_text.encode())
-        encrypted_text_decoded= b64encode(iv + encrypted_text).decode("utf-8")
-
+        encrypted_text_decoded = b64encode(iv + encrypted_text).decode("utf-8")
+        log.info("Logging the text that needs to be encrypted")
+        log.info(encrypted_text_decoded)
         return encrypted_text_decoded
 
     def decrypt(self, encrypted_text):
@@ -50,8 +57,9 @@ class AESCipher:
         iv = decoded_encrypted_text[:self.block_size]
         cipher = AES.new(self.key, AES.MODE_CBC, iv)
         plain_text = cipher.decrypt(decoded_encrypted_text[self.block_size:]).decode("utf-8")
-        plaintext_before_padding=self.__unpad(plain_text)
-
+        plaintext_before_padding = self.__unpad(plain_text)
+        log.info("Logging the text that needs to be decrypted")
+        log.info(plaintext_before_padding)
         return plaintext_before_padding
 
     def __pad(self, plain_text):
@@ -66,6 +74,7 @@ class AESCipher:
         character_to_be_padded = chr(count_of_bytes_to_be_padded)
         padding_string = count_of_bytes_to_be_padded * character_to_be_padded
         plaintext_after_padding = plain_text + padding_string
+        log.info(plaintext_after_padding)
 
         return plaintext_after_padding
 
