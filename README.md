@@ -72,6 +72,10 @@ $ python3 password_vault_backend/manage.py runserver
 
 ![enter image description here](https://i.imgur.com/bFRLB8j.png)
 
+**Backend Architecture** -
+
+![enter image description here](https://i.imgur.com/gm93zde.png)
+
 ### Deployment Instructions
 
 #### Cloud platform used : Amazon Web Services
