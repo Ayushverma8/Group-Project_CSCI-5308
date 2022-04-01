@@ -22,9 +22,13 @@ class VaultViewSet(AuthRequiredView, viewsets.ModelViewSet):
         Returns current user's passwords only
         """
         user = self.request.user
-        return super(VaultViewSet, self).get_queryset()\
-            .filter(Q(created_by=user) |
-                    Q(shared_with=user))
+        qs = super(VaultViewSet, self).get_queryset()
+
+        if self.request.method == 'GET':
+            return qs.filter(Q(created_by=user) |
+                             Q(shared_with=user))
+        else:
+            return qs.filter(created_by=user)
 
     def create(self, request, *args, **kwargs):
         """
