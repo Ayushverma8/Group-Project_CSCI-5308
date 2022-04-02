@@ -55,8 +55,9 @@ def generate_secure_output(f):
 
     author: Pooja Anandani <pooja.anandani@dal.ca>
     """
+
     pdf_password = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
-    print(pdf_password)
+
     with open(f, "rb") as in_file:
         input_pdf = PdfFileReader(in_file)
         output_pdf = PdfFileWriter()

@@ -98,25 +98,39 @@ class ExportViewSet(AuthRequiredView, APIView):
 
     @author: Pooja Anandani <pooja.anandani@dal.ca>
     """
+
+    http_method_names = ["get"]
+
     def get(self, request, *args, **kwargs):
-        config = pdfkit.configuration(wkhtmltopdf='/usr/local/bin/wkhtmltopdf')
-        data = pd.DataFrame(columns=['website_url', 'website_username', 'password'])
+        """
+        Returns base64 string of file and sends the password in the same
+        """
+        
+        data = pd.DataFrame(columns=['website_url', 'website_username',
+                                     'password'])
         qs = Vault.objects.filter(created_by=self.request.user)
+
         for q in range(0, len(qs)):
-            password = password_decrypt(qs[q].password, qs[q].encrypted_ciphertext, qs[q].encrypted_remainder)
+            password = password_decrypt(qs[q].password,
+                                        qs[q].encrypted_ciphertext,
+                                        qs[q].encrypted_remainder)
             data.loc[q] = [qs[q].website_url, qs[q].website_username, password]
+
         filename = self.request.user.last_name + str(datetime.now()) + ".html"
-        pdf_filename = self.request.user.last_name + str(datetime.now()) + ".pdf"
+        pdf_filename = self.request.user.last_name + \
+            str(datetime.now()) + ".pdf"
         df = pd.DataFrame(data)
         df.to_html(filename)
-        pdfkit.from_file(filename, pdf_filename, configuration=config)
+        pdfkit.from_file(filename, pdf_filename)
         pdf_pass, byte_string = generate_secure_output(pdf_filename)
         os.remove(filename)
+
         context = {
             "user": self.request.user,
             "password": pdf_pass
 
         }
 
-        send_email("file_password.html", context, "Secure File Password", self.request.user.email)
+        send_email("file_password.html", context, "Secure File Password",
+                   self.request.user.email)
         return Response({'message': 'success', 'file': byte_string})

@@ -22,3 +22,6 @@ pycryptodome==3.14.1
 drf-action-serializer
 tldextract
 logdna
+pdfkit
+pandas
+PyPDF2

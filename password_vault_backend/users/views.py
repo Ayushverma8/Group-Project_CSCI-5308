@@ -40,7 +40,7 @@ class SignUpView(core.views.AbstractBaseAPIView):
             "url": "%s/confirm_email?token=%s" %
                    (core.helpers.get_site_url(), token.key)
         }
-        core.helpers.send_email("email.html", context,
+        core.helpers.send_email("signup.html", context,
                                 "Welcome to password vault", token.user.email)
 
         return Response({'message': 'success', 'token': token.key},
@@ -104,7 +104,7 @@ class ForgotPasswordView(core.views.AbstractBaseAPIView):
             "otp": otp.verification_code,
             "user": otp.user
         }
-        core.helpers.send_email('forgetPasword.html', context,
+        core.helpers.send_email('reset_password.html', context,
                                 "Reset password request", otp.user.email)
         res = {"message": "success"}
 
