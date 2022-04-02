@@ -1,13 +1,8 @@
-from re import I
-from xml.dom import ValidationErr
-from django.forms import ValidationError
-from rest_framework.permissions import BasePermission, IsAuthenticated
-from rest_framework.exceptions import APIException
-from rest_framework.status import *
-
 import users.models
+from rest_framework.permissions import IsAuthenticated
 
-class MpinAuthenticated(BasePermission):
+
+class MpinAuthenticated(IsAuthenticated):
     """
     Custom class to authenticate user only if he has entered correct MPIN for
     current session

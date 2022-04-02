@@ -4,8 +4,11 @@ import { Button, Modal } from 'react-bootstrap';
 import Input from "./common/Input";
 import useForm from "../custom_hooks/useFormHook";
 import API_CLIENT from '../api/axiosClient';
+import AsyncSelect from 'react-select/async'
 
 function PasswordVault(props) {
+    const [sharedWithUsers, setSharedWithUsers] = useState([]);
+
     const showPassword = () => {
         var x = document.getElementById("my-pass");
 
@@ -39,9 +42,45 @@ function PasswordVault(props) {
 
     useEffect(() => {
         if (props.objectData) {
-            setValues(props.objectData)
+            setValues(props.objectData);
+
+            var data = props.objectData.shared_with
+            var options = [];
+
+            for (var i in data) {
+                options.push({
+                    value: data[i].id,
+                    label: data[i].first_name + " " + data[i].last_name
+                });
+            }
+
+            setSharedWithUsers(options);
         }
     }, [props.show])
+
+    const loadOptions = async (string) => {
+        try {
+            let response = await API_CLIENT.get(`users/?query=${string}`);
+            let data = response.data.results
+            var options = [];
+
+            for (var i in data) {
+                options.push({
+                    value: data[i].id,
+                    label: data[i].first_name + " " + data[i].last_name
+                });
+            }
+
+            return options;
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+    const handleOptionSelect = (data) => {
+        setSharedWithUsers(data);
+        values['shared_with_ids'] = data.map((item) => item.value)
+    }
 
     const { handleChange, handleSubmit, values, setValues, errors, setErrors } = useForm(createOrUpdatePassWord);
 
@@ -75,7 +114,18 @@ function PasswordVault(props) {
                     <label className="pull-left"> Username </label>
                     <Input type="text" name="website_username" onChange={handleChange} value={values.website_username} placeholder="website username" required="true" />
 
-                    <label className="pull-left"> Password </label>
+                    <div className="row">
+                        <label className="pull-left"> Shared with </label>
+                        <AsyncSelect
+                            isMulti={true}
+                            cacheOptions={true}
+                            value={sharedWithUsers}
+                            loadOptions={loadOptions}
+                            onChange={handleOptionSelect}
+                        />
+                    </div>
+
+                    <label className="pull-left mt-3"> Password </label>
                     <Input name="password" id="my-pass" type="password" onChange={handleChange} value={values.password} placeholder="Password" required="true" />
                     <div className='d-flex' style={{ marginTop: "-10px" }}>
                         <input type="checkbox" onClick={showPassword} /><p style={{ marginBottom: '-15px', transform: "translate(10px, -3px)" }}>Show password</p>

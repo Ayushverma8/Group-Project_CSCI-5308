@@ -1,5 +1,4 @@
 import re
-import random
 
 from django.db import transaction
 from django.contrib.auth.models import User
@@ -8,7 +7,6 @@ from rest_framework import serializers
 
 from users.models import UserMpin, VerifyInformation
 import users.utils
-import vault.utils
 
 
 class UserProfileAbstractSerializer(serializers.Serializer):

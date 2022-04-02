@@ -15,7 +15,7 @@ function Home() {
 
 	const closeModal = () => {
 		setModalShow(false);
-		setObjectData({})
+		setObjectData({});
 	}
 
 	const getPasswords = async () => {

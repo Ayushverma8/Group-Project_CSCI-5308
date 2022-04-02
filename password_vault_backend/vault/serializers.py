@@ -6,7 +6,7 @@ from .utils import password_decrypt
 from action_serializer import ModelActionSerializer
 
 
-class SharedWithSerializer(ModelActionSerializer):
+class UserSerializer(ModelActionSerializer):
     """
     Serializer for Many to many field `shared_with`. Sends user related data
     list in response.
@@ -27,8 +27,8 @@ class VaultSerializer(ModelActionSerializer):
 
     logo_url = serializers.CharField(required=False)
     password_pwned = serializers.BooleanField(required=False)
-    shared_with = SharedWithSerializer(many=True, required=False,
-                                       read_only=True)
+    shared_with = UserSerializer(many=True, required=False,
+                                 read_only=True)
     shared_with_ids = serializers\
         .PrimaryKeyRelatedField(queryset=User.objects.all(),
                                 write_only=True, many=True)
