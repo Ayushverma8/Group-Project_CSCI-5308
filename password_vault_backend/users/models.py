@@ -25,7 +25,7 @@ class UserMpin(BaseModel):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     mpin = models.CharField(max_length=255, null=False, blank=False)
-    is_authenticated = models.BooleanField(default=False)
+    is_authenticated = models.BooleanField(default=True)
 
     def check_mpin(self, data):
         """

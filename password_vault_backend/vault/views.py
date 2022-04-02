@@ -1,12 +1,6 @@
-import os
-import pandas as pd
-import pdfkit
-from datetime import datetime
-
 from django.db.models import Q
-from rest_framework import viewsets
-from rest_framework.response import Response
-from rest_framework.views import APIView
+from django.contrib.auth.models import User
+from rest_framework import viewsets, generics
 
 from . import serializers
 from .models import Vault
@@ -31,6 +25,7 @@ class VaultViewSet(AuthRequiredView, viewsets.ModelViewSet):
         """
         Returns current user's passwords only
         """
+
         user = self.request.user
         qs = super(VaultViewSet, self).get_queryset()
 

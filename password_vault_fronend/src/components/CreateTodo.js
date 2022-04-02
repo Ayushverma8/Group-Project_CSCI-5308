@@ -1,9 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Modal } from 'react-bootstrap'
 import Input from './common/Input'
 import useForm from '../custom_hooks/useFormHook';
 import API_CLIENT from '../api/axiosClient';
-import { getHeaders } from '../utils/authHelpers';
 
 function CreateTodo(props) {
     const HIGH_PRIORITY = 0

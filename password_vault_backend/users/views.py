@@ -1,5 +1,3 @@
-from hashlib import md5
-
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
 from django.views import View
@@ -16,7 +14,6 @@ import users.serializers as serializers
 import users.utils
 
 from .models import VerifyInformation, UserMpin
-from vault.utils import password_encrypt
 
 
 class SignUpView(core.views.AbstractBaseAPIView):
@@ -320,3 +317,5 @@ class UserProfileView(core.views.AuthRequiredView, core.views.AbstractBaseAPIVie
         }
 
         return Response(response_data, HTTP_200_OK)
+
+
