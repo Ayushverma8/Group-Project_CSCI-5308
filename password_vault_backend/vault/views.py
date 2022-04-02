@@ -59,7 +59,7 @@ class VaultViewSet(AuthRequiredView, viewsets.ModelViewSet):
         return response
 
 
-class SharableUserView(AuthRequiredView, generics.ListAPIView):
+class SharableUserView(AuthRequiredView, APIView):
     """
     View to get shareable users on the platform.
     """
@@ -105,7 +105,7 @@ class ExportViewSet(AuthRequiredView, APIView):
         """
         Returns base64 string of file and sends the password in the same
         """
-        
+
         data = pd.DataFrame(columns=['website_url', 'website_username',
                                      'password'])
         qs = Vault.objects.filter(created_by=self.request.user)
@@ -128,9 +128,9 @@ class ExportViewSet(AuthRequiredView, APIView):
         context = {
             "user": self.request.user,
             "password": pdf_pass
-
         }
 
         send_email("file_password.html", context, "Secure File Password",
                    self.request.user.email)
+
         return Response({'message': 'success', 'file': byte_string})
