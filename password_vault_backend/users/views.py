@@ -104,7 +104,7 @@ class ForgotPasswordView(core.views.AbstractBaseAPIView):
             "otp": otp.verification_code,
             "user": otp.user
         }
-        core.helpers.send_email('reset_password.html', context,
+        core.helpers.send_email('forgetPasword.html', context,
                                 "Reset password request", otp.user.email)
         res = {"message": "success"}
 
