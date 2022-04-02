@@ -53,11 +53,9 @@ class AESCipherTestCase(TestCase):
         self.assertEqual(returnError, False)
 
 
-cipher_initializer=MatrixTranspositionCypher();
-encryption_string="tvislo"
-cipherText,remainder = cipher_initializer.encrypt(encryption_string,[int(x) for x in str(settings.MATRIX_KEY)]);
-
-
+cipher_initializer = MatrixTranspositionCypher();
+encryption_string = "tvislo"
+cipherText, remainder = cipher_initializer.encrypt(encryption_string, [int(x) for x in str(settings.MATRIX_KEY)]);
 
 
 class MatrixTranspositionCipherTestCase(TestCase):
@@ -67,43 +65,47 @@ class MatrixTranspositionCipherTestCase(TestCase):
     @author: Shalin Awadiya <sh290595@dal.ca>
 
     """
+
     def test_matrix_transposition_encryption_success(self):
         "Determine if encryption success"
         self.assertTrue(cipherText);
 
     def test_matrix_transposition_decryption_success(self):
         "Determine if decryption success"
-        decrypted_string=cipher_initializer.decrypt(cipherText,[int(x) for x in str(settings.MATRIX_KEY)])
+        decrypted_string = cipher_initializer.decrypt(cipherText, [int(x) for x in str(settings.MATRIX_KEY)])
         self.assertEqual(decrypted_string[:-remainder], encryption_string);
 
     def test_matrix_transposition_decryption_failure(self):
         "Determine if decryption results into a failure"
-        decrypted_string=cipher_initializer.decrypt(cipherText,[int(x) for x in str(settings.MATRIX_KEY)])
-        self.assertNotEqual(decrypted_string[:-remainder],"olsivt");
-
+        decrypted_string = cipher_initializer.decrypt(cipherText, [int(x) for x in str(settings.MATRIX_KEY)])
+        self.assertNotEqual(decrypted_string[:-remainder], "olsivt");
 
     def test_matrix_transposition_cipher_remainder(self):
         "Determine if remainder and cipher text are not of same length"
-        self.assertNotEqual(cipherText,remainder);
-
+        self.assertNotEqual(cipherText, remainder);
 
     def test_matrix_transposition_cipher_remainder_length(self):
         "Determine if length of ciphertext and remainder are not same to ensure cipher success"
-        self.assertNotEqual(len(cipherText),len(str(remainder)));
-
-
+        self.assertNotEqual(len(cipherText), len(str(remainder)));
 
     def test_matrix_transposition_cipher_return_type(self):
-        "Confirm if return type is in string and not in bytes"
-        returnError=False
+        """
+        Confirm if return type is in string and not in bytes
+
+        @author: Shalin Awadiya <sh290595@dal.ca>
+        """
+        returnError = False
         if isinstance(cipherText, bytes):
-            returnError=True
-        self.assertEqual(returnError,False)
+            returnError = True
+        self.assertEqual(returnError, False)
 
     def test_matrix_transposition_cipher_key_length(self):
-        "Ensure that the remainder is always less than the length of the encryption string"
-        noError=False
-        if remainder<len(encryption_string):
-            noError=True;
-        self.assertEqual(noError,True);
+        """
+        Ensure that the remainder is always less than the length of the encryption string
 
+        @author: Shalin Awadiya <sh290595@dal.ca>
+        """
+        returnError = False
+        if remainder < len(encryption_string):
+            returnError = True;
+        self.assertEqual(returnError, True);

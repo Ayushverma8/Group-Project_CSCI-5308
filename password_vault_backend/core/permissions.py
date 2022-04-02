@@ -7,6 +7,7 @@ from rest_framework.status import *
 
 import users.models
 
+
 class MpinAuthenticated(BasePermission):
     """
     Custom class to authenticate user only if he has entered correct MPIN for

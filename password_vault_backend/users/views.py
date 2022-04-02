@@ -43,7 +43,7 @@ class SignUpView(core.views.AbstractBaseAPIView):
             "url": "%s/confirm_email?token=%s" %
                    (core.helpers.get_site_url(), token.key)
         }
-        core.helpers.send_email("signup.html", context,
+        core.helpers.send_email("email.html", context,
                                 "Welcome to password vault", token.user.email)
 
         return Response({'message': 'success', 'token': token.key},
