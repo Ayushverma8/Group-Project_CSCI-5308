@@ -1,1 +1,1 @@
-export const BACKEND_URL = process.env.REACT_APP_API_ENDPOINT || 'http://165.227.36.187/';
+export const BACKEND_URL = process.env.REACT_APP_API_ENDPOINT || 'https://group5.iayush.xyz/';
