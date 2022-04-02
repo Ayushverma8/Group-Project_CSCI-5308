@@ -59,7 +59,7 @@ class VaultViewSet(AuthRequiredView, viewsets.ModelViewSet):
         return response
 
 
-class SharableUserView(AuthRequiredView, APIView):
+class SharableUserView(AuthRequiredView, generics.ListAPIView):
     """
     View to get shareable users on the platform.
     """

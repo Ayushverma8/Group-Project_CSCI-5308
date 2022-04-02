@@ -1,3 +1,4 @@
+from operator import is_
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
@@ -18,6 +19,18 @@ class UserSerializer(ModelActionSerializer):
         model = User
         fields = ['id', 'email', 'first_name', 'last_name']
 
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        is_user = ""
+
+        if instance == self.context['request'].user:
+            is_user= "(You)"
+
+        data['full_name'] = "%s %s %s" % (data['first_name'],
+                                          data['last_name'], is_user)
+
+        return data
+
 
 class VaultSerializer(ModelActionSerializer):
     """
@@ -31,7 +44,7 @@ class VaultSerializer(ModelActionSerializer):
                                  read_only=True)
     shared_with_ids = serializers\
         .PrimaryKeyRelatedField(queryset=User.objects.all(),
-                                write_only=True, many=True)
+                                write_only=True, many=True, required=False)
     owner = serializers.SerializerMethodField()
 
     class Meta:

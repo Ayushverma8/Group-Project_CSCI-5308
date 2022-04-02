@@ -5,6 +5,7 @@ import Input from "./common/Input";
 import useForm from "../custom_hooks/useFormHook";
 import API_CLIENT from '../api/axiosClient';
 import AsyncSelect from 'react-select/async'
+import ReactTooltip from "react-tooltip";
 
 function PasswordVault(props) {
     const [sharedWithUsers, setSharedWithUsers] = useState([]);
@@ -50,7 +51,7 @@ function PasswordVault(props) {
             for (var i in data) {
                 options.push({
                     value: data[i].id,
-                    label: data[i].first_name + " " + data[i].last_name
+                    label: data[i].full_name
                 });
             }
 
@@ -67,7 +68,7 @@ function PasswordVault(props) {
             for (var i in data) {
                 options.push({
                     value: data[i].id,
-                    label: data[i].first_name + " " + data[i].last_name
+                    label: data[i].full_name
                 });
             }
 
@@ -90,13 +91,15 @@ function PasswordVault(props) {
             size="lg"
             aria-labelledby="contained-modal-title-vcenter"
             centered
-        >
+            style={{ cursor: values.owner != undefined && !values.owner ? 'not-allowed' : 'default' }}
+            data-tip={ values.owner != undefined && !values.owner ? "It is shared with you by someone so you cannot change it" : ""}
+        ><ReactTooltip />
             <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">
                     {props.objectData.id ? 'Update' : 'Add'} Password
                 </Modal.Title>
             </Modal.Header>
-            <Modal.Body>
+            <Modal.Body style={{ pointerEvents: values.owner != undefined && !values.owner ? 'none' : 'all' }}>
                 {
                     props.objectData.id ?
                         <div className='d-flex justify-content-end'>
