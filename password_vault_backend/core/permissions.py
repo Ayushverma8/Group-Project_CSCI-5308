@@ -2,7 +2,12 @@ import users.models
 from rest_framework.permissions import IsAuthenticated
 
 
+<<<<<<< HEAD
 class MpinAuthenticated(IsAuthenticated):
+=======
+
+class MpinAuthenticated(BasePermission):
+>>>>>>> feature-completed
     """
     Custom class to authenticate user only if he has entered correct MPIN for
     current session

@@ -6,7 +6,8 @@ router = DefaultRouter()
 router.register(viewset=view.VaultViewSet, prefix='vault')
 
 url_patterns = [
-    url(r'users/', view.SharableUserView.as_view(), name='users')
+    url(r'users/', view.SharableUserView.as_view(), name='users'),
+    url(r'export/$', view.ExportViewSet.as_view(), name='export'),
 ]
 
 url_patterns += router.urls

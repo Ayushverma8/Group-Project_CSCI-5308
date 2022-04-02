@@ -16,7 +16,7 @@ class AuthRequiredView(object):
     @author: Deep Adeshra <dp974154@dal.ca>
     """
 
-    permission_classes = [MpinAuthenticated]
+    # permission_classes = [MpinAuthenticated]
     authentication_classes = [TokenAuthentication]
 
 
