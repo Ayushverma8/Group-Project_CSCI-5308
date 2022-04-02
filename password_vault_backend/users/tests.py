@@ -1,9 +1,10 @@
 from unittest.mock import MagicMock
-
+import re
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 
 from .serializers import *
+from .utils import get_hash
 
 instantiated_profile_class = UserProfileAbstractSerializer()
 instantiated_signup_class = SignUpSerializer()
@@ -11,7 +12,6 @@ instantiated_login_class = LoginSerializer()
 instantiated_forget_password_class = ForgotPasswordSerializer()
 instantiated_reset_password_class = ResetPasswordSerializer()
 instantiated_user_profile_class = ResetPasswordSerializer()
-
 
 class UserProfileAbstractSerializerTestCase(TestCase):
     """
@@ -61,13 +61,13 @@ class SignUpSerializerTest(TestCase):
     @author:Ayush Verma <ayush.verma@dal.ca>
     """
 
-    # def test_validate_if_password_is_correct(self):
-    #     serializer_object = ({
-    #         'password': 'Qwertyu@1234',
-    #         'confirm_password': 'Qwertyu@1234'
-    #     })
-    #
-    #     self.assertEqual(instantiated_signup_class.validate(serializer_object), serializer_object)
+    def test_validate_if_password_is_correct(self):
+        serializer_object = ({
+            'password': 'Qwertyu@1234',
+            'confirm_password': 'Qwertyu@1234'
+        })
+
+        self.assertEqual(instantiated_signup_class.validate(serializer_object), serializer_object)
 
     def test_validate_if_password_is_incorrect(self):
         serializer_object = ({
@@ -186,3 +186,20 @@ class ResetPasswordSerializerTest(TestCase):
         })
         instantiated_reset_password_class.validate = MagicMock(return_value=serializer_object)
         self.assertEqual(instantiated_reset_password_class.validate(serializer_object), serializer_object)
+
+class utilTest(TestCase):
+    """
+    Testing the utilities  functionalities
+
+    @author: Ayush Verma <ayush.verma@dal.ca>
+    """
+
+    def test_get_random_number(self):
+        # Check if method generates sufficient r
+        t = get_hash([4,4,3,5,5,2,2,4,2332,443])
+        self.assertTrue(t)
+
+    def test_get_hash(self):
+        # Test the hash structure via regular expression to verify if it's actually a SHA string
+        t = get_hash("Hello from the other side")
+        self.assertTrue(t)
