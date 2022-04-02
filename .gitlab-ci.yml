@@ -18,7 +18,7 @@ migrations:
   script:
     - apt -y update
     - apt -y install apt-utils
-    - apt install wkhtmltopdf
+    - apt install -y wkhtmltopdf
     - apt -y install net-tools python3.8 python3-pip mysql-client libmysqlclient-dev
     - pip3 install -r requirements.txt
     - aws s3 cp s3://group5asdc/env.example password_vault_backend/password_vault_backend/.env
