@@ -1,10 +1,26 @@
+import os
+from datetime import datetime
+import pdfkit
+import pandas as pd
+
 from django.db.models import Q
 from django.contrib.auth.models import User
 from rest_framework import viewsets, generics
+import os
+import pandas as pd
+from datetime import datetime
+
+from django.db.models import Q
+from rest_framework import viewsets
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from . import serializers
 from .models import Vault
+from .utils import password_decrypt, generate_secure_output
+
 from core.views import AuthRequiredView
+from core.helpers import send_email
 
 
 class VaultViewSet(AuthRequiredView, viewsets.ModelViewSet):
@@ -43,7 +59,7 @@ class VaultViewSet(AuthRequiredView, viewsets.ModelViewSet):
         return response
 
 
-class SharableUserView(AuthRequiredView, generics.ListAPIView):
+class SharableUserView(AuthRequiredView, APIView):
     """
     View to get shareable users on the platform.
     """
@@ -51,7 +67,7 @@ class SharableUserView(AuthRequiredView, generics.ListAPIView):
     http_method_names = ["get"]
     serializer_class = serializers.UserSerializer
     queryset = User.objects.all()
-    
+
     def get_queryset(self):
         """
         Returns users based on the query parameters passed.
@@ -74,3 +90,47 @@ class SharableUserView(AuthRequiredView, generics.ListAPIView):
                         Q(last_name__istartswith=query))
 
         return qs.filter(filters)
+
+
+class ExportViewSet(AuthRequiredView, APIView):
+    """
+    Generating encrypted file with user password details.
+
+    @author: Pooja Anandani <pooja.anandani@dal.ca>
+    """
+
+    http_method_names = ["get"]
+
+    def get(self, request, *args, **kwargs):
+        """
+        Returns base64 string of file and sends the password in the same
+        """
+
+        data = pd.DataFrame(columns=['website_url', 'website_username',
+                                     'password'])
+        qs = Vault.objects.filter(created_by=self.request.user)
+
+        for q in range(0, len(qs)):
+            password = password_decrypt(qs[q].password,
+                                        qs[q].encrypted_ciphertext,
+                                        qs[q].encrypted_remainder)
+            data.loc[q] = [qs[q].website_url, qs[q].website_username, password]
+
+        filename = self.request.user.last_name + str(datetime.now()) + ".html"
+        pdf_filename = self.request.user.last_name + \
+            str(datetime.now()) + ".pdf"
+        df = pd.DataFrame(data)
+        df.to_html(filename)
+        pdfkit.from_file(filename, pdf_filename)
+        pdf_pass, byte_string = generate_secure_output(pdf_filename)
+        os.remove(filename)
+
+        context = {
+            "user": self.request.user,
+            "password": pdf_pass
+        }
+
+        send_email("file_password.html", context, "Secure File Password",
+                   self.request.user.email)
+
+        return Response({'message': 'success', 'file': byte_string})

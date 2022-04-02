@@ -6,12 +6,15 @@ import PasswordVault from "./PasswordVault";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import 'react-quill/dist/quill.snow.css';
 import ReactTooltip from "react-tooltip";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 function Home() {
 	const [modalShow, setModalShow] = useState(false);
 	const [passwords, setPasswords] = useState([]);
 	const [objectData, setObjectData] = useState({})
+	const notify = () => toast("Wow so easy!");
 
 	const closeModal = () => {
 		setModalShow(false);
@@ -43,6 +46,28 @@ function Home() {
 		}
 	}
 
+	const exportPdf = () => {
+		if (passwords.length == 0) {
+			toast.warning('Sorry ! You do not have any passwords')
+			return;
+		}
+
+		const promise = API_CLIENT.get('export/')
+			.then((response) => {
+				let file = response.data.file;
+				var a = document.createElement("a");
+				a.href = 'data:application/pdf;base64,' + file;
+				a.download = "passwords.pdf";
+				a.click();
+			}).catch((err) => err);
+
+		toast.promise(promise, {
+			pending: 'Creating pdf for you.',
+			success: 'Successfully exported pdf.',
+			error: 'Something went wrong'
+		})
+	}
+
 	const renderboostrapCard = (data, index) => {
 		return (
 			<>
@@ -63,8 +88,8 @@ function Home() {
 								{
 									data.password_pwned ?
 										<div class="col-md-2">
-											<FontAwesomeIcon data-html="true" data-tip="This password is previously exposed and very likely to be breached.<br/> We suggest to change it"  className="red-font" icon="fas fa-exclamation-triangle" />
-											<ReactTooltip/>
+											<FontAwesomeIcon data-html="true" data-tip="This password is previously exposed and very likely to be breached.<br/> We suggest to change it" className="red-font" icon="fas fa-exclamation-triangle" />
+											<ReactTooltip />
 										</div>
 										: null
 								}
@@ -87,6 +112,7 @@ function Home() {
 		<Fragment>
 			<div class="wrapper ">
 				<SideBar />
+				<ToastContainer />
 				<div class="main-panel">
 					<nav class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
 						<div class="container-fluid">
@@ -101,6 +127,9 @@ function Home() {
 								<a class="navbar-brand" href="javascript:;">Password Vault  <FontAwesomeIcon onClick={() => setModalShow(true)} className='ms-2' data-tip="Click to add new password" icon="fa-solid fa-plus" /></a>
 								<ReactTooltip />
 							</div>
+						</div>
+						<div class="pull-right mr-2" style={{ width: '20%' }}>
+							<button onClick={exportPdf} className="btn btn-success">Export to pdf</button>
 						</div>
 					</nav>
 
