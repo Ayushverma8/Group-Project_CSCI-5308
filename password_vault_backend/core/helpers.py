@@ -21,7 +21,7 @@ def send_email(template_name, context, subject, to_email):
     html_message = render_to_string(template_name, context=context)
 
     plain_message = strip_tags(html_message)
-    send_mail(subject, plain_message, settings.EMAIL_HOST_USER,
+    send_mail(subject, plain_message, settings.FROM_EMAIL,
               [to_email], html_message=html_message)
 
     return True
