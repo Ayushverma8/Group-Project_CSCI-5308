@@ -1,4 +1,3 @@
-import { faL } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import { Fragment } from "react/cjs/react.production.min";
 import API_CLIENT from "../api/axiosClient";
