@@ -200,6 +200,6 @@ class utilTest(TestCase):
         self.assertTrue(t)
 
     def test_get_hash(self):
-        # Test the hash structure via regular expression to verify if it's actually a SHA string
+        # Test the hash structure to verify if it's actually a SHA string
         t = get_hash("Hello from the other side")
         self.assertTrue(t)

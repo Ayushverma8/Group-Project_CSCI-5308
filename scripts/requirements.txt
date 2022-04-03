@@ -24,4 +24,5 @@ tldextract
 logdna
 pdfkit
 pandas
+requests
 PyPDF2

@@ -1,16 +1,19 @@
 import random
 import string
+from unittest.mock import MagicMock
 
 from django.conf import settings
 from django.test import TestCase
-
+from django.core.validators import URLValidator
+from django.core.exceptions import ValidationError
 from .Aes import *
 from .MatrixTranspositionCypher import MatrixTranspositionCypher
+from .models import Vault
 
 pivot = AESCipher(settings.AES_KEY)
 string_to_be_encrypted = "Knock Knock! Encrypt this text please"
 encrypted_string = pivot.encrypt(string_to_be_encrypted)
-
+class_vault_models_pivot = Vault()
 
 class AESCipherTestCase(TestCase):
     """
@@ -128,3 +131,29 @@ class MatrixTranspositionCipherTestCase(TestCase):
             returnError = True;
 
         self.assertEqual(returnError, True);
+
+class VaultTest(TestCase):
+    """
+    Check for the features to show the pawned password for users.
+
+    @author: Ayush Verma <ayush.verma@dal.ca>
+    """
+    def test_logo_url_success(self):
+        # Fetch URL and render it onto the views
+        y = class_vault_models_pivot.logo_url()
+        self.assertTrue(y)
+
+    def test_password_pwned(self):
+        # Verify if the password is breached and is available in the database
+        class_vault_models_pivot.password_pwned = MagicMock(return_value=True)
+        self.assertTrue(class_vault_models_pivot.password_pwned())
+
+    def test_save(self):
+        serializer_object = ({
+            'password': 'qwerty@123',
+            'encrypted_ciphertext': '7QIOzSfMiV5EmE9SZMP5fT2lH+2KQN565g4dTCpjQ5A=',
+            'encrypted_remainder': '34333'
+        })
+        class_vault_models_pivot.save = MagicMock(return_value=serializer_object)
+        self.assertEqual(class_vault_models_pivot.save(serializer_object), serializer_object)
+
