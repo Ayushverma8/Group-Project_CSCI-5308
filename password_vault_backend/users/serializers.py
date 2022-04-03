@@ -5,12 +5,11 @@ from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 from rest_framework import serializers
 
-<<<<<<< HEAD
+
 from users.models import UserMpin, VerifyInformation
 import users.utils
-=======
 from users.models import VerifyInformation, Media
->>>>>>> 86bad92 (profile-picture-upload)
+
 
 
 class UserProfileAbstractSerializer(serializers.Serializer):
@@ -79,13 +78,11 @@ class SignUpSerializer(UserProfileAbstractSerializer):
         This method validates entire JSON body.
         """
 
-<<<<<<< HEAD
-=======
         if not data['mpin']:
             raise serializers.ValidationError({
                 "message": "Please enter mpin"
             })
->>>>>>> 86bad92 (profile-picture-upload)
+
         if data['password'] != data['confirm_password']:
             raise serializers.ValidationError({
                 'confirm_password': "This should be same as password"
@@ -201,11 +198,8 @@ class ResetPasswordSerializer(serializers.Serializer):
         """
 
         try:
-<<<<<<< HEAD
-            user_otp = VerifyInformation.objects.filter(user__email=data.get('email'))\
-=======
+            user_otp = VerifyInformation.objects.filter(user__email=data.get('email'))
             user_otp = Verification.objects.filter(user__email=data.get('email')) \
->>>>>>> 86bad92 (profile-picture-upload)
                 .order_by('-created_at').first()
 
             if user_otp.verification_code == data.get('otp'):

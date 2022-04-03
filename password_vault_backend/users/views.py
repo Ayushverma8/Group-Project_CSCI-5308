@@ -14,7 +14,6 @@ import core.views
 import users.serializers as serializers
 import users.utils
 
-from .models import VerifyInformation, UserMpin
 from .models import VerifyInformation, UserMpin, Media
 from vault.utils import password_encrypt
 
@@ -156,7 +155,7 @@ class LogOutView(core.views.AuthRequiredView, core.views.AbstractBaseAPIView):
         Removes token from the dababase and logout the user
         """
 
-        UserMpin.objects.filter(user=request.user)\
+        UserMpin.objects.filter(user=request.user) \
             .update(is_authenticated=False)
         Token.objects.filter(user=request.user).delete()
         UserMpin.objects.filter(user=request.user)
@@ -324,8 +323,6 @@ class UserProfileView(core.views.AuthRequiredView, core.views.AbstractBaseAPIVie
         return Response(response_data, HTTP_200_OK)
 
 
-<<<<<<< HEAD
-=======
 class MediaUpload(core.views.AuthRequiredView, viewsets.ModelViewSet):
     """
     @author: Pooja Anandani <pooja.anandani@dal.ca>
@@ -333,4 +330,3 @@ class MediaUpload(core.views.AuthRequiredView, viewsets.ModelViewSet):
     queryset = Media.objects.all()
     serializer_class = UserMediaSerializer
     http_method_names = ['get', 'post', 'patch', 'delete']
->>>>>>> 86bad92 (profile-picture-upload)

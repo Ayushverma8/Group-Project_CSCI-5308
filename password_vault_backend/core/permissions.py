@@ -21,4 +21,5 @@ class MpinAuthenticated(IsAuthenticated):
             return False
 
         mpin_instance = users.models.UserMpin.objects.get(user=request.user)
+        print(mpin_instance)
         return mpin_instance.is_authenticated
