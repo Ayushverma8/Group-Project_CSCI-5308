@@ -21,6 +21,14 @@ function PasswordVault(props) {
     }
 
     const createOrUpdatePassWord = async () => {
+        var url = values['website_url'];
+
+        if (!/^https?:\/\//i.test(url)) {
+            url = 'http://' + url;
+        }
+
+        values['website_url'] = url;
+
         try {
             if (!props.objectData.id) {
                 await API_CLIENT.post('vault/', values);
@@ -92,7 +100,7 @@ function PasswordVault(props) {
             aria-labelledby="contained-modal-title-vcenter"
             centered
             style={{ cursor: values.owner != undefined && !values.owner ? 'not-allowed' : 'default' }}
-            data-tip={ values.owner != undefined && !values.owner ? "It is shared with you by someone so you cannot change it" : ""}
+            data-tip={values.owner != undefined && !values.owner ? "It is shared with you by someone so you cannot change it" : ""}
         ><ReactTooltip />
             <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">
@@ -109,13 +117,13 @@ function PasswordVault(props) {
 
                 <div className="form-date-w3-agileits">
                     <label className="pull-left"> Website </label>
-                    <Input type="text" name="website_name" onChange={handleChange} value={values.website_name} placeholder="Website name" required="true" />
+                    <Input type="text" name="website_name" onChange={handleChange} errors={errors} value={values.website_name} placeholder="Website name" required="true" />
 
                     <label className="pull-left"> URL </label>
-                    <Input type="text" name="website_url" onChange={handleChange} value={values.website_url} placeholder="website url" required="true" />
+                    <Input type="text" name="website_url" onChange={handleChange} errors={errors} value={values.website_url} placeholder="website url" required="true" />
 
                     <label className="pull-left"> Username </label>
-                    <Input type="text" name="website_username" onChange={handleChange} value={values.website_username} placeholder="website username" required="true" />
+                    <Input type="text" name="website_username" onChange={handleChange} errors={errors} value={values.website_username} placeholder="website username" required="true" />
 
                     <div className="row">
                         <label className="pull-left"> Shared with </label>
@@ -129,7 +137,7 @@ function PasswordVault(props) {
                     </div>
 
                     <label className="pull-left mt-3"> Password </label>
-                    <Input name="password" id="my-pass" type="password" onChange={handleChange} value={values.password} placeholder="Password" required="true" />
+                    <Input name="password" id="my-pass" type="password" errors={errors} onChange={handleChange} value={values.password} placeholder="Password" required="true" />
                     <div className='d-flex' style={{ marginTop: "-10px" }}>
                         <input type="checkbox" onClick={showPassword} /><p style={{ marginBottom: '-15px', transform: "translate(10px, -3px)" }}>Show password</p>
                     </div>
