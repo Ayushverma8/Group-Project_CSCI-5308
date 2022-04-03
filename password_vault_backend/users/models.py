@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 from core.models import BaseModel
-from vault import utils
 import users.utils
 
 
@@ -55,3 +54,15 @@ class UserMpin(BaseModel):
 
         return super().save(*args, **kwargs)
 
+
+class ContactUs(BaseModel):
+    """
+    Model to store the details of users who contacted us.
+
+    @author: Deep Adeshra <dp974154@dal.ca>
+    """
+
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
+    email = models.EmailField()
+    message = models.TextField()

@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 from rest_framework import serializers
 
-from users.models import UserMpin, VerifyInformation
+from users.models import UserMpin, VerifyInformation, ContactUs
 import users.utils
 
 
@@ -244,3 +244,13 @@ class MPINValidateSerializer(serializers.Serializer):
             raise serializers.ValidationError("Make sure it is correct one")
 
         return data
+
+
+class ContactUsSerializer(serializers.ModelSerializer):
+    """
+    Serializer for handling contact-us requests
+    """
+
+    class Meta:
+        model = ContactUs
+        fields = '__all__'
