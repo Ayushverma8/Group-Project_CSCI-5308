@@ -14,6 +14,7 @@ import PasswordVault from './components/PasswordVault';
 import Todo from './components/Todo';
 import MpinValidation from './components/MpinValidation';
 import VerifyEmailMessgage from './components/VerifyEmailMessage';
+import ContactUs from './components/ContactUs';
 
 function App() {
 	return (
@@ -26,6 +27,7 @@ function App() {
 						<Route path='/signup' element={<SignUp />} />
 						<Route path='/forgot-password' element={<ForgetPassword />} />
 						<Route path='/reset-password' element={<ResetPassword />} />
+						<Route path='/contact-us' element={<ContactUs />} />
 					</Route>
 
 					<Route path='/' element={<PrivateRoute />}>
