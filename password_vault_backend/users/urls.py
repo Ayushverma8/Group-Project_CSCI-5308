@@ -7,7 +7,7 @@ router = DefaultRouter()
 
 
 # rest_framework's ViewSet items will be set like this.
-# router.register()
+router.register(viewset=views.ContactUsView, prefix='contact-us')
 
 # views which are inheriting AbstractBaseAPIView, will have urls like this
 url_patterns = [
