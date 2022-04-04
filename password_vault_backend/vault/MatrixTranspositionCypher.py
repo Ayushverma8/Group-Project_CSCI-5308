@@ -1,34 +1,31 @@
 class MatrixTranspositionCypher:
-    def __init__(self):
-        pass
-
-    def encrypt(self, plainText, key):
+    def encrypt(self, plain_text, key):
         """
-            This method will encrypt the salt added to the password of the users
-            so that it can be used successfully to validate the user in the next login
-            attempt
+        This method will encrypt the salt added to the password of the users
+        so that it can be used successfully to validate the user in the next login
+        attempt
 
-            @author: Shalin Awadiya <shalin.awadiya@dal.ca>
-
+        @author: Shalin Awadiya <shalin.awadiya@dal.ca>
         """
-        max = 0
+
+        max_l = 0
+
         for i in key:
-            if (i > max):
-                max = i
+            if i > max_l:
+                max_l = i
 
-        column_length = max
+        column_length = max_l
 
         remainder = 0
 
-        if (len(plainText) % column_length > 0):
-            remainder = column_length - (len(plainText) % column_length)
-
+        if len(plain_text) % column_length > 0:
+            remainder = column_length - (len(plain_text) % column_length)
 
         if remainder > 0:
             for i in range(remainder):
-                plainText = plainText + "%"
+                plain_text = plain_text + "%"
         # print(plainText)
-        rows = (int)(len(plainText) / column_length)
+        rows = int(len(plain_text) / column_length)
         # print(rows)
 
         eachrow = []
@@ -36,18 +33,18 @@ class MatrixTranspositionCypher:
         endpoint = column_length
 
         for i in range(rows):
-            eachrow.append(plainText[startpoint:endpoint])
+            eachrow.append(plain_text[startpoint:endpoint])
             startpoint = startpoint + column_length
             endpoint = endpoint + column_length
-        # print(eachrow)
-        cypherText = ""
+
+        cypher_text = ""
         for i in range(len(key)):
             for j in range(len(eachrow)):
-                cypherText = cypherText + eachrow[j][key[i] - 1]
+                cypher_text = cypher_text + eachrow[j][key[i] - 1]
 
-        return cypherText, remainder
+        return cypher_text, remainder
 
-    def decrypt(self, cypherText, key):
+    def decrypt(self, cypher_text, key):
         """
         After retrieving the encrypted password from the database it will be trimmed of
         salt and shown back to the users for further reference.
@@ -55,28 +52,29 @@ class MatrixTranspositionCypher:
         @author: Shalin Awadiya <shalin.awadiya@dal.ca>
 
         """
-        max = 0
-        for i in key:
-            if (i > max):
-                max = i
+        max_l = 0
 
-        column_length = max
-        rows = (int)(len(cypherText) / column_length)
+        for i in key:
+            if i > max_l:
+                max_l = i
+
+        column_length = max_l
+        rows = int(len(cypher_text) / column_length)
 
         resultant_dictionary = {}
         startpoint = 0
         endpoint = rows
         for i in range(column_length):
-            resultant_dictionary[key[i]] = cypherText[startpoint:endpoint]
+            resultant_dictionary[key[i]] = cypher_text[startpoint:endpoint]
             startpoint = startpoint + rows
             endpoint = endpoint + rows
 
-
-        plainText = ""
+        plain_text = ""
         list2 = key
         list2.sort()
+
         for i in range(rows):
             for j in range(len(list2)):
-                plainText = plainText + (resultant_dictionary.get(list2[j]))[i]
+                plain_text = plain_text + (resultant_dictionary.get(list2[j]))[i]
 
-        return plainText
+        return plain_text

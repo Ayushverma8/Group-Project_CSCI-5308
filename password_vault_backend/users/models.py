@@ -33,9 +33,9 @@ class UserMpin(BaseModel):
         @author: Deep Adeshra<dp974154@dal.ca>
         """
 
-        hash = users.utils.get_hash(data)
+        our_hash = users.utils.get_hash(data)
 
-        return hash == self.mpin
+        return our_hash == self.mpin
 
     def save(self, *args, **kwargs):
         """

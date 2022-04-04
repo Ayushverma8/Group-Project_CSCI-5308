@@ -40,4 +40,4 @@ def get_site_url():
     if mode == "devel":
         return "http://localhost:8000"
     else:
-        return "prod_url"
+        return "https://group5.iayush.xyz/"

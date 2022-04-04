@@ -5,7 +5,7 @@ from django.shortcuts import render
 
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.status import *
+from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED
 from rest_framework.authtoken.models import Token
 from rest_framework.viewsets import ModelViewSet
 
@@ -291,7 +291,6 @@ class UserProfileView(core.views.AuthRequiredView, core.views.AbstractBaseAPIVie
         user.last_name = validated_data['last_name']
 
         if user.email != validated_data['email']:
-            # user.is_active = False
             user.email = validated_data['email']
             email_changed = True
 

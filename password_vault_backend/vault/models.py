@@ -54,18 +54,18 @@ class Vault(BaseModel):
 
         password = password_decrypt(self.password,
             self.encrypted_ciphertext, self.encrypted_remainder)
-        hash = users.utils.get_hash(password)
+        hash_pass = users.utils.get_hash(password)
 
-        req_url = "%s%s" % (choices.PASSWORD_PWNED_API, hash[:5])
+        req_url = "%s%s" % (choices.PASSWORD_PWNED_API, hash_pass[:5])
 
         response = requests.get(req_url)
         data = response.text.split('\n')
 
         for item in data:
-            half_hash, occurance = item.split(':')
-            full_hash = "%s%s" % (hash[:5], half_hash)
+            half_hash, occurrence = item.split(':')
+            full_hash = "%s%s" % (hash_pass[:5], half_hash)
 
-            if full_hash.upper() == hash.upper():
+            if full_hash.upper() == hash_pass.upper():
                 return True
 
         return False

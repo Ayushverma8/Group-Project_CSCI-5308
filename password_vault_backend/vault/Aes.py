@@ -38,7 +38,7 @@ class AESCipher:
 
         padded_plain_text = self.__pad(plain_text)
         iv = Random.new().read(self.block_size)
-        cipher = AES.new(self.key, AES.MODE_CBC, iv)
+        cipher = AES.new(self.key, AES.MODE_GCM, iv)
         encrypted_text = cipher.encrypt(padded_plain_text.encode())
         encrypted_text_decoded = b64encode(iv + encrypted_text).decode("utf-8")
         log.info("Logging the text that needs to be encrypted")
@@ -55,7 +55,7 @@ class AESCipher:
 
         decoded_encrypted_text = b64decode(encrypted_text)
         iv = decoded_encrypted_text[:self.block_size]
-        cipher = AES.new(self.key, AES.MODE_CBC, iv)
+        cipher = AES.new(self.key, AES.MODE_GCM, iv)
         plain_text = cipher.decrypt(decoded_encrypted_text[self.block_size:]).decode("utf-8")
         plaintext_before_padding = self.__unpad(plain_text)
         log.info("Logging the text that needs to be decrypted")

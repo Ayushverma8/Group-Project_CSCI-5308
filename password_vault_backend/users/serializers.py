@@ -201,7 +201,7 @@ class ResetPasswordSerializer(serializers.Serializer):
                 user_otp.delete()
             else:
                 raise serializers.ValidationError({"otp": "No record found"})
-        except:
+        except Exception:
             raise serializers.ValidationError({"otp": "No record found"})
 
         return data
