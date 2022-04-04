@@ -7,10 +7,6 @@ from .serializers import UserProfileAbstractSerializer, SignUpSerializer, \
     LoginSerializer, ForgotPasswordSerializer, ResetPasswordSerializer
 from .utils import get_hash
 
-sample_password = 'eQwerty@1234'
-
-test_email_address = 'ayush.verma@dal.ca'
-
 instantiated_profile_class = UserProfileAbstractSerializer()
 instantiated_signup_class = SignUpSerializer()
 instantiated_login_class = LoginSerializer()
@@ -20,6 +16,7 @@ instantiated_user_profile_class = ResetPasswordSerializer()
 
 AYUSH_VERMA = "Ayush Verma"
 AYUSH_EMAIL = "ayush.verma@dal.ca"
+AYUSH_USERNAME = "ayush.verma@dal.ca"
 TEST_PASS = "Qwertyu@1234"
 
 
@@ -157,7 +154,7 @@ class LoginSerializerTest(TestCase):
             'email': AYUSH_EMAIL,
             'password': TEST_PASS,
             'token': 'ffnrfnfnn4nttnti5ntinfnnffnvvs',
-            'confirm_password': 'Qwerty@1234'
+            'confirm_password': TEST_PASS
         })
         instantiated_login_class.validate = MagicMock(
             return_value=serializer_object)
@@ -198,10 +195,10 @@ class ResetPasswordSerializerTest(TestCase):
 
     def test_validate_unsuccessful_no_otp(self):
         serializer_object = ({
-            'user__email': test_email_address,
+            'user__email': AYUSH_EMAIL,
             'email': AYUSH_EMAIL,
             'token': 'ffnrfnfnn4nttnti5ntinfnnffnvvs',
-            'confirm_password': sample_password,
+            'confirm_password': TEST_PASS,
             'otp': 343333,
         })
         instantiated_reset_password_class.validate = MagicMock(
@@ -215,7 +212,7 @@ class ResetPasswordSerializerTest(TestCase):
             'user__email': 'ayush.verma@dal.ca',
             'email': AYUSH_EMAIL,
             'token': 'ffnrfnfnn4nttnti5ntinfnnffnvvs',
-            'confirm_password': 'eQwerty@1234',
+            'confirm_password':TEST_PASS,
             'otp': 343333,
         })
         instantiated_reset_password_class.validate = MagicMock(
