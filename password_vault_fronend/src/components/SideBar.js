@@ -14,8 +14,10 @@ function SideBar() {
     return (
         <div class="sidebar" data-color="white" data-active-color="danger">
             <div class="logo">
+
                 <div class="logo-image-small">
-                    <Avatar avatarStyle="Circle" className="user-icon"></Avatar>
+
+                    <Avatar avatarStyle="Circle" className="user-icon" onChange={(e)=>console.log(e)}></Avatar>
                 </div>
                 <a href="#" class="simple-text logo-normal">
                     <label id="lbluserid" style={{ fontWeight: "bolder" }}>{userProfile.firstName} {userProfile.lastName}</label>

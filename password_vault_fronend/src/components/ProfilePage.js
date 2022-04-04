@@ -5,11 +5,26 @@ import { Fragment } from "react/cjs/react.production.min";
 import SideBar from './SideBar'
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import 'axios'
 
 function ProfilePage() {
 
 	const [successMessage, setSuccessMessage] = useState(false);
 	const [emailChanged, setEmailChanged] = useState(false);
+	const[inputElement,setInputElement] = useState(null);
+
+	const handleProfilePicSubmit = async() =>
+	{
+    let formData = new FormData();
+	debugger
+    formData.append('profile_pic',this.state.profilePic);
+	try{
+		let response = await API_CLIENT.get('user_profile/');
+	}
+	catch (e) {
+		console.log(e)
+	}
+	}
 
 	useEffect(async () => {
 		try {
@@ -33,6 +48,23 @@ function ProfilePage() {
 			setErrors(err.response.data);
 		}
 	}
+
+	const handleProfilePicChange = async (e) => {
+		const elem = document.getElementById("profile");
+		setInputElement(elem.files[0]);
+
+		try{
+			const formData = new FormData();
+			formData.append("image", elem.files[0]);
+			debugger
+			let response = await API_CLIENT.post('user/', formData);
+			debugger
+		}
+		catch (e) {
+			console.log(e)
+		}
+  	}
+
 
 	const { handleChange, handleSubmit, values, setValues, errors, setErrors } = useForm(updateProfile);
 
@@ -64,6 +96,13 @@ function ProfilePage() {
 							<Input type="email" name="email" placeholder="Your Email" required="" value={values.email} onChange={handleChange} errors={errors} />
 							<label className="pull-left"> New Password </label>
 							<Input type="password" name="password" placeholder="Your Password" required="" value={values.password} onChange={handleChange} errors={errors} />
+							 <input
+								 type="file"
+								 id={"profile"}
+								 accept=".jpg,.jpeg,.png"
+								 onChange={() => handleProfilePicChange()}
+							 />
+          					<button onClick={handleProfilePicSubmit}>submit</button>
 						</div>
 						<div className="make wow shake">
 							<button type="submit" className="btn btn-primary" >Save changes</button>
