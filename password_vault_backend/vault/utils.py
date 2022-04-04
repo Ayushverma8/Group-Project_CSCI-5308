@@ -22,7 +22,7 @@ def password_encrypt(password):
     """
 
     salt = ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase)
-                   for i in range(6))
+                   for _ in range(6))
     plaintext = password + salt
     cypher_text, remainder = matrix_transposition_cypher \
         .encrypt(salt, [int(x) for x in str(settings.MATRIX_KEY)])

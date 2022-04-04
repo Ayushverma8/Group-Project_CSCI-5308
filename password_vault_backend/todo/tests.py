@@ -3,8 +3,9 @@ from unittest.mock import MagicMock
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 
-from .serializers import *
+from .serializers import ToDoSerializer
 from .views import ToDoViewSet
+
 
 instantianted_todo_class = ToDoSerializer()
 
@@ -41,12 +42,14 @@ class ToDoSerializerTest(TestCase):
         instantianted_todo_class.create = MagicMock(side_effect=ValidationError('Task not created successfully'))
         self.assertRaises(ValidationError, instantianted_todo_class.create, serializer_object)
 
+
 class ToDoViewSetTest(TestCase):
     """
     Testing ToDo views to verify the ToDo generation
 
     @author: Ayush Verma <ayush.verma@dal.ca>
     """
+
     def test_get_queryset_failure(self):
         instantianted_todo_view = ToDoViewSet()
         test_query = 'priority=3&status=2'

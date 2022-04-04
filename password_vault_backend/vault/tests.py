@@ -1,12 +1,8 @@
-import random
-import string
 from unittest.mock import MagicMock
 
 from django.conf import settings
 from django.test import TestCase
-from django.core.validators import URLValidator
-from django.core.exceptions import ValidationError
-from .Aes import *
+from .Aes import AESCipher
 from .MatrixTranspositionCypher import MatrixTranspositionCypher
 from .models import Vault
 
@@ -14,6 +10,7 @@ pivot = AESCipher(settings.AES_KEY)
 string_to_be_encrypted = "Knock Knock! Encrypt this text please"
 encrypted_string = pivot.encrypt(string_to_be_encrypted)
 class_vault_models_pivot = Vault()
+
 
 class AESCipherTestCase(TestCase):
     """
@@ -42,18 +39,19 @@ class AESCipherTestCase(TestCase):
 
     def test_encryption_return_type(self):
         # Confirm if the encrypted ciphertext is in string and not in AES bytes
-        returnError = False
+        return_error = False
         if isinstance(encrypted_string, bytes):
-            returnError = True
-        self.assertEqual(returnError, False)
+            return_error = True
+        self.assertEqual(return_error, False)
 
     def test_decryption_return_type(self):
         # Confirm if the decrypted plaintext is in string and not in AES bytes
         decrypted_string = pivot.decrypt(encrypted_string)
-        returnError = False
+        return_error = False
+
         if isinstance(decrypted_string, bytes):
-            returnError = True
-        self.assertEqual(returnError, False)
+            return_error = True
+        self.assertEqual(return_error, False)
 
 
 cipher_initializer = MatrixTranspositionCypher();
@@ -126,11 +124,12 @@ class MatrixTranspositionCipherTestCase(TestCase):
         @author: Shalin Awadiya <sh290595@dal.ca>
         """
 
-        returnError = False
+        return_error = False
         if remainder < len(encryption_string):
-            returnError = True;
+            return_error = True;
 
-        self.assertEqual(returnError, True);
+        self.assertEqual(return_error, True)
+
 
 class VaultTest(TestCase):
     """

@@ -1,7 +1,7 @@
 import API_CLIENT from "../api/axiosClient";
 import Input from "./common/Input";
 import useForm from "../custom_hooks/useFormHook";
-import { setUserLoggedIn } from "../utils/authHelpers";
+import {setUserLoggedIn, setUserProfile} from "../utils/authHelpers";
 import { Fragment } from "react/cjs/react.production.min";
 
 function Signup() {
@@ -9,6 +9,10 @@ function Signup() {
 		try {
 			let res = await API_CLIENT.post('/signup/', values);
 			setUserLoggedIn(res.data.token);
+			setUserProfile({
+				first_name: values.first_name,
+				last_name: values.last_name
+			})
 		} catch (e) {
 			setErrors(e.response.data);
 		}

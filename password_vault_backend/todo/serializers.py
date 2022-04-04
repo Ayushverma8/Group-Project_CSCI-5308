@@ -1,7 +1,4 @@
-from datetime import date
-import re
 from rest_framework import serializers
-from django.utils.timezone import datetime
 
 from todo.models import ToDo
 
