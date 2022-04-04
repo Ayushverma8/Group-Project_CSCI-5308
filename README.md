@@ -64,9 +64,6 @@ $ python3 password_vault_backend/manage.py runserver
 
 ### Architecture
 
-*ReactJS Frontend* -
-
-![enter image description here](https://i.imgur.com/bFRLB8j.png)
 
 **Backend Architecture** -
 
