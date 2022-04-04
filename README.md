@@ -1,17 +1,13 @@
 # ![Password Vault](https://gcdnb.pbrd.co/images/NfA6svumiXXi.png)
-[](SonarQubeURL) [![npm version](https://img.shields.io/badge/Powered%20by-SonarQube-brightgreen)](https://www.npmjs.com/package/@toast-ui/editor) [![license](https://img.shields.io/github/license/nhn/tui.editor.svg)]() [![](https://img.shields.io/badge/AWS-Codedeploy-green.svg)]()
-> CSCI 5308 - Group Project - Password Vault
-![enter image description here](https://i.imgur.com/wY1WJAq.png)
 
+[](SonarQubeURL) [![npm version](https://img.shields.io/badge/Powered%20by-SonarQube-brightgreen)](http://52.90.114.61/projects/) [![license](https://img.shields.io/github/license/nhn/tui.editor.svg)]() [![](https://img.shields.io/badge/AWS-Codedeploy-green.svg)]()
 
+<h3 align="center"> CSCI 5308 - ADVANCED TOPICS IN SOFTWARE DEVELOPMENT </h3>
+<h5 align="center"> Group Project - <a href="https://www.dal.ca.ca/">Dalhousie University</a> (Spring 2022) </h5>
 
-## 🚩 Table of Contents
-
-- [Dependencies](#-Dependencies)
-- [Build Instructions](#-BuildInstructions)
-- [Usage scenario](#-features)
-
+![enter image description here](https://i.imgur.com/mCleVH9.png)
 ## 📦 Dependencies
+
 
 ### Technology Stack
 
