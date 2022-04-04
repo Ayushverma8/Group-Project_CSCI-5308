@@ -7,6 +7,10 @@ from .serializers import UserProfileAbstractSerializer, SignUpSerializer, \
     LoginSerializer, ForgotPasswordSerializer, ResetPasswordSerializer
 from .utils import get_hash
 
+sample_password = 'eQwerty@1234'
+
+test_email_address = 'ayush.verma@dal.ca'
+
 instantiated_profile_class = UserProfileAbstractSerializer()
 instantiated_signup_class = SignUpSerializer()
 instantiated_login_class = LoginSerializer()
@@ -194,10 +198,10 @@ class ResetPasswordSerializerTest(TestCase):
 
     def test_validate_unsuccessful_no_otp(self):
         serializer_object = ({
-            'user__email': 'ayush.verma@dal.ca',
+            'user__email': test_email_address,
             'email': AYUSH_EMAIL,
             'token': 'ffnrfnfnn4nttnti5ntinfnnffnvvs',
-            'confirm_password': 'eQwerty@1234',
+            'confirm_password': sample_password,
             'otp': 343333,
         })
         instantiated_reset_password_class.validate = MagicMock(
