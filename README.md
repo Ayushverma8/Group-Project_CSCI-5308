@@ -92,3 +92,8 @@ Post that, you can navigate to the AWS Codedeploy page by clicking [here](https:
 ![enter image description here](https://i.imgur.com/jN2WQt1.png)
 
 Once the deployment succeeds, you can open the URL in the web browser. 
+
+**Cloud Logging** -
+You can view all requested application logs with tags like info, error, warning on logdna.com. Attached is the screenshot of dashboard with logs of a feature.
+
+![enter image description here](https://i.imgur.com/J3m6ZLq.png)
