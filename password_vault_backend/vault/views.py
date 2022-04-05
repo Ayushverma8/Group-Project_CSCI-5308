@@ -40,7 +40,7 @@ class VaultViewSet(AuthRequiredView, viewsets.ModelViewSet):
         """
 
         user = self.request.user
-        qs = super(VaultViewSet, self).get_queryset()
+        qs = super(VaultViewSet, self).get_queryset().distinct()
 
         if self.request.method == 'GET':
             return qs.filter(Q(created_by=user) |

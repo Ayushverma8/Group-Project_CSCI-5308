@@ -29,12 +29,8 @@ function ProfilePage() {
 		try {
 			let response = await API_CLIENT.patch('user_profile/', values);
 			setSuccessMessage(true);
-			setUserProfile({
-				first_name: response.data.first_name,
-				last_name: response.data.last_name
-			})
+			await setTimeout(setUserProfile(values.first_name, values.last_name), 300);
 			setUserProfileHere(getUserProfile());
-
 
 			if (response.data.email_changed) {
 				setEmailChanged(true)

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getUserProfile, setUserLoggedOut } from "../utils/authHelpers";
 import Avatar from 'avataaars';
+import avatar from 'animal-avatar-generator'
 
 
 function SideBar(props) {
@@ -9,17 +10,22 @@ function SideBar(props) {
 
     useEffect(() => {
         setUserProfile(getUserProfile());
+        var seed = "my_default_seed"
+        if (getUserProfile() && getUserProfile().firstName && getUserProfile().lastName) {
+            seed = getUserProfile().firstName + getUserProfile().lastName;
+        }
+        const svg = avatar(seed, { size: 100 });
+        document.getElementById('avatar').innerHTML = svg;
     }, [])
 
     useEffect(() => {
         setUserProfile(getUserProfile());
-    },[props])
+    }, [props])
 
     return (
         <div class="sidebar" data-color="white" data-active-color="danger">
             <div class="logo">
-                <div class="logo-image-small">
-                    <Avatar avatarStyle="Circle" className="user-icon"></Avatar>
+                <div class="logo-image-small" id='avatar'>
                 </div>
                 <a href="#" class="simple-text logo-normal">
                     <label id="lbluserid" style={{ fontWeight: "bolder" }}>{userProfile.firstName} {userProfile.lastName}</label>

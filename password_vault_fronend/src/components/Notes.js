@@ -86,21 +86,10 @@ function Notes() {
 
 			<nav class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
 				<div class="container-fluid">
-					<div class="collapse navbar-collapse justify-content-end" id="navigation">
+					<div class="collapse navbar-collapse justify-content-center" id="navigation">
 						<a class="navbar-brand" style={{ paddingRight: "710px" }} href="#">Notes {addNotesPage ? null : <FontAwesomeIcon className='ms-2' data-tip="Click to add new notes" onClick={() => setAddNotes(true)} icon="fa-solid fa-plus" />}
 							<ReactTooltip />
 						</a>
-
-						<form>
-							<div class="input-group no-border">
-								<input type="text" value="" class="form-control" placeholder="Search..." />
-								<div class="input-group-append">
-									<div class="input-group-text">
-										<i class="nc-icon nc-zoom-split"></i>
-									</div>
-								</div>
-							</div>
-						</form>
 					</div>
 				</div>
 			</nav>

@@ -53,7 +53,7 @@ class VaultSerializer(ModelActionSerializer):
                    "encrypted_ciphertext", "encrypted_remainder")
         action_fields = {
             'list': {'fields': ('id', 'website_url', 'website_name',
-                                'logo_url', 'password_pwned')},
+                                'logo_url', 'password_pwned', 'owner',)},
         }
 
     def create(self, validated_data):
