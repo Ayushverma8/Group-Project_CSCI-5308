@@ -27,7 +27,8 @@ const setUserLoggedOut = async () => {
     window.location.href = '/login'
 }
 
-const setUserProfile = ({firstName, lastName}) => {
+const setUserProfile = (firstName, lastName) => {
+    console.log(firstName, lastName)
     localStorage.setItem('USER_FIRSTNAME', firstName);
     localStorage.setItem('USER_LASTNAME', lastName);
 }

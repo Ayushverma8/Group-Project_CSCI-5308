@@ -5,16 +5,20 @@ import { Fragment } from "react/cjs/react.production.min";
 import SideBar from './SideBar'
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { getUserProfile, setUserProfile } from "../utils/authHelpers";
 
 function ProfilePage() {
 
 	const [successMessage, setSuccessMessage] = useState(false);
 	const [emailChanged, setEmailChanged] = useState(false);
+	const [userProfile, setUserProfileHere] = useState({});
+
 
 	useEffect(async () => {
 		try {
 			let response = await API_CLIENT.get('user_profile/');
-
+			setUserProfile(response.data.first_name, response.data.last_name)
+			setUserProfileHere(getUserProfile());
 			setValues(response.data);
 		} catch (err) {
 			console.log(err);
@@ -24,8 +28,14 @@ function ProfilePage() {
 	const updateProfile = async () => {
 		try {
 			let response = await API_CLIENT.patch('user_profile/', values);
-
 			setSuccessMessage(true);
+			setUserProfile({
+				first_name: response.data.first_name,
+				last_name: response.data.last_name
+			})
+			setUserProfileHere(getUserProfile());
+
+
 			if (response.data.email_changed) {
 				setEmailChanged(true)
 			}
@@ -38,17 +48,13 @@ function ProfilePage() {
 
 	return (
 		<Fragment>
-			<SideBar />
+			<SideBar profile={userProfile}/>
 			<div className="col-md-6 offset-4 mt-5">
 				<div className="col-md-6 offset-3">
 					{
 						successMessage &&
 						<div className="mt-3 mb-2 rounded text-success about-bottom p-3 bg-light border">
 							Profile updated
-							{
-								emailChanged && ". Please check your email"
-							}
-
 							<FontAwesomeIcon style={{ marginLeft: '5px' }} icon="fa-solid fa-check" />
 						</div>
 					}

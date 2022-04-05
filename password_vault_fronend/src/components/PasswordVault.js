@@ -138,7 +138,7 @@ function PasswordVault(props) {
 
                     <label className="pull-left mt-3"> Password </label>
                     <Input name="password" id="my-pass" type="password" errors={errors} onChange={handleChange} value={values.password} placeholder="Password" required="true" />
-                    <div className='d-flex' style={{ marginTop: "-10px" }}>
+                    <div className='d-flex' style={{ marginTop: "-10px", pointerEvents:'all' }}>
                         <input type="checkbox" onClick={showPassword} /><p style={{ marginBottom: '-15px', transform: "translate(10px, -3px)" }}>Show password</p>
                     </div>
                 </div>

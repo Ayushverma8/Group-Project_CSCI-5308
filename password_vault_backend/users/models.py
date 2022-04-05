@@ -1,8 +1,9 @@
+from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import User
 from core.models import BaseModel
 import users.utils
-
+import core.helpers
 
 class VerifyInformation(BaseModel):
     """
@@ -66,3 +67,16 @@ class ContactUs(BaseModel):
     last_name = models.CharField(max_length=255)
     email = models.EmailField()
     message = models.TextField()
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
+        context = {
+            'first_name': self.first_name,
+            'last_name': self.last_name,
+            'email': self.email,
+            'message': self.email
+        }
+
+        core.helpers.send_email('contact_us_admin.html', context, "Someone contacted us !",
+                                settings.CONTACT_US_QUERY_HEAD_EMAIL)

@@ -3,6 +3,7 @@ import { Modal } from 'react-bootstrap'
 import Input from './common/Input'
 import useForm from '../custom_hooks/useFormHook';
 import API_CLIENT from '../api/axiosClient';
+import moment from 'moment';
 
 function CreateTodo(props) {
     const HIGH_PRIORITY = 0
@@ -11,6 +12,7 @@ function CreateTodo(props) {
 
     const createOrUpdateTodo = async () => {
         try {
+
             if (values.id) {
                 await API_CLIENT.patch(`todo/${values.id}/`, values);
             } else {
@@ -32,8 +34,10 @@ function CreateTodo(props) {
 
         await setTimeout(300)
 
-        values['priority'] = priority;
-        setValues(values)
+        setValues(values => ({ ...values,
+            ['priority']: priority,
+            ['end_date']: moment(values.end_date).format('YYYY-MM-DD')}
+        ));
 
         const high_priority_btn = document.getElementById('high-priority')
         const low_priority_btn = document.getElementById('low-priority')
@@ -57,8 +61,8 @@ function CreateTodo(props) {
     useEffect(() => {
         if (props.objToUpdate) {
             setValues(props.objToUpdate)
-            values['id'] = props.objToUpdate.id
             setPriority(null, props.objToUpdate.priority)
+            setErrors({})
         }
     }, [props.show])
 

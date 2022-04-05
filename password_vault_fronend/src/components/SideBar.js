@@ -3,13 +3,17 @@ import { getUserProfile, setUserLoggedOut } from "../utils/authHelpers";
 import Avatar from 'avataaars';
 
 
-function SideBar() {
+function SideBar(props) {
 
     const [userProfile, setUserProfile] = useState({});
 
     useEffect(() => {
         setUserProfile(getUserProfile());
     }, [])
+
+    useEffect(() => {
+        setUserProfile(getUserProfile());
+    },[props])
 
     return (
         <div class="sidebar" data-color="white" data-active-color="danger">

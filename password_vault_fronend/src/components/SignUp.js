@@ -9,10 +9,7 @@ function Signup() {
 		try {
 			let res = await API_CLIENT.post('/signup/', values);
 			setUserLoggedIn(res.data.token);
-			setUserProfile({
-				first_name: values.first_name,
-				last_name: values.last_name
-			})
+			setUserProfile(values.first_name,values.last_name)
 		} catch (e) {
 			setErrors(e.response.data);
 		}
