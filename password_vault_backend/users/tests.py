@@ -271,4 +271,4 @@ class ContactUsTestCase(TestCase):
                           'message': 'Hello from the other side'}
         ContactUs.save = MagicMock(
             return_value=True)
-        self.assertEqual(ContactUs.save(), True)
+        self.assertEqual(ContactUs.save(context_object), True)
