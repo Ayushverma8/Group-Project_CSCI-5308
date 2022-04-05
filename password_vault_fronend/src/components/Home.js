@@ -72,7 +72,7 @@ function Home() {
 		return (
 			<>
 				<div class="col-lg-3 col-md-6 col-sm-6 cursor-pointer"
-					 data-html="true" data-tip={!data.owener ? "": "Shared by someone"} onClick={() => openPasswordModal(data.id)}>
+					 data-html="true" data-tip={!data.owner ? "": "Shared by someone"} onClick={() => openPasswordModal(data.id)}>
 					<div class="card card-stats">
 						<div class="card-body">
 							<div class="row">

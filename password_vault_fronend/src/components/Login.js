@@ -12,9 +12,7 @@ function Login() {
                res.data.user.first_name,
               res.data.user.last_name
             )
-            console.log(getUserProfile())
             setUserLoggedIn(res.data.token);
-            console.log(res.data.user)
         } catch (err) {
             setErrors(err.response.data);
         }
