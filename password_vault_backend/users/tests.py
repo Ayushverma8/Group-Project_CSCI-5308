@@ -16,7 +16,6 @@ instantiated_user_profile_class = ResetPasswordSerializer()
 
 AYUSH_VERMA = "Ayush Verma"
 AYUSH_EMAIL = "ayush.verma@dal.ca"
-AYUSH_USERNAME = "ayush.verma@dal.ca"
 TEST_PASS = "Qwertyu@1234"
 
 
@@ -130,7 +129,7 @@ class LoginSerializerTest(TestCase):
             'email': 'Ayush',
             'password': 'john.doe@dal.ca',
             'token': TEST_PASS,
-            'confirm_password': 'ayush.verma@dal.ca'
+            'confirm_password': AYUSH_EMAIL
         })
         instantiated_login_class.validate = MagicMock(
             side_effect=ValidationError('this account does not exists'))
@@ -178,7 +177,7 @@ class ForgotPasswordSerializerTest(TestCase):
                           AYUSH_EMAIL)
 
     def test_validate_email_success(self):
-        valid_email = "ayush.verma@dal.ca"
+        valid_email = AYUSH_EMAIL
         instantiated_forget_password_class.validate_email = MagicMock(
             return_value=valid_email)
         self.assertEqual(
@@ -209,7 +208,7 @@ class ResetPasswordSerializerTest(TestCase):
 
     def test_validate_successful_reset_password(self):
         serializer_object = ({
-            'user__email': 'ayush.verma@dal.ca',
+            'user__email': AYUSH_EMAIL,
             'email': AYUSH_EMAIL,
             'token': 'ffnrfnfnn4nttnti5ntinfnnffnvvs',
             'confirm_password':TEST_PASS,
