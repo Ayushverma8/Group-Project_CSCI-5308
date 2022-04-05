@@ -111,10 +111,10 @@ class MatrixTranspositionCipherTestCase(TestCase):
         @author: Shalin Awadiya <sh290595@dal.ca>
         """
 
-        returnError = False
+        return_error = False
         if isinstance(cipher_text, bytes):
-            returnError = True
-        self.assertEqual(returnError, False)
+            return_error = True
+        self.assertEqual(return_error, False)
 
     def test_matrix_transposition_cipher_key_length(self):
         """
