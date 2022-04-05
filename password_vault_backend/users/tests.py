@@ -3,6 +3,7 @@ from unittest.mock import MagicMock
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 
+from .models import UserMpin, ContactUs
 from .serializers import UserProfileAbstractSerializer, SignUpSerializer, \
     LoginSerializer, ForgotPasswordSerializer, ResetPasswordSerializer
 from .utils import get_hash
@@ -13,7 +14,6 @@ instantiated_login_class = LoginSerializer()
 instantiated_forget_password_class = ForgotPasswordSerializer()
 instantiated_reset_password_class = ResetPasswordSerializer()
 instantiated_user_profile_class = ResetPasswordSerializer()
-
 AYUSH_VERMA = "Ayush Verma"
 AYUSH_EMAIL = "ayush.verma@dal.ca"
 AYUSH_USERNAME = "ayush.verma@dal.ca"
@@ -212,7 +212,7 @@ class ResetPasswordSerializerTest(TestCase):
             'user__email': 'ayush.verma@dal.ca',
             'email': AYUSH_EMAIL,
             'token': 'ffnrfnfnn4nttnti5ntinfnnffnvvs',
-            'confirm_password':TEST_PASS,
+            'confirm_password': TEST_PASS,
             'otp': 343333,
         })
         instantiated_reset_password_class.validate = MagicMock(
@@ -238,3 +238,38 @@ class UtilTest(TestCase):
         # Test the hash structure to verify if it's actually a SHA string
         t = get_hash("Hello from the other side")
         self.assertTrue(t)
+
+
+class VerifyInformationTest(TestCase):
+    """
+    Testing the MPin functionality
+
+    @author: Ayush Verma <ayush.verma@dal.ca>
+    """
+
+    def test_UserMpin(self):
+        # Verify the generated the MPin
+        UserMpin.check_mpin = MagicMock(
+            return_value=True)
+        self.assertEqual(UserMpin.check_mpin("1234"), True)
+
+    def test_save(self):
+        saved_object = ({"name": "ayush verma", "mpin": 1234})
+        UserMpin.save = MagicMock(
+            return_value=saved_object)
+        self.assertEqual(UserMpin.save(), saved_object)
+
+
+class ContactUsTestCase(TestCase):
+    """
+    Testing the ContactUs functionality
+
+    @author: Ayush Verma <ayush.verma@dal.ca>
+    """
+
+    def test_save(self):
+        context_object = {'first_name': 'Ayush', 'last_name': 'Verma', 'email': 'ayush.verma@dal.ca',
+                          'message': 'Hello from the other side'}
+        ContactUs.save = MagicMock(
+            return_value=True)
+        self.assertEqual(ContactUs.save(), True)
