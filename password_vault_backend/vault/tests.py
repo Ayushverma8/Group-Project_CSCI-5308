@@ -114,7 +114,7 @@ class MatrixTranspositionCipherTestCase(TestCase):
         return_error = False
         if isinstance(cipher_text, bytes):
             return_error = True
-        self.assertEqual(returnError, False)
+        self.assertEqual(return_error, False)
 
     def test_matrix_transposition_cipher_key_length(self):
         """
